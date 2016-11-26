@@ -17,3 +17,6 @@ include 'services:webservice'
 */
 
 rootProject.name = 'IgnoreTheExtraClub'
+
+include ':common:vanillasiteswap'
+include ':components:itec'
