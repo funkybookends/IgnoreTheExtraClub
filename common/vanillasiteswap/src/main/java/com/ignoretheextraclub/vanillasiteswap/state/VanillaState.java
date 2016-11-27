@@ -140,16 +140,20 @@ public class VanillaState
         return toString(this.occupied);
     }
 
+    /**
+     * Overridden will match against other VanillaStates and boolean[]
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o)
     {
+        if (o == null) return false;
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (o instanceof boolean[]) return Arrays.equals(this.occupied, (boolean[]) o);
+        if (getClass() != o.getClass()) return false;
         VanillaState state = (VanillaState) o;
-
         return Arrays.equals(occupied, state.occupied);
-
     }
 
     @Override
@@ -200,59 +204,37 @@ public class VanillaState
 
     public static int transition(VanillaState from, VanillaState to) throws NoTransitionException
     {
+        if (from.maxThrow != to.maxThrow)
+        {
+            throw new NoTransitionException("Cannot transition between states with different max throws: [" + from.toString() + "],[" + to.toString() + "]");
+        }
         if (from.canThrow() && to.occupied[to.maxThrow - 1]) //if can throw and highest spot occupied
         {
             return to.maxThrow;
         }
         if (!from.canThrow())
         {
-            return 0;
-        }
-        try
-        {
-            final boolean[] firstFrom1ToEnd = new boolean[from.maxThrow-1];
-            final boolean[] toFrom0ToEndMinus1 = new boolean[to.maxThrow-1];
-
-            System.arraycopy(from.occupied, 1, firstFrom1ToEnd, 0, from.maxThrow - 1);
-            System.arraycopy(to.occupied, 0, toFrom0ToEndMinus1, 0, from.maxThrow - 1);
-
-            final int differentPosition = getPositionWithDifferentValue(firstFrom1ToEnd, toFrom0ToEndMinus1);
-
-            return differentPosition + 1;
-        }
-        catch (NoDifferenceException | IllegalArgumentException e)
-        {
-            throw new NoTransitionException("Cannot transition between these two states, from [" + from.toString() + "] to [" + to.toString() + "]", e);
-        }
-    }
-
-    private static int getPositionWithDifferentValue(boolean[] first, boolean[] second) throws NoDifferenceException, IllegalArgumentException
-    {
-        if (first.length != second.length)
-        {
-            throw new IllegalArgumentException("Lengths must be the same, was given: [" + toString(first) + "], and [" + toString(second) + "]");
-        }
-
-        boolean found = false;
-        int foundPosition = 0;
-
-        for (int pos = 0; pos < first.length; pos++)
-        {
-            if (first[pos] != second[pos])
+            if (to.equals(drop(from.occupied, false)))
             {
-                if (found)
-                {
-                    throw new IllegalArgumentException("More than one position different, was given: [" + toString(first) + "], and [" + toString(second) + "]");
-                }
-                found = true;
-                foundPosition = pos;
+                return 0;
+            }
+            else
+            {
+                throw new NoTransitionException("[" + from.toString() + "] needed to throw 0, but throwing a 0 does not get you to [" + to.toString() + "]");
             }
         }
-        if (!found)
+        for (int thro : from.getAvailableThrows())
         {
-            throw new NoDifferenceException("No places different, was give : [" + toString(first) + "], and [" + toString(second) + "]");
+            try
+            {
+                if (from.thro(thro).equals(to)) return thro;
+            }
+            catch (BadThrowException e)
+            {
+                throw new RuntimeException("I threw a throw I thought was legal: [" + thro + "] into [" + from.toString() + "]", e);
+            }
         }
-        return foundPosition;
+        throw new NoTransitionException("Cannot transition between these two states, from [" + from.toString() + "] to [" + to.toString() + "]");
     }
 
     public static class VanillaStateBuilder
