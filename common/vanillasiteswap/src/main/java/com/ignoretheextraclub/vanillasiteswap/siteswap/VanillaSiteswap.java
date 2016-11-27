@@ -168,13 +168,7 @@ public class VanillaSiteswap
 
     private static boolean containsAGroundState(List<VanillaState> states)
     {
-        for (VanillaState state : states)
-        {
-            if (state.isGround())
-            {
-                return true;
-            }
-        }
+        for (VanillaState state : states) if (state.isGround()) return true;
         return false;
     }
     
