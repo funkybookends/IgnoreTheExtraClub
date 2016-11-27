@@ -106,13 +106,7 @@ public class VanillaState
 
     public boolean isGround()
     {
-        for (int position = 0; position < this.numObjects; position++)
-        {
-            if (!occupied[position])
-            {
-                return false;
-            }
-        }
+        for (int position = 0; position < this.numObjects; position++) if (!occupied[position]) return false;
         return true;
     }
 
