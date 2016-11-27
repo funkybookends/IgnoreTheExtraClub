@@ -162,21 +162,15 @@ public class VanillaState
                 }
                 catch (StateSizeException | NumObjectsException e)
                 {
-                    throw new BadThrowException("Something went wrong! you tried to throw 0 when you had to, but I erred", e);
+                    throw new RuntimeException("Something went wrong! you tried to throw 0 when you had to, but I erred", e);
                 }
             }
             throw new BadThrowException("Cannot throw [" + thro + "], must throw 0");
         }
         try
         {
-            if (thro == maxThrow)
-            {
-                return getState(drop(occupied, true)); // throw max_throw
-            }
-            else if (occupied[thro])
-            {
-                throw new BadThrowException("Cannot throw [" + thro + "], already occupied.");
-            }
+            if (thro == maxThrow) return getState(drop(occupied, true)); // throw max_throw
+            else if (occupied[thro]) throw new BadThrowException("Cannot throw [" + thro + "], already occupied.");
             else
             {
                 boolean[] nextState = copy(occupied);
@@ -186,7 +180,7 @@ public class VanillaState
         }
         catch (StateSizeException | NumObjectsException e)
         {
-            throw new BadThrowException("Something went wrong! the throw should've been fine.", e);
+            throw new RuntimeException("Something went wrong! the throw should've been fine.", e);
         }
     }
 
