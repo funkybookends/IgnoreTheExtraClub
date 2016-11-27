@@ -232,7 +232,7 @@ public class VanillaSiteswap
     }
 
     /**
-     * Converts an int[] to a string, guanrateed to never throw an exception - replaces any unknowns with "-"
+     * Converts an int[] to a string, guaranteed to never throw an exception - replaces any unknowns with "-"
      * @param intSiteswap
      * @return String representation of intSiteswap
      */
