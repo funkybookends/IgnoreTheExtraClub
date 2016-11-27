@@ -29,6 +29,7 @@ public class VanillaSiteswapTest
 
         invalidSiteswaps.add("543");
         invalidSiteswaps.add("9768458");
+//        invalidSiteswaps.add("975"); // to test that it will throw an exception if given a valid siteswap
     }
 
     @Test
@@ -67,6 +68,26 @@ public class VanillaSiteswapTest
         }
     }
 
+    @Test
+    public void invalidSiteswapsDontCompile() throws Exception
+    {
+        for (String invalidSiteswap : invalidSiteswaps)
+        {
+            try
+            {
+                new VanillaSiteswap(invalidSiteswap, true);
+                throw new RuntimeException(invalidSiteswap + " should've thrown an exception");
+            }
+            catch (InvalidSiteswapException | BadThrowException e)
+            {
+                // do nothing
+            }
+        }
+
+
+    }
+
+
     private static class TestCase
     {
         public final int[] intSiteswap;
@@ -92,7 +113,6 @@ public class VanillaSiteswapTest
             this.grounded = grounded;
             this.period = period;
         }
-
         /**
          * Method to verify that the siteswap
          *
@@ -111,5 +131,4 @@ public class VanillaSiteswapTest
             Assert.assertEquals(messagePrefix + this.sortedStringSiteswap + " period", this.period, siteswap.getPeriod());
         }
     }
-
 }
