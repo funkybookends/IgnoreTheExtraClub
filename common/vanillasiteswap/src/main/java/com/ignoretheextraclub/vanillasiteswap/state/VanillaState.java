@@ -200,7 +200,7 @@ public class VanillaState
 
     public static int transition(VanillaState from, VanillaState to) throws NoTransitionException
     {
-        if (to.occupied[to.maxThrow - 1])
+        if (from.canThrow() && to.occupied[to.maxThrow - 1]) //if can throw and highest spot occupied
         {
             return to.maxThrow;
         }
