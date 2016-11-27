@@ -15,6 +15,7 @@ import java.util.List;
 public class VanillaSiteswapTest
 {
     private List<TestCase> validSiteswaps = new LinkedList<>();
+    private List<String> invalidSiteswaps = new LinkedList<>();
 
     @Before
     public void setUp() throws Exception
@@ -25,6 +26,9 @@ public class VanillaSiteswapTest
 //        validSiteswaps.add(new TestCase(new int[]{0,0,3},"300", "003", 1, true, true, 3));
         validSiteswaps.add(new TestCase(new int[]{8,6,7,8,6},"78686", "86786", 7, false, true, 5));
         validSiteswaps.add(new TestCase(new int[]{2,9,7},"972", "297", 6, true, false, 3));
+
+        invalidSiteswaps.add("543");
+        invalidSiteswaps.add("9768458");
     }
 
     @Test
@@ -89,15 +93,22 @@ public class VanillaSiteswapTest
             this.period = period;
         }
 
-        public void verify(String prefix, VanillaSiteswap constructed, boolean sorted)
+        /**
+         * Method to verify that the siteswap
+         *
+         * @param messagePrefix a prefix so you can know which method is being tested for example
+         * @param siteswap the siteswap to test against
+         * @param sorted ? test sorted string : test unsorted string;
+         */
+        public void verify(String messagePrefix, VanillaSiteswap siteswap, boolean sorted)
         {
-            prefix += " ";
-            if (sorted) Assert.assertEquals(prefix + this.sortedStringSiteswap + " sorted", this.sortedStringSiteswap, constructed.toString());
-            else        Assert.assertEquals(prefix + this.unsortedStringSiteswap + " unsorted", this.unsortedStringSiteswap, constructed.toString());
-            Assert.assertEquals(prefix + this.sortedStringSiteswap + " numObjects", this.numObjects, constructed.getNumObjects());
-            Assert.assertEquals(prefix + this.sortedStringSiteswap + " prime", this.prime, constructed.isPrime());
-            Assert.assertEquals(prefix + this.sortedStringSiteswap + " grounded", this.grounded, constructed.isGrounded());
-            Assert.assertEquals(prefix + this.sortedStringSiteswap + " period", this.period, constructed.getPeriod());
+            messagePrefix += " ";
+            if (sorted) Assert.assertEquals(messagePrefix + this.sortedStringSiteswap + " sorted", this.sortedStringSiteswap, siteswap.toString());
+            else        Assert.assertEquals(messagePrefix + this.unsortedStringSiteswap + " unsorted", this.unsortedStringSiteswap, siteswap.toString());
+            Assert.assertEquals(messagePrefix + this.sortedStringSiteswap + " numObjects", this.numObjects, siteswap.getNumObjects());
+            Assert.assertEquals(messagePrefix + this.sortedStringSiteswap + " prime", this.prime, siteswap.isPrime());
+            Assert.assertEquals(messagePrefix + this.sortedStringSiteswap + " grounded", this.grounded, siteswap.isGrounded());
+            Assert.assertEquals(messagePrefix + this.sortedStringSiteswap + " period", this.period, siteswap.getPeriod());
         }
     }
 
