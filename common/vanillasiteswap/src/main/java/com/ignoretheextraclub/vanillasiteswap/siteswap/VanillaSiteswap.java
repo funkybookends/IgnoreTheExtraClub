@@ -158,7 +158,7 @@ public class VanillaSiteswap
             int stateNumber = (start + i) % period;
             VanillaState state = states.get(stateNumber);
             int excitedness = state.excitedness();
-                score += excitedness*(-i+1);
+            score += excitedness*(-i+1);
         }
         return score;
     }
@@ -172,33 +172,6 @@ public class VanillaSiteswap
     protected static int[] parseGlobalString(String stringSiteswap) throws BadThrowException
     {
         return stringSiteswap.chars().map((thro) -> charToInt((char) thro)).toArray();
-    }
-
-    /**
-     * Converts a char to an int. Guaranteed to not throw an exception, returns -1 if not a valid char. Should get
-     * caught elsewhere.
-     * @param thro
-     * @return
-     */
-    private static int charToInt(char thro)
-    {
-        if      (thro >= '0' && thro <= '9') return thro - '0';
-        else if (thro >= 'A' && thro <= 'Z') return thro - 'A' + 10;
-        else if (thro >= 'a' && thro <= 'z') return thro - 'a' + 10;
-        else                                 return -1;
-    }
-
-    /**
-     * Converts an int to a char. Guranteed to not throw an exception, returns '?' if not valid.
-     * @param thro
-     * @return
-     */
-    private static char intToChar(int thro)
-    {
-        if      (thro < 0 ) return '?';
-        else if (thro < 10) return (char) (thro + '0');
-        else if (thro < 36) return (char) (thro + 'A' - 10);
-        else                return '?';
     }
 
     public boolean isPrime()
@@ -247,5 +220,32 @@ public class VanillaSiteswap
     public String toString()
     {
         return this.stringSiteswap;
+    }
+
+    /**
+     * Converts a char to an int. Guaranteed to not throw an exception, returns -1 if not a valid char. Should get
+     * caught elsewhere.
+     * @param thro
+     * @return
+     */
+    private static int charToInt(char thro)
+    {
+        if      (thro >= '0' && thro <= '9') return thro - '0';
+        else if (thro >= 'A' && thro <= 'Z') return thro - 'A' + 10;
+        else if (thro >= 'a' && thro <= 'z') return thro - 'a' + 10;
+        else                                 return -1;
+    }
+
+    /**
+     * Converts an int to a char. Guranteed to not throw an exception, returns '?' if not valid.
+     * @param thro
+     * @return
+     */
+    private static char intToChar(int thro)
+    {
+        if      (thro < 0 ) return '?';
+        else if (thro < 10) return (char) (thro + '0');
+        else if (thro < 36) return (char) (thro + 'A' - 10);
+        else                return '?';
     }
 }
