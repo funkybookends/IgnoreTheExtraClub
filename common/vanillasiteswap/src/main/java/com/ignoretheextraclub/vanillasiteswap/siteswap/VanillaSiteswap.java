@@ -28,7 +28,7 @@ public class VanillaSiteswap
     private final List<VanillaState> states = new LinkedList<>();
 
     /**
-     * A pattern is prime if it does not revist a state twice.
+     * A pattern is prime if it does not revisit a state twice.
      *
      * If it does this implies it can be decomposed into two or more siteswaps TODO determine decompositions
      */
