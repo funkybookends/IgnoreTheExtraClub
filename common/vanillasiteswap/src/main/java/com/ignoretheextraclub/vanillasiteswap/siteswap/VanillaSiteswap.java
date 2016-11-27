@@ -73,7 +73,7 @@ public class VanillaSiteswap
 
         if (states.size() != period)
         {
-            throw new InvalidSiteswapException("This shouldn't happen. Built states.size() != vanillaSiteswap.length");
+            throw new RuntimeException("This shouldn't happen. Built states.size() != vanillaSiteswap.length");
         }
     }
 
