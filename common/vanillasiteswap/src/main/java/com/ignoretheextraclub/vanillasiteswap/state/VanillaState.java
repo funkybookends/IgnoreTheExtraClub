@@ -192,24 +192,12 @@ public class VanillaState
 
     public static int transition(VanillaState from, VanillaState to) throws NoTransitionException
     {
-        if (from.maxThrow != to.maxThrow)
-        {
-            throw new NoTransitionException("Cannot transition between states with different max throws: [" + from.toString() + "],[" + to.toString() + "]");
-        }
-        if (from.canThrow() && to.occupied[to.maxThrow - 1]) //if can throw and highest spot occupied
-        {
-            return to.maxThrow;
-        }
+        if (from.maxThrow != to.maxThrow) throw new NoTransitionException("Cannot transition between states with different max throws: [" + from.toString() + "],[" + to.toString() + "]");
+        if (from.canThrow() && to.occupied[to.maxThrow - 1]) return to.maxThrow; //if can throw and highest spot occupied
         if (!from.canThrow())
         {
-            if (to.equals(drop(from.occupied, false)))
-            {
-                return 0;
-            }
-            else
-            {
-                throw new NoTransitionException("[" + from.toString() + "] needed to throw 0, but throwing a 0 does not get you to [" + to.toString() + "]");
-            }
+            if (to.equals(drop(from.occupied, false))) return 0;
+            else throw new NoTransitionException("[" + from.toString() + "] needed to throw 0, but throwing a 0 does not get you to [" + to.toString() + "]");
         }
         for (int thro : from.getAvailableThrows())
         {
