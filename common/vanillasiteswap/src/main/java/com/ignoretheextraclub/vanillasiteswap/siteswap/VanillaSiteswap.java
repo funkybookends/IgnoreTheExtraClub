@@ -5,10 +5,7 @@ import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import com.ignoretheextraclub.vanillasiteswap.utils.Utils;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -174,30 +171,34 @@ public class VanillaSiteswap
     
     protected static int[] parseGlobalString(String stringSiteswap) throws BadThrowException
     {
-        final int[] intSiteswap = new int[stringSiteswap.length()];
-
-        for (int position = 0; position < stringSiteswap.length(); position++)
-        {
-            intSiteswap[position] = charToInt(stringSiteswap.charAt(position));
-        }
-
-        return intSiteswap;
+        return stringSiteswap.chars().map((thro) -> charToInt((char) thro)).toArray();
     }
 
-    private static int charToInt(char thro) throws BadThrowException
+    /**
+     * Converts a char to an int. Guaranteed to not throw an exception, returns -1 if not a valid char. Should get
+     * caught elsewhere.
+     * @param thro
+     * @return
+     */
+    private static int charToInt(char thro)
     {
         if      (thro >= '0' && thro <= '9') return thro - '0';
         else if (thro >= 'A' && thro <= 'Z') return thro - 'A' + 10;
         else if (thro >= 'a' && thro <= 'z') return thro - 'a' + 10;
-        else                                 throw new BadThrowException("[" + thro + "] is not a valid throw");
+        else                                 return -1;
     }
 
-    private static char intToChar(int thro) throws BadThrowException
+    /**
+     * Converts an int to a char. Guranteed to not throw an exception, returns '?' if not valid.
+     * @param thro
+     * @return
+     */
+    private static char intToChar(int thro)
     {
-        if      (thro < 0 ) throw new BadThrowException("Cannot throw less than 0, was given [" + thro + "]");
+        if      (thro < 0 ) return '?';
         else if (thro < 10) return (char) (thro + '0');
         else if (thro < 36) return (char) (thro + 'A' - 10);
-        else                throw new BadThrowException("Cannot throw larger than 36/Z, was given [" + thro + "]");
+        else                return '?';
     }
 
     public boolean isPrime()
