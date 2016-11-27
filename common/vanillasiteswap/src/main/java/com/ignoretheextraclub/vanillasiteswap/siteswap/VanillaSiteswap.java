@@ -239,16 +239,7 @@ public class VanillaSiteswap
     private static String toString(int[] intSiteswap)
     {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int intThrow : intSiteswap)
-        {
-            try
-            {
-                stringBuilder.append(intToChar(intThrow));
-            } catch (BadThrowException e)
-            {
-                stringBuilder.append("-");
-            }
-        }
+        Arrays.stream(intSiteswap).forEach(thro -> stringBuilder.append(intToChar(thro)));
         return stringBuilder.toString();
     }
 
