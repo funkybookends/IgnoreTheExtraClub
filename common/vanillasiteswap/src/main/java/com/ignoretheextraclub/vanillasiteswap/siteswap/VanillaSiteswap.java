@@ -44,7 +44,7 @@ public class VanillaSiteswap
     private final String stringSiteswap;
     private final int[] intSiteswap;
 
-    protected VanillaSiteswap(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
+    public VanillaSiteswap(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
     {
         if (vanillaSiteswap.length > MAX_PERIOD || vanillaSiteswap.length < 1)
         {
@@ -58,10 +58,7 @@ public class VanillaSiteswap
             buildStates(vanillaSiteswap);
             this.grounded = containsAGroundState(states);
             this.prime = !containsARepeatedState(); // both done here because they can be used during sorting
-            if (sort)
-            {
-                sort();
-            }
+            if (sort) sort();
             this.sorted = sort;
             this.intSiteswap = getAllThrows();
             this.stringSiteswap = toString(this.intSiteswap);
@@ -77,21 +74,9 @@ public class VanillaSiteswap
         }
     }
 
-    public static VanillaSiteswap parse(int[] siteswap, boolean sort) throws InvalidSiteswapException
+    public VanillaSiteswap(String stringSiteswap, boolean sort) throws InvalidSiteswapException, BadThrowException
     {
-        return new VanillaSiteswap(siteswap, sort);
-    }
-
-    public static VanillaSiteswap parse(String vanillaSiteswap, boolean sort) throws InvalidSiteswapException
-    {
-        try
-        {
-            return new VanillaSiteswap(parseGlobalString(vanillaSiteswap), sort);
-        }
-        catch (BadThrowException e)
-        {
-            throw new InvalidSiteswapException("Siteswap [" + vanillaSiteswap + "] is invalid", e);
-        }
+        this(parseGlobalString(stringSiteswap), sort);
     }
 
     private int[] getAllThrows() throws NoTransitionException

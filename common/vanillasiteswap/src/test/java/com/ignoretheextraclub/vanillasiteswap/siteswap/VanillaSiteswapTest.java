@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,31 +34,31 @@ public class VanillaSiteswapTest
         final boolean sorted = false;
         for (TestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = VanillaSiteswap.parse(testCase.intSiteswap, sorted);
+            VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.intSiteswap, sorted);
             testCase.verify(prefix, vanillaSiteswap, sorted);
         }
     }
 
     @Test
-    public void parseGlobalStringNoSort() throws InvalidSiteswapException
+    public void parseGlobalStringNoSort() throws InvalidSiteswapException, BadThrowException
     {
         final String prefix = "parseGlobalStringNoSort";
         final boolean sorted = false;
         for (TestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = VanillaSiteswap.parse(testCase.unsortedStringSiteswap, sorted);
+            VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.unsortedStringSiteswap, sorted);
             testCase.verify(prefix, vanillaSiteswap, sorted);
         }
     }
 
     @Test
-    public void parseGlobalStringSorted() throws InvalidSiteswapException
+    public void parseGlobalStringSorted() throws InvalidSiteswapException, BadThrowException
     {
         final boolean sorted = true;
         final String prefix = "parseGlobalStringSorted";
         for (TestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = VanillaSiteswap.parse(testCase.unsortedStringSiteswap, sorted);
+            VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.unsortedStringSiteswap, sorted);
             testCase.verify(prefix, vanillaSiteswap, sorted);
         }
     }

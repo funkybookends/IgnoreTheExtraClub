@@ -73,6 +73,7 @@ public class VanillaStateTest
         VanillaState ooxxx_8 = new VanillaStateBuilder(5,3).thenThrow(5).thenThrow(5).thenThrow(5).build();
 
         List<VanillaState> statesSorted = new LinkedList<>();
+        statesSorted.add(xxxoo_0);
         statesSorted.add(xxoxo_1);
         statesSorted.add(xoxxo_2);
         statesSorted.add(oxxxo_3);
