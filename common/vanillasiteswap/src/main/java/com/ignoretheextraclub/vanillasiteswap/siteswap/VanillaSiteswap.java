@@ -44,7 +44,7 @@ public class VanillaSiteswap
     private final String stringSiteswap;
     private final int[] intSiteswap;
 
-    private VanillaSiteswap(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
+    protected VanillaSiteswap(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
     {
         if (vanillaSiteswap.length > MAX_PERIOD || vanillaSiteswap.length < 1)
         {
@@ -77,17 +77,6 @@ public class VanillaSiteswap
         }
     }
 
-    private int[] getAllThrows() throws NoTransitionException
-    {
-        final int[] thros = new int[period];
-        for (int i = 0; i < period - 1; i++)
-        {
-            thros[i] = transition(states.get(i), states.get(i+1));
-        }
-        thros[period - 1] = transition(states.get(period - 1), states.get(0));
-        return thros;
-    }
-
     public static VanillaSiteswap parse(int[] siteswap, boolean sort) throws InvalidSiteswapException
     {
         return new VanillaSiteswap(siteswap, sort);
@@ -103,6 +92,17 @@ public class VanillaSiteswap
         {
             throw new InvalidSiteswapException("Siteswap [" + vanillaSiteswap + "] is invalid", e);
         }
+    }
+
+    private int[] getAllThrows() throws NoTransitionException
+    {
+        final int[] thros = new int[period];
+        for (int i = 0; i < period - 1; i++)
+        {
+            thros[i] = transition(states.get(i), states.get(i+1));
+        }
+        thros[period - 1] = transition(states.get(period - 1), states.get(0));
+        return thros;
     }
 
     private boolean containsARepeatedState()
@@ -134,7 +134,6 @@ public class VanillaSiteswap
             throw new InvalidSiteswapException("Did not return to original state. Final state: [" + states.get(period-1) + "], original state: [" + states.get(0) + "]");
         }
     }
-
 
     /**
      * Sorts the siteswap, finds the groundiest first throw and makes that the first throw.
