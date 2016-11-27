@@ -291,12 +291,12 @@ public class VanillaState
         return copy;
     }
 
-    private static boolean[] drop(boolean[] filledPositions, boolean higestState)
+    private static boolean[] drop(boolean[] filledPositions, boolean highestState)
     {
         final int maxThrow = filledPositions.length;
         boolean[] next = new boolean[maxThrow];
         System.arraycopy(filledPositions, 1, next, 0, maxThrow - 1);
-        next[maxThrow-1] = higestState;
+        next[maxThrow-1] = highestState;
         return next;
     }
 
