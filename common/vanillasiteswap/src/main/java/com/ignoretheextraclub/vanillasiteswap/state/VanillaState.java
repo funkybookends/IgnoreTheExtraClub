@@ -15,6 +15,10 @@ public class VanillaState
 {
     private static final String EMPTY = "_";
     private static final String FILLED = "X";
+
+    /**
+     * Temporary map as a database TODO replace with real database
+     */
     private static Map<String, VanillaState> STATES = new HashMap<>();
 
     private static final int MIN_SIZE = 2;
