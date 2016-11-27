@@ -12,6 +12,13 @@ import java.util.stream.IntStream;
 import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.*;
 
 /**
+ * An immutable Vanilla Siteswap.
+ *
+ * Defines the public interface as four methods to create, taking either an int[] or a String, and optional boolean to
+ * toggle sorting.
+ *
+ * Other public methods access the properties of the siteswap.
+ *
  * Created by caspar on 26/11/16.
  */
 @Immutable
@@ -44,7 +51,28 @@ public class VanillaSiteswap
     private final String stringSiteswap;
     private final int[] intSiteswap;
 
-    public VanillaSiteswap(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
+    public static VanillaSiteswap create(int[] siteswap, boolean sort) throws InvalidSiteswapException
+    {
+        return new VanillaSiteswap(siteswap, sort);
+    }
+
+    public static VanillaSiteswap create(int[] siteswap) throws InvalidSiteswapException
+    {
+        return new VanillaSiteswap(siteswap, true);
+    }
+
+    public static VanillaSiteswap create(String siteswap, boolean sort) throws InvalidSiteswapException
+    {
+        return new VanillaSiteswap(parseGlobalString(siteswap), sort);
+    }
+
+    public static VanillaSiteswap create(String siteswap) throws InvalidSiteswapException
+    {
+        final int[] intSiteswap = parseGlobalString(siteswap);
+        return new VanillaSiteswap(intSiteswap, true);
+    }
+
+    protected VanillaSiteswap(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
     {
         if (vanillaSiteswap.length > MAX_PERIOD || vanillaSiteswap.length < 1)
         {
@@ -72,11 +100,6 @@ public class VanillaSiteswap
         {
             throw new RuntimeException("This shouldn't happen. Built states.size() != vanillaSiteswap.length");
         }
-    }
-
-    public VanillaSiteswap(String stringSiteswap, boolean sort) throws InvalidSiteswapException, BadThrowException
-    {
-        this(parseGlobalString(stringSiteswap), sort);
     }
 
     private int[] getAllThrows() throws NoTransitionException
@@ -153,7 +176,7 @@ public class VanillaSiteswap
         return false;
     }
     
-    protected static int[] parseGlobalString(String stringSiteswap) throws BadThrowException
+    protected static int[] parseGlobalString(String stringSiteswap)
     {
         return stringSiteswap.chars().map((thro) -> charToInt((char) thro)).toArray();
     }

@@ -51,7 +51,7 @@ public class VanillaSiteswapTest
         final boolean sorted = false;
         for (TestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.unsortedStringSiteswap, sorted);
+            VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
             testCase.verify(prefix, vanillaSiteswap, sorted);
         }
     }
@@ -63,7 +63,7 @@ public class VanillaSiteswapTest
         final String prefix = "parseGlobalStringSorted";
         for (TestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.unsortedStringSiteswap, sorted);
+            VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
             testCase.verify(prefix, vanillaSiteswap, sorted);
         }
     }
@@ -75,10 +75,10 @@ public class VanillaSiteswapTest
         {
             try
             {
-                new VanillaSiteswap(invalidSiteswap, true);
+                VanillaSiteswap.create(invalidSiteswap, true);
                 throw new RuntimeException(invalidSiteswap + " should've thrown an exception");
             }
-            catch (InvalidSiteswapException | BadThrowException e)
+            catch (InvalidSiteswapException e)
             {
                 // do nothing
             }
