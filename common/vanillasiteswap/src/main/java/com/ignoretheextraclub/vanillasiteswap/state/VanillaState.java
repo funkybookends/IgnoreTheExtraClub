@@ -6,6 +6,7 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * Created by caspar on 26/11/16.
@@ -75,18 +76,11 @@ public class VanillaState
     {
         if (canThrow())
         {
-            int[] availableThrows = new int[this.maxThrow - this.numObjects + 1];
-            int i = 0;
-            for (int position = 0; position < maxThrow; position++)
+            return IntStream.range(0, maxThrow + 1).filter(pos ->
             {
-                if (!occupied[position])
-                {
-                    availableThrows[i] = position;
-                    i++;
-                }
-            }
-            availableThrows[this.maxThrow - this.numObjects] = maxThrow;
-            return availableThrows;
+                if (pos != maxThrow) return !occupied[pos];
+                return true; //to capture max throw as available
+            }).toArray();
         }
         else
         {
