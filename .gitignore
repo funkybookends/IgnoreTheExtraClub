@@ -29,3 +29,6 @@ nbdist/
 gradlew
 gradlew.bat
 gradle/
+
+
+*/classes/*
