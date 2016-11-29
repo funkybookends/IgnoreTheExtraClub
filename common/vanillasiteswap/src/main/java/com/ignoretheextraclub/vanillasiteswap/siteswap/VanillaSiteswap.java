@@ -49,7 +49,7 @@ public class VanillaSiteswap
     private final int highestThrow;
     private final boolean sorted;
     private final String stringSiteswap;
-    private final int[] intSiteswap;
+    protected final int[] intSiteswap;
 
     public static VanillaSiteswap create(int[] siteswap, boolean sort) throws InvalidSiteswapException
     {
@@ -216,7 +216,7 @@ public class VanillaSiteswap
      * @param intSiteswap
      * @return String representation of intSiteswap
      */
-    private static String toString(int[] intSiteswap)
+    protected static String toString(int[] intSiteswap)
     {
         StringBuilder stringBuilder = new StringBuilder();
         Arrays.stream(intSiteswap).forEach(thro -> stringBuilder.append(intToChar(thro)));

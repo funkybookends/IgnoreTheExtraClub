@@ -63,9 +63,21 @@ public class FourHandedSiteswap extends VanillaSiteswap
         }
     }
 
+    public String localLeader()
+    {
+        final int[] localLeaderIntSiteswap = FourHandedSiteswap.globalToLocal(this.intSiteswap, 0);
+        return VanillaSiteswap.toString(localLeaderIntSiteswap);
+    }
+
+    public String localFollower()
+    {
+        final int[] localFollowerIntSiteswap = FourHandedSiteswap.globalToLocal(this.intSiteswap, 1);
+        return VanillaSiteswap.toString(localFollowerIntSiteswap);
+    }
+
     private static int[] localToGlobal(final int[] local)
     {
-        int[] global = new int[local.length];
+        final int[] global = new int[local.length];
         int fromStart = 0;
         int fromMiddle = local.length/2;
         if (local.length % 2 == 1) fromMiddle++;
@@ -80,6 +92,16 @@ public class FourHandedSiteswap extends VanillaSiteswap
             fromMiddle++;
         }
         return global;
+    }
+
+    private static int[] globalToLocal(final int[] global,final int startPos)
+    {
+        final int[] local = new int[global.length];
+        for (int i = 0; i < global.length; i++)
+        {
+            local[(startPos + (i*2)) % global.length] = global[i];
+        }
+        return local;
     }
 
 }
