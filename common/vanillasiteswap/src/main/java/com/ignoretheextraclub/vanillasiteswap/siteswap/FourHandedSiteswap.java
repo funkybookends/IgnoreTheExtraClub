@@ -104,4 +104,14 @@ public class FourHandedSiteswap extends VanillaSiteswap
         return local;
     }
 
+    private static String vanillaToPrechac(int thro)
+    {
+        return thro % 2 == 1 ? String.valueOf(thro/2) + ".5p" : String.valueOf(thro/2);
+    }
+
+    private int[] parsePrecach(String precachString)
+    {
+    return null;
+    }
+
 }
