@@ -70,7 +70,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         int fromMiddle = local.length/2;
         if (local.length % 2 == 1) fromMiddle++;
         int insertionIndex = 0;
-        while (fromStart < local.length/2)
+        while (fromStart < (local.length / 2) + 1)
         {
             global[insertionIndex] = local[fromStart];
             insertionIndex++;
