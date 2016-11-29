@@ -214,21 +214,54 @@ public class VanillaState
         private int givenObjects;
         private final int expectedObjects;
 
-        public VanillaStateBuilder(int maxThrow, int expectedObjects)
+        public VanillaStateBuilder(int maxThrow, int expectedObjects) throws StateSizeException, NumObjectsException
         {
+            if (maxThrow < MIN_SIZE || maxThrow > MAX_SIZE)
+            {
+                throw new StateSizeException("State has [" + maxThrow + "] positions, must be between [" + MIN_SIZE + "] and [" + MAX_SIZE + "]");
+            }
+
             this.occupied = new boolean[maxThrow];
             this.maxThrow = maxThrow;
             this.expectedObjects = expectedObjects;
+
+            if (this.expectedObjects < MIN_OBJECTS || this.expectedObjects > MAX_OBJECTS)
+            {
+                throw new NumObjectsException("State has [" + this.expectedObjects + "] objects, must be between [" + MIN_OBJECTS + "] and [" + MAX_OBJECTS + "]");
+            }
         }
 
         public VanillaStateBuilder thenThrow(int thro) throws BadThrowException, NumObjectsException
         {
-            if (thro < 0 || thro > maxThrow)    throw new BadThrowException("Throw [" + thro + "] out of bounds [0," + maxThrow + "]");
-            if (!occupied[0] && thro != 0)      givenObjects++;
-            if (givenObjects > expectedObjects) throw new NumObjectsException("Given an unexpected object. Already have [" + givenObjects + "] in [" + this.toString() + "]");
-            if (thro == maxThrow)               occupied = drop(occupied, true);
-            else if (occupied[thro])            throw new BadThrowException("Throw [" + thro + "] cannot be made: [" + this.toString() + "]");
-            else                               {occupied[thro] = true; occupied = drop(occupied, false);}
+            if (thro < 0 || thro > maxThrow)
+            {
+                throw new BadThrowException("Throw [" + thro + "] out of bounds [0," + maxThrow + "]");
+            }
+
+            if (!occupied[0] && thro != 0)
+            {
+                givenObjects++;
+            }
+
+            if (givenObjects > expectedObjects)
+            {
+                throw new NumObjectsException("Given an unexpected object. Already have [" + givenObjects + "] in [" + this.toString() + "]");
+            }
+
+            if (thro == maxThrow)
+            {
+                occupied = drop(occupied, true);
+            }
+            else if (occupied[thro])
+            {
+                throw new BadThrowException("Throw [" + thro + "] cannot be made: [" + this.toString() + "]");
+            }
+            else
+            {
+                occupied[thro] = true;
+                occupied = drop(occupied, false);
+            }
+
             return this;
         }
 
