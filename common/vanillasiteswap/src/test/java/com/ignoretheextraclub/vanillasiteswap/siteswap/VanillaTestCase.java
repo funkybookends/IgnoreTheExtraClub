@@ -19,7 +19,8 @@ class VanillaTestCase
     public final Integer period;
     public final Integer highestThrow;
 
-    public final boolean validFHS;
+    public final boolean validGlobalFHS;
+    public final boolean validLocalFHS;
 
 
     public VanillaTestCase(int[] constructIntSiteswap,
@@ -30,7 +31,8 @@ class VanillaTestCase
                            Boolean grounded,
                            Integer period,
                            Integer highestThrow,
-                           boolean validFHS)
+                           boolean validGlobalFHS,
+                           boolean validLocalFHS)
     {
         this.intSiteswap = constructIntSiteswap;
         this.unsortedStringSiteswap = constructStringSiteswap;
@@ -40,7 +42,9 @@ class VanillaTestCase
         this.grounded = grounded;
         this.period = period;
         this.highestThrow = highestThrow;
-        this.validFHS = validFHS;
+
+        this.validGlobalFHS = validGlobalFHS;
+        this.validLocalFHS = validLocalFHS;
     }
 
     /**
@@ -108,7 +112,8 @@ class VanillaTestCase
                 true,
                 3,
                 9,
-                true));
+                true,
+                false));
 
         valid.add(new VanillaTestCase(new int[]{3, 4, 5},
                 "345",
@@ -118,6 +123,7 @@ class VanillaTestCase
                 true,
                 3,
                 5,
+                false,
                 false));
 
         valid.add(new VanillaTestCase(new int[]{6, 7, 8, 9, 10},
@@ -128,6 +134,7 @@ class VanillaTestCase
                 true,
                 5,
                 10,
+                true,
                 true));
 
         valid.add(new VanillaTestCase(new int[]{0,0,3},
@@ -138,6 +145,7 @@ class VanillaTestCase
                 true,
                 3,
                 3,
+                false,
                 false));
 
         valid.add(new VanillaTestCase(new int[]{8, 6, 7, 8, 6},
@@ -148,7 +156,8 @@ class VanillaTestCase
                 true,
                 5,
                 8,
-                true));
+                true,
+                false));
 
         valid.add(new VanillaTestCase(new int[]{2, 9, 7},
                 "297",
@@ -158,6 +167,18 @@ class VanillaTestCase
                 false,
                 3,
                 9,
+                true,
+                false));
+
+        valid.add(new VanillaTestCase(new int[]{2, 7, 9},
+                "279",
+                "972",
+                6,
+                true,
+                false,
+                3,
+                9,
+                false,
                 true));
 
         return valid;

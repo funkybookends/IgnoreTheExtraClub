@@ -4,7 +4,6 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapExceptio
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,9 @@ public class FourHandedSiteswapTest
     @Before
     public void setUp() throws Exception
     {
-        validFHSs = VanillaTestCase.getValidTestCases().stream().filter(vanillaTestCase -> vanillaTestCase.validFHS).collect(Collectors.toList());
+        validFHSs = VanillaTestCase.getValidTestCases().stream()
+                .filter(testCase -> testCase.validGlobalFHS || testCase.validLocalFHS)
+                .collect(Collectors.toList());
     }
 
     @Test
