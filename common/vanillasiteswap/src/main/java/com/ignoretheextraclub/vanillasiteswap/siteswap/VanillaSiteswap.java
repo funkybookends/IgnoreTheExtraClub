@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import com.ignoretheextraclub.vanillasiteswap.utils.Utils;
@@ -178,7 +179,7 @@ public class VanillaSiteswap
     
     protected static int[] parseGlobalString(String stringSiteswap)
     {
-        return stringSiteswap.chars().map((thro) -> charToInt((char) thro)).toArray();
+        return IntVanilla.charArrayToIntArray(stringSiteswap.toCharArray());
     }
 
     public boolean isPrime()
@@ -218,9 +219,7 @@ public class VanillaSiteswap
      */
     protected static String toString(int[] intSiteswap)
     {
-        StringBuilder stringBuilder = new StringBuilder();
-        Arrays.stream(intSiteswap).forEach(thro -> stringBuilder.append(intToChar(thro)));
-        return stringBuilder.toString();
+        return IntVanilla.intArrayToCharArray(intSiteswap).toString();
     }
 
     @Override
@@ -229,30 +228,5 @@ public class VanillaSiteswap
         return this.stringSiteswap;
     }
 
-    /**
-     * Converts a char to an int. Guaranteed to not throw an exception, returns -1 if not a valid char. Should get
-     * caught elsewhere.
-     * @param thro
-     * @return
-     */
-    private static int charToInt(char thro)
-    {
-        if      (thro >= '0' && thro <= '9') return thro - '0';
-        else if (thro >= 'A' && thro <= 'Z') return thro - 'A' + 10;
-        else if (thro >= 'a' && thro <= 'z') return thro - 'a' + 10;
-        else                                 return -1;
-    }
 
-    /**
-     * Converts an int to a char. Guranteed to not throw an exception, returns '?' if not valid.
-     * @param thro
-     * @return
-     */
-    private static char intToChar(int thro)
-    {
-        if      (thro < 0 ) return '?';
-        else if (thro < 10) return (char) (thro + '0');
-        else if (thro < 36) return (char) (thro + 'A' - 10);
-        else                return '?';
-    }
 }

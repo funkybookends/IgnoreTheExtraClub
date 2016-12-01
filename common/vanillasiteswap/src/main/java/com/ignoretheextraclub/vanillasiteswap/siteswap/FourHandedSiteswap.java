@@ -1,7 +1,10 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidFourHandedSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+
+import java.util.Arrays;
 
 /**
  * Created by caspar on 27/11/16.
@@ -21,7 +24,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         {
             try
             {
-                return new FourHandedSiteswap(localToGlobal(siteswap), sort);
+                return new FourHandedSiteswap(GlobalLocal.globalToLocal(siteswap, 0), sort);
             }
             catch (InvalidSiteswapException e1)
             {
@@ -65,44 +68,19 @@ public class FourHandedSiteswap extends VanillaSiteswap
 
     public String localLeader()
     {
-        final int[] localLeaderIntSiteswap = FourHandedSiteswap.globalToLocal(this.intSiteswap, 0);
+        final int[] localLeaderIntSiteswap = GlobalLocal.globalToLocal(this.intSiteswap, 0);
         return VanillaSiteswap.toString(localLeaderIntSiteswap);
     }
 
     public String localFollower()
     {
-        final int[] localFollowerIntSiteswap = FourHandedSiteswap.globalToLocal(this.intSiteswap, 1);
+        final int[] localFollowerIntSiteswap = GlobalLocal.globalToLocal(this.intSiteswap, 1);
         return VanillaSiteswap.toString(localFollowerIntSiteswap);
     }
 
-    private static int[] localToGlobal(final int[] local)
-    {
-        final int[] global = new int[local.length];
-        int fromStart = 0;
-        int fromMiddle = local.length/2;
-        if (local.length % 2 == 1) fromMiddle++;
-        int insertionIndex = 0;
-        while (fromStart < (local.length / 2) + 1)
-        {
-            global[insertionIndex] = local[fromStart];
-            insertionIndex++;
-            if (fromMiddle < local.length) global[insertionIndex] = local[fromMiddle]; //incase odd
-            insertionIndex++;
-            fromStart++;
-            fromMiddle++;
-        }
-        return global;
-    }
 
-    private static int[] globalToLocal(final int[] global,final int startPos)
-    {
-        final int[] local = new int[global.length];
-        for (int i = 0; i < global.length; i++)
-        {
-            local[(startPos + (i*2)) % global.length] = global[i];
-        }
-        return local;
-    }
+
+
 
     private static String vanillaToPrechac(int thro)
     {
