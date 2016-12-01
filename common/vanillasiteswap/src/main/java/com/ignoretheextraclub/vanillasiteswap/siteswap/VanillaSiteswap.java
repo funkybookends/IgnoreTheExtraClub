@@ -64,12 +64,12 @@ public class VanillaSiteswap
 
     public static VanillaSiteswap create(String siteswap, boolean sort) throws InvalidSiteswapException
     {
-        return new VanillaSiteswap(parseGlobalString(siteswap), sort);
+        return new VanillaSiteswap(IntVanilla.stringToIntArray(siteswap), sort);
     }
 
     public static VanillaSiteswap create(String siteswap) throws InvalidSiteswapException
     {
-        final int[] intSiteswap = parseGlobalString(siteswap);
+        final int[] intSiteswap = IntVanilla.stringToIntArray(siteswap);
         return new VanillaSiteswap(intSiteswap, true);
     }
 
@@ -149,7 +149,7 @@ public class VanillaSiteswap
      */
     private void sort()
     {
-        List<Integer> scores = IntStream.range(0, period).map((start) -> scoreRotation(start)).boxed().collect(Collectors.toList());
+        List<Integer> scores = IntStream.range(0, period).map(this::scoreRotation).boxed().collect(Collectors.toList());
         int minPosition = IntStream.range(0, period).reduce((bestP, candP) -> scores.get(bestP) < scores.get(candP) ? bestP : candP).getAsInt();
         while (minPosition > 0)
         {
@@ -175,11 +175,6 @@ public class VanillaSiteswap
     {
         for (VanillaState state : states) if (state.isGround()) return true;
         return false;
-    }
-    
-    protected static int[] parseGlobalString(String stringSiteswap)
-    {
-        return IntVanilla.charArrayToIntArray(stringSiteswap.toCharArray());
     }
 
     public boolean isPrime()

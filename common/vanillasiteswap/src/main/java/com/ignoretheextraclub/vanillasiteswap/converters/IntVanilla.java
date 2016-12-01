@@ -53,4 +53,9 @@ public class IntVanilla
         }
         return intThrows;
     }
+
+    public static int[] stringToIntArray(String stringThrows)
+    {
+        return charArrayToIntArray(stringThrows.toCharArray());
+    }
 }

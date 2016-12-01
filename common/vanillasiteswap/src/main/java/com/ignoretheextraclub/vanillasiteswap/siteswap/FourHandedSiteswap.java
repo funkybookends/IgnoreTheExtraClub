@@ -1,6 +1,7 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
 import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
+import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidFourHandedSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 
@@ -45,12 +46,12 @@ public class FourHandedSiteswap extends VanillaSiteswap
 
     public static FourHandedSiteswap create(String siteswap, boolean sort) throws InvalidSiteswapException
     {
-        return FourHandedSiteswap.createGlobalOrLocal(parseGlobalString(siteswap), sort);
+        return FourHandedSiteswap.createGlobalOrLocal(IntVanilla.stringToIntArray(siteswap), sort);
     }
 
     public static FourHandedSiteswap create(String siteswap) throws InvalidSiteswapException
     {
-        return FourHandedSiteswap.createGlobalOrLocal(parseGlobalString(siteswap), true);
+        return FourHandedSiteswap.createGlobalOrLocal(IntVanilla.stringToIntArray(siteswap), true);
     }
 
     private FourHandedSiteswap(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
@@ -76,20 +77,6 @@ public class FourHandedSiteswap extends VanillaSiteswap
     {
         final int[] localFollowerIntSiteswap = GlobalLocal.globalToLocal(this.intSiteswap, 1);
         return VanillaSiteswap.toString(localFollowerIntSiteswap);
-    }
-
-
-
-
-
-    private static String vanillaToPrechac(int thro)
-    {
-        return thro % 2 == 1 ? String.valueOf(thro/2) + ".5p" : String.valueOf(thro/2);
-    }
-
-    private int[] parsePrecach(String precachString)
-    {
-    return null;
     }
 
 }
