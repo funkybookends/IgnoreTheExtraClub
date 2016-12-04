@@ -3,8 +3,6 @@ package com.ignoretheextraclub.vanillasiteswap.converters;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by caspar on 04/12/16.
  */

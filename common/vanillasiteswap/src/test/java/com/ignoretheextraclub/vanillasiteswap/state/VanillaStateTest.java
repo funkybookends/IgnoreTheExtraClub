@@ -7,7 +7,6 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState.VanillaStateBuilder;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.LinkedList;
