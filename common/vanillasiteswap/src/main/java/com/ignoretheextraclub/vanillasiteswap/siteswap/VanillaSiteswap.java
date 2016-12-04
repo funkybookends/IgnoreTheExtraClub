@@ -79,8 +79,8 @@ public class VanillaSiteswap
         {
             throw new InvalidSiteswapException("Invalid siteswap length");
         }
-        this.highestThrow = Utils.max(vanillaSiteswap);
-        this.numObjects = Utils.average(vanillaSiteswap);
+        this.highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
+        this.numObjects = (int) Arrays.stream(vanillaSiteswap).average().orElse(0);
         this.period = vanillaSiteswap.length;
         try
         {
