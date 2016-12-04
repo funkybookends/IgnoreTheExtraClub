@@ -1,10 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
-import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidPrechacException;
-
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
