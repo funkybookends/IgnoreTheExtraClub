@@ -1,13 +1,12 @@
 package com.ignoretheextraclub.vanillasiteswap.state;
 
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.OccupancyException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by caspar on 04/12/16.
@@ -121,6 +120,101 @@ public class MultiplexState extends AbstractState
         catch (StateSizeException | NumObjectsException | OccupancyException e)
         {
             throw new BadThrowException("throws [" + IntVanilla.intArrayToString(thros) + "] cannot be applied to state: [" + this.toString() + "]", e);
+        }
+    }
+
+    public int[] transition(MultiplexState from, MultiplexState to) throws NoTransitionException
+    {
+        if (from.maxOccupancy != to.maxOccupancy)
+        {
+            throw new NoTransitionException("Must have same maxOccupancy. From [" + from.maxOccupancy + "] != [" + to.maxOccupancy + "] To");
+        }
+        if (from.numObjects != to.numObjects)
+        {
+            throw new NoTransitionException("Must have same the same number of objects. From [" + from.numObjects + "] != [" + to.numObjects+ "] To");
+        }
+        if (from.maxThrow != to.maxThrow)
+        {
+            throw new NoTransitionException("Must have same the same maxThrow. From [" + from.maxThrow + "] != [" + to.maxThrow+ "] To");
+        }
+
+        List<Integer> thros = new LinkedList<>();
+
+        for (int i = 1; i < from.maxThrow; i++)
+        {
+            int diff = to.occupancy[i-1] - from.occupancy[i];
+            while (diff > 0)
+            {
+                thros.add(i);
+                diff--;
+            }
+        }
+        int highestThrows = to.occupancy[to.maxThrow];
+        while (highestThrows> 0)
+        {
+            thros.add(to.maxThrow);
+            highestThrows--;
+        }
+
+        if (thros.size() != from.occupancy[0]) throw new NoTransitionException("Cannot transition from [" + from.toString() + "] to [" + to.toString() + "]");
+
+        if (thros.isEmpty()) return new int[]{};
+
+        return thros.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public static class MultiplexStateBuilder
+    {
+        private int[] occupancy;
+        private int expectedObjects;
+        private int givenObjects;
+        private int maxOccupancy;
+        private int maxThrow;
+
+        public MultiplexStateBuilder(int maxOccupancy, int maxThrow, int expectedObjects) throws StateSizeException, NumObjectsException
+        {
+            if (maxThrow < MIN_SIZE || maxThrow > MAX_SIZE)
+            {
+                throw new StateSizeException("State has [" + maxThrow + "] positions, must be between [" + MIN_SIZE + "] and [" + MAX_SIZE + "]");
+            }
+            if (expectedObjects < MIN_OBJECTS || expectedObjects > MAX_OBJECTS)
+            {
+                throw new NumObjectsException("State has [" + expectedObjects + "] expected objects, must be between [" + MIN_OBJECTS + "] and [" + MAX_OBJECTS + "]");
+            }
+            this.occupancy = new int[maxThrow];
+            this.maxOccupancy = maxOccupancy;
+            this.maxThrow = maxThrow;
+            this.expectedObjects = expectedObjects;
+        }
+
+        public MultiplexStateBuilder thenThrow(int... thros) throws BadThrowException, NumObjectsException
+        {
+            if (thros.length > this.maxOccupancy)
+            {
+                throw new BadThrowException("Too many throws, must be less than maxOccupancy [" + this.maxOccupancy + "]");
+            }
+
+            int existingBallsToThrow = this.occupancy[0];
+            int highestState = 0;
+            for (int thro : thros)
+            {
+                if (existingBallsToThrow > 0) existingBallsToThrow--;
+                else                          givenObjects++;
+
+                if (thro == this.maxThrow) highestState++;
+                else                       occupancy[thro]++;
+            }
+
+            if (givenObjects > expectedObjects) throw new NumObjectsException("Was given too many objects. Expected only [" + expectedObjects + "], recieved [" + givenObjects + "]");
+
+            this.occupancy = drop(this.occupancy, highestState);
+
+            return this;
+        }
+
+        public MultiplexState build() throws StateSizeException, NumObjectsException, OccupancyException
+        {
+            return new MultiplexState(occupancy, maxOccupancy);
         }
     }
 
