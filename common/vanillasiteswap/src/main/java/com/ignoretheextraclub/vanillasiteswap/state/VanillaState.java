@@ -1,6 +1,9 @@
 package com.ignoretheextraclub.vanillasiteswap.state;
 
-import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.Arrays;

@@ -2,10 +2,7 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
 import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidFourHandedSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-
-import java.util.Arrays;
 
 /**
  * Created by caspar on 27/11/16.
