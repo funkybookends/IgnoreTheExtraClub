@@ -1,5 +1,7 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
+import java.util.Arrays;
+
 /**
  * Created by caspar on 30/11/16.
  */
@@ -55,5 +57,10 @@ public class IntVanilla
     public static int[] stringToIntArray(String stringThrows)
     {
         return charArrayToIntArray(stringThrows.toCharArray());
+    }
+
+    public static String intArrayToString(int[] thros)
+    {
+        return new String(intArrayToCharArray(thros));
     }
 }

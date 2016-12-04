@@ -12,25 +12,18 @@ import java.util.stream.IntStream;
  * Created by caspar on 26/11/16.
  */
 @Immutable
-public class VanillaState
+public class VanillaState extends AbstractState
 {
-    private static final String EMPTY = "_";
-    private static final String FILLED = "X";
+
+    private final int maxThrow;
+    private final int numObjects;
 
     /**
      * Temporary map as a database TODO replace with real database
      */
     private static Map<String, VanillaState> STATES = new HashMap<>();
 
-    private static final int MIN_SIZE = 2;
-    private static final int MAX_SIZE = 15;
-
-    private static final int MIN_OBJECTS = 1;
-    private static final int MAX_OBJECTS = 12;
-
     private final boolean[] occupied;
-    private final int maxThrow;
-    private final int numObjects;
 
     /**
      * Actually constructs a new object
@@ -67,7 +60,7 @@ public class VanillaState
         return STATES.get(stateString);
     }
 
-    private boolean canThrow()
+    public boolean canThrow()
     {
         return occupied[0];
     }
