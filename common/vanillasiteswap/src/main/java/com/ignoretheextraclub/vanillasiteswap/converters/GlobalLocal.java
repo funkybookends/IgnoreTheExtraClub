@@ -1,21 +1,18 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by caspar on 30/11/16.
  */
-public class GlobalLocal<T>
+public class GlobalLocal
 {
     public static int[] globalToLocal(final int[] global, final int startPos)
     {
         final int[] local = new int[global.length];
         for (int i = 0; i < global.length; i++)
         {
-            local[(startPos + (i*2)) % global.length] = global[i];
+            local[i] = global[(startPos + (i*2)) % global.length];
         }
         return local;
     }
@@ -44,7 +41,7 @@ public class GlobalLocal<T>
         final T[] local = (T[]) Array.newInstance(global.getClass().getComponentType(), global.length);
         for (int i = 0; i < global.length; i++)
         {
-            local[(startPos + (i*2)) % global.length] = global[i];
+            local[i] = global[(startPos + (i*2)) % global.length];
         }
         return local;
     }
