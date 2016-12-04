@@ -134,7 +134,7 @@ public class VanillaState
      * @return
      */
     @Override
-    public boolean equals(Object o)
+    public boolean equals(final Object o)
     {
         if (o == null) return false;
         if (this == o) return true;
@@ -150,7 +150,7 @@ public class VanillaState
         return this.toString().hashCode();
     }
 
-    public VanillaState thro(int thro) throws BadThrowException
+    public VanillaState thro(final int thro) throws BadThrowException
     {
         if (!canThrow())
         {
@@ -184,7 +184,7 @@ public class VanillaState
         }
     }
 
-    public static int transition(VanillaState from, VanillaState to) throws NoTransitionException
+    public static int transition(final VanillaState from, final VanillaState to) throws NoTransitionException
     {
         if (from.maxThrow != to.maxThrow) throw new NoTransitionException("Cannot transition between states with different max throws: [" + from.toString() + "],[" + to.toString() + "]");
         if (from.canThrow() && to.occupied[to.maxThrow - 1]) return to.maxThrow; //if can throw and highest spot occupied
@@ -214,7 +214,7 @@ public class VanillaState
         private int givenObjects;
         private final int expectedObjects;
 
-        public VanillaStateBuilder(int maxThrow, int expectedObjects) throws StateSizeException, NumObjectsException
+        public VanillaStateBuilder(final int maxThrow, final int expectedObjects) throws StateSizeException, NumObjectsException
         {
             if (maxThrow < MIN_SIZE || maxThrow > MAX_SIZE)
             {
@@ -231,7 +231,7 @@ public class VanillaState
             }
         }
 
-        public VanillaStateBuilder thenThrow(int thro) throws BadThrowException, NumObjectsException
+        public VanillaStateBuilder thenThrow(final int thro) throws BadThrowException, NumObjectsException
         {
             if (thro < 0 || thro > maxThrow)
             {
@@ -282,7 +282,7 @@ public class VanillaState
         }
     }
 
-    private static String toString(boolean[] filledPositions)
+    private static String toString(final boolean[] filledPositions)
     {
         StringBuilder strBuilder = new StringBuilder();
         for (boolean filledPosition : filledPositions)
@@ -299,14 +299,14 @@ public class VanillaState
         return strBuilder.toString();
     }
 
-    private static boolean[] copy(boolean[] positions)
+    private static boolean[] copy(final boolean[] positions)
     {
         boolean[] copy = new boolean[positions.length];
         System.arraycopy(positions, 0, copy, 0, positions.length);
         return copy;
     }
 
-    private static boolean[] drop(boolean[] filledPositions, boolean highestState)
+    private static boolean[] drop(final boolean[] filledPositions, final boolean highestState)
     {
         final int maxThrow = filledPositions.length;
         boolean[] next = new boolean[maxThrow];
