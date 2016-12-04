@@ -2,11 +2,14 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by caspar on 26/11/16.
@@ -14,6 +17,13 @@ import java.util.List;
 public class VanillaSiteswapTest
 {
     private List<String> invalidSiteswaps = new LinkedList<>();
+
+    /**
+     * Test cases to use.
+     */
+    private List<VanillaTestCase> validSiteswaps = VanillaTestCase.getValidTestCases().stream()
+            .filter(vanillaTestCase -> vanillaTestCase.validVanillaSiteswap)
+            .collect(Collectors.toList());
 
     @Before
     public void setUp() throws Exception
@@ -29,11 +39,23 @@ public class VanillaSiteswapTest
     {
         final String prefix = "";
         final boolean sorted = false;
-        for (VanillaTestCase testCase : VanillaTestCase.getValidTestCases())
+        int failures = 0;
+        for (VanillaTestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.intSiteswap, sorted);
-            testCase.verify("parseNoSort", prefix, sorted, vanillaSiteswap);
+            try
+            {
+                VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.intSiteswap, sorted);
+                testCase.verify("parseNoSort", prefix, sorted, vanillaSiteswap);
+            }
+            catch (ComparisonFailure e)
+            {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+                failures++;
+            }
         }
+        if (failures > 0) Assert.fail("There were " + failures + " failures");
+
     }
 
     @Test
@@ -41,11 +63,22 @@ public class VanillaSiteswapTest
     {
         final String prefix = "";
         final boolean sorted = false;
-        for (VanillaTestCase testCase : VanillaTestCase.getValidTestCases())
+        int failures = 0;
+        for (VanillaTestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
-            testCase.verify("parseGlobalStringNoSort", prefix, sorted, vanillaSiteswap);
+            try
+            {
+                VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
+                testCase.verify("parseGlobalStringNoSort", prefix, sorted, vanillaSiteswap);
+            }
+            catch (ComparisonFailure e)
+            {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+                failures++;
+            }
         }
+        if (failures > 0) Assert.fail("There were " + failures + " failures");
     }
 
     @Test
@@ -53,11 +86,22 @@ public class VanillaSiteswapTest
     {
         final boolean sorted = true;
         final String prefix = "";
-        for (VanillaTestCase testCase : VanillaTestCase.getValidTestCases())
+        int failures = 0;
+        for (VanillaTestCase testCase : validSiteswaps)
         {
-            VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
-            testCase.verify("parseGlobalStringSorted", prefix, sorted, vanillaSiteswap);
+            try
+            {
+                VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
+                testCase.verify("parseGlobalStringSorted", prefix, sorted, vanillaSiteswap);
+            }
+            catch (ComparisonFailure e)
+            {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+                failures++;
+            }
         }
+        if (failures > 0) Assert.fail("There were " + failures + " failures");
     }
 
     @Test
@@ -75,9 +119,5 @@ public class VanillaSiteswapTest
                 // do nothing
             }
         }
-
-
     }
-
-
 }

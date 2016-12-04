@@ -3,14 +3,17 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import com.ignoretheextraclub.vanillasiteswap.utils.Utils;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.*;
+import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.VanillaStateBuilder;
+import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.transition;
 
 /**
  * An immutable Vanilla Siteswap.
@@ -214,7 +217,7 @@ public class VanillaSiteswap
      */
     protected static String toString(int[] intSiteswap)
     {
-        return IntVanilla.intArrayToCharArray(intSiteswap).toString();
+        return new String(IntVanilla.intArrayToCharArray(intSiteswap));
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
-import java.util.Arrays;
-
 /**
  * Created by caspar on 30/11/16.
  */
