@@ -58,7 +58,7 @@ public class MultiplexState extends AbstractState
     @Override
     public String toString()
     {
-        return super.toString();
+        return MultiplexState.toString(this.occupancy);
     }
 
     private static String toString(int[] occupancy)
@@ -123,7 +123,7 @@ public class MultiplexState extends AbstractState
         }
     }
 
-    public int[] transition(MultiplexState from, MultiplexState to) throws NoTransitionException
+    public static int[] transition(MultiplexState from, MultiplexState to) throws NoTransitionException
     {
         if (from.maxOccupancy != to.maxOccupancy)
         {
@@ -149,7 +149,7 @@ public class MultiplexState extends AbstractState
                 diff--;
             }
         }
-        int highestThrows = to.occupancy[to.maxThrow];
+        int highestThrows = to.occupancy[to.maxThrow - 1];
         while (highestThrows> 0)
         {
             thros.add(to.maxThrow);
