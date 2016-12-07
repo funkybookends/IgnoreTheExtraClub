@@ -11,6 +11,8 @@ public class IntPrechac
     private static final char PASS = 'p';
     private static final char DELIMETER = ' ';
     private static final char DOT = '.';
+    private static final String PREFIX = "";
+    private static final String SUFFIX = "";
 
     public static String intToPrechac(int thro)
     {
@@ -20,7 +22,7 @@ public class IntPrechac
 
     public static String intToPrechac(int[] thros)
     {
-        return Arrays.stream(thros).boxed().map(IntPrechac::intToPrechac).collect(Collectors.joining(String.valueOf(DELIMETER), "", ""));
+        return Arrays.stream(thros).boxed().map(IntPrechac::intToPrechac).collect(Collectors.joining(String.valueOf(DELIMETER), PREFIX, SUFFIX));
     }
 
 }
