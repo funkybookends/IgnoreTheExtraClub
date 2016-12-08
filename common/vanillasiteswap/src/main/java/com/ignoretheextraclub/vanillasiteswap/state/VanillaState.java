@@ -20,12 +20,6 @@ public class VanillaState extends AbstractState
 
     private final int maxThrow;
     private final int numObjects;
-
-    /**
-     * Temporary map as a database TODO replace with real database
-     */
-    private static Map<String, VanillaState> STATES = new HashMap<>();
-
     private final boolean[] occupied;
 
     /**
@@ -51,16 +45,6 @@ public class VanillaState extends AbstractState
         }
 
         this.occupied = occupied;
-    }
-
-    private static VanillaState getState(final boolean[] filledPositions) throws StateSizeException, NumObjectsException
-    {
-        String stateString = toString(filledPositions);
-        if (!STATES.containsKey(stateString))
-        {
-            STATES.put(stateString, new VanillaState(filledPositions));
-        }
-        return STATES.get(stateString);
     }
 
     public boolean canThrow()
@@ -154,7 +138,7 @@ public class VanillaState extends AbstractState
             {
                 try
                 {
-                    return getState(drop(occupied, false)); // throw 0
+                    return new VanillaState(drop(occupied, false)); // throw 0
                 }
                 catch (StateSizeException | NumObjectsException e)
                 {
@@ -165,13 +149,13 @@ public class VanillaState extends AbstractState
         }
         try
         {
-            if (thro == maxThrow) return getState(drop(occupied, true)); // throw max_throw
+            if (thro == maxThrow) return new VanillaState(drop(occupied, true)); // throw max_throw
             else if (occupied[thro]) throw new BadThrowException("Cannot throw [" + thro + "], already occupied.");
             else
             {
                 boolean[] nextState = copy(occupied);
                 nextState[thro] = true;
-                return getState(drop(nextState, false)); // throw non max throw throw
+                return new VanillaState(drop(nextState, false)); // throw non max throw throw
             }
         }
         catch (StateSizeException | NumObjectsException e)
@@ -263,7 +247,7 @@ public class VanillaState extends AbstractState
 
         public VanillaState build() throws StateSizeException, NumObjectsException
         {
-            return getState(occupied);
+            return new VanillaState(occupied);
         }
 
         public int getGivenObjects()
