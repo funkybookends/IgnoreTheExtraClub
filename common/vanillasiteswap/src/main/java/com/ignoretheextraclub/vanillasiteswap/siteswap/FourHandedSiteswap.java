@@ -3,10 +3,12 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+import jdk.nashorn.internal.ir.annotations.Immutable;
 
 /**
  * Created by caspar on 27/11/16.
  */
+@Immutable
 public class FourHandedSiteswap extends VanillaSiteswap
 {
     private final static int[] ILLEGAL_THROWS = new int[]{1,3};
@@ -22,7 +24,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         {
             try
             {
-                return new FourHandedSiteswap(GlobalLocal.globalToLocal(siteswap, 0), sort);
+                return new FourHandedSiteswap(GlobalLocal.localToGlobal(siteswap), sort);
             }
             catch (InvalidSiteswapException e1)
             {

@@ -83,7 +83,7 @@ public class IntVanilla
     }
 
     /**
-     * Converts an int array to a string. Guranteed to not throw an exception
+     * Converts an int array to a string. Guaranteed to not throw an exception
      *
      * It is your responsibility to catch invalid throws.
      * @param thros

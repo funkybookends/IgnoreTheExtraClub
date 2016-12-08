@@ -163,6 +163,11 @@ public class MultiplexState extends AbstractState
         return thros.stream().mapToInt(Integer::intValue).toArray();
     }
 
+    public int getNumObjects()
+    {
+        return numObjects;
+    }
+
     public static class MultiplexStateBuilder
     {
         private int[] occupancy;
