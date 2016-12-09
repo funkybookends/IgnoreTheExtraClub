@@ -1,7 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
-import com.ignoretheextraclub.vanillasiteswap.state.MultiplexState;
-import org.apache.commons.lang.NotImplementedException;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +13,7 @@ public class StringMultiplex
     private static final char OPEN = '[';
     private static final char CLOSE = ']';
 
-    private static List<List<Integer>> StringToThrows(String stringSiteswap)
+    private static List<List<Integer>> stringToThrows(final String stringSiteswap)
     {
         List<List<Integer>> allThros = new LinkedList<>();
 
@@ -42,13 +41,20 @@ public class StringMultiplex
         return allThros;
     }
 
-    public static String listMultiplexStatesToString(List<MultiplexState> states)
+    private static String throwsToString(final List<List<Integer>> allThros) throws InvalidArgumentException
     {
-        throw new NotImplementedException();
-    }
-
-    public static List<MultiplexState> stringToListMultiplexState(String stringSiteswap)
-    {
-        throw new NotImplementedException();
+        StringBuilder str = new StringBuilder();
+        for (List<Integer> beatThros : allThros)
+        {
+            if      (beatThros.size() == 0) throw new InvalidArgumentException(new String[]{"Cannot have no throws in a beat"});
+            else if (beatThros.size() == 1) str.append(beatThros.get(0));
+            else
+            {
+                str.append(OPEN);
+                beatThros.forEach(str::append);
+                str.append(CLOSE);
+            }
+        }
+        return str.toString();
     }
 }
