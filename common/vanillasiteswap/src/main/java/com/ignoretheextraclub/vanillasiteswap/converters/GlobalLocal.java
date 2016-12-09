@@ -36,6 +36,7 @@ public class GlobalLocal
         return global;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T[] globalToLocal(final T[] global, final int startPos)
     {
         final T[] local = (T[]) Array.newInstance(global.getClass().getComponentType(), global.length);
@@ -46,6 +47,7 @@ public class GlobalLocal
         return local;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T[] localToGlobal(final T[] local)
     {
         final T[] global = (T[]) Array.newInstance(local.getClass().getComponentType(), local.length);
