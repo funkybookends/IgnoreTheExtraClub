@@ -16,14 +16,13 @@ public class IntPrechac
     private static final String PREFIX = "";
     private static final String SUFFIX = "";
 
-    private static final Pattern THROW_PATTERN = Pattern.compile("(\\d+(\\.5)?)p?");
+    private static final Pattern THROW_PATTERN = Pattern.compile("(\\d+(\\.5)?)[pP]?");
 
     public static String intToPrechac(final int thro)
     {
         if (thro % 2 == 0) return String.valueOf(thro/2);
         return String.valueOf(thro/2) + DOT + "5" + PASS;
     }
-
 
     public static String intToPrechac(final int[] thros)
     {
@@ -50,7 +49,7 @@ public class IntPrechac
             if (!matcher.find()) return -1;
             return Integer.valueOf(matcher.group(1));
         }
-        catch (NumberFormatException nfe)
+        catch (final NumberFormatException nfe)
         {
             return -1;
         }

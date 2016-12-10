@@ -24,7 +24,7 @@ public class IntHefflish
 
     /**
      * Converts a throw to hefflish. Guranteed to not throw an exception.
-     * @param thro
+     * @param thro the throw to translate
      * @return the hefflish word, or an empty string if invalid.
      */
     public static String intToHefflish(int thro)

@@ -15,7 +15,7 @@ public class IntVanilla
      * @param thro
      * @return the thro as an int, or {@link #INVALID_INT} if not valid.
      */
-    public static int charToInt(char thro)
+    public static int charToInt(final char thro)
     {
         if      (thro >= '0' && thro <= '9') return thro - '0';
         else if (thro >= 'A' && thro <= 'Z') return thro - 'A' + 10;
@@ -30,7 +30,7 @@ public class IntVanilla
      * @param thro
      * @return the thro as a char, or {@link #INVALID_CHAR} if not valid.
      */
-    public static char intToChar(int thro)
+    public static char intToChar(final int thro)
     {
         if      (thro < 0 ) return INVALID_CHAR;
         else if (thro < 10) return (char) (thro + '0');
@@ -45,7 +45,7 @@ public class IntVanilla
      * @param intThrows
      * @return charThrows, with {@link #INVALID_CHAR}s for invalid throws.
      */
-    public static char[] intArrayToCharArray(int[] intThrows)
+    public static char[] intArrayToCharArray(final int[] intThrows)
     {
         final char[] charThrows = new char[intThrows.length];
         for (int i = 0; i < intThrows.length; i++)
@@ -60,7 +60,7 @@ public class IntVanilla
      * @param charThrows
      * @return an array of ints, with {@link #INVALID_INT} for any invalid throws.
      */
-    public static int[] charArrayToIntArray(char[] charThrows)
+    public static int[] charArrayToIntArray(final char[] charThrows)
     {
         final int[] intThrows = new int[charThrows.length];
         for (int i = 0; i < charThrows.length; i++)
@@ -77,7 +77,7 @@ public class IntVanilla
      * @param stringThrows
      * @return an int array, with {@link #INVALID_INT} for any invalid throws.
      */
-    public static int[] stringToIntArray(String stringThrows)
+    public static int[] stringToIntArray(final String stringThrows)
     {
         return charArrayToIntArray(stringThrows.toCharArray());
     }
@@ -89,7 +89,7 @@ public class IntVanilla
      * @param thros
      * @return A string representation of the throws, with {@link #INVALID_CHAR} for any invalid throws.
      */
-    public static String intArrayToString(int[] thros)
+    public static String intArrayToString(final int[] thros)
     {
         return new String(intArrayToCharArray(thros));
     }
