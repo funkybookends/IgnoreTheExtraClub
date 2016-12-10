@@ -173,7 +173,6 @@ public class FourHandedSiteswap extends VanillaSiteswap
         private String followerStringSiteswap;
         private String leaderPrechac;
         private String followerPrechac;
-        private String prechac;
         private boolean isMirrored;
 
         public FourHandedSiteswapBuilder(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
@@ -196,8 +195,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
             followerIntSiteswap = GlobalLocal.globalToLocal(this.intSiteswap, 1);
             followerStringSiteswap = IntVanilla.intArrayToString(followerIntSiteswap);
 
-            leaderPrechac = IntPrechac.intToPrechac(leaderIntSiteswap);
-            followerPrechac = IntPrechac.intToPrechac(followerIntSiteswap);
+            leaderPrechac = IntPrechac.fourHandedIntsToPrechac(leaderIntSiteswap);
+            followerPrechac = IntPrechac.fourHandedIntsToPrechac(followerIntSiteswap);
 
         }
 

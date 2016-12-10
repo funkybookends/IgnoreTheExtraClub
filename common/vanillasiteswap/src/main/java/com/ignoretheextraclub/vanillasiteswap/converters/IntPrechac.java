@@ -30,4 +30,18 @@ public class IntPrechac
     public static final Pattern P_THROW_SET = Pattern.compile(THROW_SET);
     public static final Pattern P_PRECHAC = Pattern.compile(PRECHAC);
 
+    public static String fourHandedIntToPrechac(int thro)
+    {
+        if (thro % 2 == 0 ) return String.valueOf(thro / 2);
+        return String.valueOf(thro / 2) + DOT + "5" + PASS;
+    }
+
+    public static String fourHandedIntsToPrechac(int[] thros)
+    {
+        return Arrays.stream(thros)
+                .boxed()
+                .map(IntPrechac::fourHandedIntToPrechac)
+                .collect(Collectors.joining(String.valueOf(DELIMETER)));
+    }
+
 }
