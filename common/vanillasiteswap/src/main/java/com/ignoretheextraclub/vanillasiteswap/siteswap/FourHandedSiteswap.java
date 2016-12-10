@@ -4,7 +4,10 @@ import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntPrechac;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import jdk.nashorn.internal.ir.annotations.Immutable;
+
+import java.util.List;
 
 /**
  * Created by caspar on 27/11/16.
@@ -23,7 +26,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
     private final String followerPrechac;
     private final String prechac;
 
-    public FourHandedSiteswap(boolean prime,
+    public FourHandedSiteswap(List<VanillaState> states,
+                              boolean prime,
                               int period,
                               int numObjects,
                               boolean grounded,
@@ -40,7 +44,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
                               String followerPrechac,
                               String prechac)
     {
-        super(prime,
+        super(states,
+              prime,
               period,
               numObjects,
               grounded,
@@ -99,6 +104,41 @@ public class FourHandedSiteswap extends VanillaSiteswap
         return FourHandedSiteswap.createGlobalOrLocal(IntVanilla.stringToIntArray(siteswap), true);
     }
 
+    public int[] getLeaderIntSiteswap()
+    {
+        return leaderIntSiteswap;
+    }
+
+    public int[] getFollowerIntSiteswap()
+    {
+        return followerIntSiteswap;
+    }
+
+    public String getLeaderStringSiteswap()
+    {
+        return leaderStringSiteswap;
+    }
+
+    public String getFollowerStringSiteswap()
+    {
+        return followerStringSiteswap;
+    }
+
+    public String getLeaderPrechac()
+    {
+        return leaderPrechac;
+    }
+
+    public String getFollowerPrechac()
+    {
+        return followerPrechac;
+    }
+
+    public String getPrechac()
+    {
+        return prechac;
+    }
+
     protected static class FourHandedSiteswapBuilder extends VanillaSiteswapBuilder
     {
         private int[] leaderIntSiteswap;
@@ -134,7 +174,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
 
         protected FourHandedSiteswap buildFourHandedSiteswap()
         {
-            return new FourHandedSiteswap(prime,
+            return new FourHandedSiteswap(states,
+                                          prime,
                                           period,
                                           numObjects,
                                           grounded,

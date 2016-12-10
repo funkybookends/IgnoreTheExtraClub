@@ -28,7 +28,7 @@ import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.transiti
 public class VanillaSiteswap extends Siteswap
 {
 
-    protected final List<VanillaState> states = new LinkedList<>(); //The list of states, ordered, and possibly sorted
+    protected final List<VanillaState> states; //The list of states, ordered, and possibly sorted
     protected final boolean prime; //A pattern is prime if it does not revisit a state twice. If it does this implies it can be decomposed into two or more siteswaps TODO determine decompositions
     protected final int period;
     protected final int numObjects;
@@ -39,7 +39,7 @@ public class VanillaSiteswap extends Siteswap
     protected final int[] intSiteswap;
     protected final int[] startingObjectsPerHand;
 
-    public VanillaSiteswap(boolean prime,
+    public VanillaSiteswap(List<VanillaState> states, boolean prime,
                            int period,
                            int numObjects,
                            boolean grounded,
@@ -49,6 +49,7 @@ public class VanillaSiteswap extends Siteswap
                            int[] intSiteswap,
                            int[] startingObjectsPerHand)
     {
+        this.states = states;
         this.prime = prime;
         this.period = period;
         this.numObjects = numObjects;
@@ -286,7 +287,8 @@ public class VanillaSiteswap extends Siteswap
 
         private VanillaSiteswap buildVanillaSiteswap()
         {
-            return new VanillaSiteswap(prime,
+            return new VanillaSiteswap(states,
+                                       prime,
                                        period,
                                        numObjects,
                                        grounded,
