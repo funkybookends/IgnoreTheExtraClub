@@ -246,14 +246,8 @@ public class VanillaState extends AbstractState
         StringBuilder strBuilder = new StringBuilder();
         for (boolean filledPosition : filledPositions)
         {
-            if (filledPosition)
-            {
-                strBuilder.append(FILLED);
-            }
-            else
-            {
-                strBuilder.append(EMPTY);
-            }
+            if (filledPosition) strBuilder.append(FILLED);
+            else                strBuilder.append(EMPTY);
         }
         return strBuilder.toString();
     }
