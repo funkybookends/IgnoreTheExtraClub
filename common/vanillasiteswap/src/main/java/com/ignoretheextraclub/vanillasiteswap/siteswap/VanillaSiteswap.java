@@ -3,6 +3,7 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
+import com.ignoretheextraclub.vanillasiteswap.state.VanillaState.VanillaStateBuilder;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.Arrays;
@@ -162,6 +163,7 @@ public class VanillaSiteswap extends Siteswap
                 startingObjectsPerHand = new int[hands];
                 period = validatePeriod(vanillaSiteswap.length);
                 numObjects = validateNumObjects((int) Arrays.stream(vanillaSiteswap).average().orElse(0));
+                highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
                 buildStatesAndHands(vanillaSiteswap);
                 grounded = containsAGroundState();
                 prime = !containsARepeatedState();
@@ -169,7 +171,6 @@ public class VanillaSiteswap extends Siteswap
                 sorted = sort;
                 intSiteswap = getAllThrows();
                 stringSiteswap = IntVanilla.intArrayToString(intSiteswap);
-                highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
             }
             catch (final BadThrowException | NumObjectsException | StateSizeException | NoTransitionException | PeriodException cause)
             {
@@ -209,7 +210,7 @@ public class VanillaSiteswap extends Siteswap
                                                                        StateSizeException,
                                                                        InvalidSiteswapException
         {
-            final VanillaState.VanillaStateBuilder builder = new VanillaState.VanillaStateBuilder(this.highestThrow, numObjects);
+            final VanillaStateBuilder builder = new VanillaStateBuilder(this.highestThrow, numObjects);
             int index = 0;
             int givenObjects = 0;
             while (builder.getGivenObjects() < numObjects || index % period != 0)
