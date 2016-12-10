@@ -30,20 +30,8 @@ public class VanillaState extends AbstractState
      */
     private VanillaState(final boolean[] occupied) throws StateSizeException, NumObjectsException
     {
-        this.maxThrow = occupied.length;
-
-        if (maxThrow < MIN_SIZE || maxThrow > MAX_SIZE)
-        {
-            throw new StateSizeException("State has [" + maxThrow + "] positions, must be between [" + MIN_SIZE + "] and [" + MAX_SIZE + "]");
-        }
-
-        this.numObjects = getNumObjects(occupied);
-
-        if (this.numObjects < MIN_OBJECTS || this.numObjects > MAX_OBJECTS)
-        {
-            throw new NumObjectsException("State has [" + this.numObjects + "] objects, must be between [" + MIN_OBJECTS + "] and [" + MAX_OBJECTS + "]");
-        }
-
+        this.maxThrow = validateSize(occupied.length);
+        this.numObjects = validateNumObjects(getNumObjects(occupied));
         this.occupied = occupied;
     }
 
