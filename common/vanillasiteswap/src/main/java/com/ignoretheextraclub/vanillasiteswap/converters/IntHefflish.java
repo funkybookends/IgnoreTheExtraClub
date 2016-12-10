@@ -29,7 +29,7 @@ public class IntHefflish
      */
     public static String intToHefflish(int thro)
     {
-        if (thro > 0 && thro < HEFFLISH.length - 1)
+        if (thro >= 0 && thro < HEFFLISH.length)
             return HEFFLISH[thro];
         return "";
     }
