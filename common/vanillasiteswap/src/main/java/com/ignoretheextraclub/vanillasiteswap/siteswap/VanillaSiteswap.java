@@ -27,11 +27,10 @@ import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.transiti
 @Immutable
 public class VanillaSiteswap extends Siteswap
 {
+    public static final int MAX_THROW = IntVanilla.charToInt('D');
 
     protected final List<VanillaState> states; //The list of states, ordered, and possibly sorted
     protected final boolean prime; //A pattern is prime if it does not revisit a state twice. If it does this implies it can be decomposed into two or more siteswaps TODO determine decompositions
-    protected final int period;
-    protected final int numObjects;
     protected final boolean grounded; //A pattern is grounded if it goes through the ground state, the ground state is the lowest level of excitiation
     protected final int highestThrow;
     protected final boolean sorted;
@@ -39,20 +38,23 @@ public class VanillaSiteswap extends Siteswap
     protected final int[] intSiteswap;
     protected final int[] startingObjectsPerHand;
 
-    public VanillaSiteswap(List<VanillaState> states, boolean prime,
-                           int period,
-                           int numObjects,
-                           boolean grounded,
-                           int highestThrow,
-                           boolean sorted,
-                           String stringSiteswap,
-                           int[] intSiteswap,
-                           int[] startingObjectsPerHand)
+    protected VanillaSiteswap(final int numJugglers,
+                              final int period,
+                              final int numObjects,
+                              final int[] intSiteswap,
+                              final List<VanillaState> states,
+                              final boolean sorted,
+                              final boolean prime,
+                              final boolean grounded,
+                              final int highestThrow,
+                              final int[] startingObjectsPerHand,
+                              final String stringSiteswap) throws InvalidSiteswapException
     {
+        super(numJugglers,
+              period,
+              numObjects);
         this.states = states;
         this.prime = prime;
-        this.period = period;
-        this.numObjects = numObjects;
         this.grounded = grounded;
         this.highestThrow = highestThrow;
         this.sorted = sorted;
@@ -80,36 +82,6 @@ public class VanillaSiteswap extends Siteswap
     public static VanillaSiteswap create(final String siteswap) throws InvalidSiteswapException
     {
         return create(siteswap, true);
-    }
-
-    public boolean isPrime()
-    {
-        return prime;
-    }
-
-    public int getPeriod()
-    {
-        return period;
-    }
-
-    public int getNumObjects()
-    {
-        return numObjects;
-    }
-
-    public boolean isGrounded()
-    {
-        return grounded;
-    }
-
-    public int getHighestThrow()
-    {
-        return highestThrow;
-    }
-
-    public boolean isSorted()
-    {
-        return sorted;
     }
 
     @Override
@@ -140,7 +112,7 @@ public class VanillaSiteswap extends Siteswap
      */
     protected static class VanillaSiteswapBuilder
     {
-        protected final List<VanillaState> states;
+        protected List<VanillaState> states;
         protected boolean prime;
         protected int period;
         protected int numObjects;
@@ -154,28 +126,24 @@ public class VanillaSiteswap extends Siteswap
         public VanillaSiteswapBuilder(final int[] vanillaSiteswap, final boolean sort, final int hands) throws
                                                                                                         InvalidSiteswapException
         {
-            if (vanillaSiteswap.length > VanillaSiteswap.MAX_PERIOD || vanillaSiteswap.length < 1)
-            {
-                throw new InvalidSiteswapException("Invalid siteswap length");
-            }
-            highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
-            numObjects = (int) Arrays.stream(vanillaSiteswap).average().orElse(0);
-            period = vanillaSiteswap.length;
-            states = new LinkedList<>();
-            startingObjectsPerHand = new int[hands];
             try
             {
+                states = new LinkedList<>();
+                startingObjectsPerHand = new int[hands];
+                period = validatePeriod(vanillaSiteswap.length);
+                numObjects = validateNumObjects((int) Arrays.stream(vanillaSiteswap).average().orElse(0));
                 buildStatesAndHands(vanillaSiteswap);
                 grounded = containsAGroundState();
-                prime = !containsARepeatedState(); // both done here because they can be used during sorting
+                prime = !containsARepeatedState();
                 if (sort) sort();
                 sorted = sort;
                 intSiteswap = getAllThrows();
                 stringSiteswap = IntVanilla.intArrayToString(intSiteswap);
+                highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
             }
-            catch (BadThrowException | NumObjectsException | StateSizeException | NoTransitionException e)
+            catch (final BadThrowException | NumObjectsException | StateSizeException | NoTransitionException | PeriodException cause)
             {
-                throw new InvalidSiteswapException("Invalid Siteswap [" + IntVanilla.intArrayToString(vanillaSiteswap) + "]", e);
+                throw new InvalidSiteswapException("Invalid Siteswap [" + IntVanilla.intArrayToString(vanillaSiteswap) + "]", cause);
             }
 
             if (states.size() != period)
@@ -285,18 +253,14 @@ public class VanillaSiteswap extends Siteswap
             return false;
         }
 
-        private VanillaSiteswap buildVanillaSiteswap()
+        private VanillaSiteswap buildVanillaSiteswap() throws InvalidSiteswapException
         {
-            return new VanillaSiteswap(states,
-                                       prime,
-                                       period,
-                                       numObjects,
-                                       grounded,
-                                       highestThrow,
-                                       sorted,
-                                       stringSiteswap,
-                                       intSiteswap,
-                                       startingObjectsPerHand);
+            if (startingObjectsPerHand.length > 2)
+            {
+                throw new InvalidSiteswapException("No humans have more than two hands!");
+            }
+            return new VanillaSiteswap(1, period, numObjects, intSiteswap, states,sorted, prime, grounded,
+                                       highestThrow, startingObjectsPerHand, stringSiteswap);
         }
     }
 

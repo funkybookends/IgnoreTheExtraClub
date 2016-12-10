@@ -15,8 +15,8 @@ import java.util.List;
 @Immutable
 public class FourHandedSiteswap extends VanillaSiteswap
 {
-    private final static int[] ILLEGAL_THROWS = new int[]{1,3};
-    private static final int MAX_THROW = 12; //C
+    private static final int[] ILLEGAL_THROWS = new int[]{1, 3};
+    private static final int MAX_THROW = IntVanilla.charToInt('C');
 
     private final int[] leaderIntSiteswap;
     private final int[] followerIntSiteswap;
@@ -26,34 +26,37 @@ public class FourHandedSiteswap extends VanillaSiteswap
     private final String followerPrechac;
     private final String prechac;
 
-    public FourHandedSiteswap(List<VanillaState> states,
-                              boolean prime,
-                              int period,
-                              int numObjects,
-                              boolean grounded,
-                              int highestThrow,
-                              boolean sorted,
-                              String stringSiteswap,
-                              int[] intSiteswap,
-                              int[] startingObjectsPerHand,
-                              int[] leaderIntSiteswap,
-                              int[] followerIntSiteswap,
-                              String leaderStringSiteswap,
-                              String followerStringSiteswap,
-                              String leaderPrechac,
-                              String followerPrechac,
-                              String prechac)
+    protected FourHandedSiteswap(final int numJugglers,
+                                 final int period,
+                                 final int numObjects,
+                                 final int[] intSiteswap,
+                                 final List<VanillaState> states,
+                                 final boolean sorted,
+                                 final boolean prime,
+                                 final boolean grounded,
+                                 final int highestThrow,
+                                 final int[] startingObjectsPerHand,
+                                 final String stringSiteswap,
+                                 final String prechac,
+                                 final int[] leaderIntSiteswap,
+                                 final String leaderStringSiteswap,
+                                 final String leaderPrechac,
+                                 final int[] followerIntSiteswap,
+                                 final String followerStringSiteswap,
+                                 final String followerPrechac) throws InvalidSiteswapException
     {
-        super(states,
-              prime,
+        super(numJugglers,
               period,
               numObjects,
+              intSiteswap,
+              states,
+              sorted,
+              prime,
               grounded,
               highestThrow,
-              sorted,
-              stringSiteswap,
-              intSiteswap,
-              startingObjectsPerHand);
+              startingObjectsPerHand,
+              stringSiteswap
+        );
         this.leaderIntSiteswap = leaderIntSiteswap;
         this.followerIntSiteswap = followerIntSiteswap;
         this.leaderStringSiteswap = leaderStringSiteswap;
@@ -79,7 +82,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
             }
             catch (InvalidSiteswapException invalidAsLocal)
             {
-                throw new InvalidSiteswapException("Invalid as either Global or Local Siteswap");
+                invalidAsGlobal.addSuppressed(invalidAsLocal);
+                throw new InvalidSiteswapException("Invalid as either Global or Local Siteswap", invalidAsGlobal);
             }
         }
     }
@@ -172,25 +176,16 @@ public class FourHandedSiteswap extends VanillaSiteswap
 
         }
 
-        protected FourHandedSiteswap buildFourHandedSiteswap()
+        protected FourHandedSiteswap buildFourHandedSiteswap() throws InvalidSiteswapException
         {
-            return new FourHandedSiteswap(states,
-                                          prime,
-                                          period,
-                                          numObjects,
-                                          grounded,
-                                          highestThrow,
-                                          sorted,
-                                          stringSiteswap,
-                                          intSiteswap,
-                                          startingObjectsPerHand,
-                                          leaderIntSiteswap,
-                                          followerIntSiteswap,
-                                          leaderStringSiteswap,
-                                          followerStringSiteswap,
-                                          leaderPrechac,
-                                          followerPrechac,
-                                          prechac);
+            if (startingObjectsPerHand.length > 4)
+            {
+                throw new InvalidSiteswapException("No humans have more than two hands!");
+            }
+            return new FourHandedSiteswap(2, period, numObjects, intSiteswap, states, sorted,
+                                          prime,grounded, highestThrow, startingObjectsPerHand, stringSiteswap, prechac,
+                                          leaderIntSiteswap, leaderStringSiteswap, leaderPrechac, followerIntSiteswap,
+                                          followerStringSiteswap, followerPrechac);
         }
     }
 

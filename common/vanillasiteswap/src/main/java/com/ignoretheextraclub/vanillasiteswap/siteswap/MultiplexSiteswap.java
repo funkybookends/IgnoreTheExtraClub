@@ -1,45 +1,35 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
-import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
-import com.ignoretheextraclub.vanillasiteswap.converters.StringMultiplex;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
 import com.ignoretheextraclub.vanillasiteswap.state.MultiplexState;
 import jdk.nashorn.internal.ir.annotations.Immutable;
+import org.apache.commons.lang.NotImplementedException;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by caspar on 07/12/16.
  */
 @Immutable
-public class MultiplexSiteswap
+public class MultiplexSiteswap extends Siteswap
 {
     private final List<MultiplexState> states;
     private final int period;
     private final int numObjects;
     private final String stringSiteswap;
 
-    private MultiplexSiteswap(List<MultiplexState> states) throws InvalidSiteswapException
+    public MultiplexSiteswap(final List<MultiplexState> states,
+                             final int period,
+                             final int numObjects,
+                             final String stringSiteswap,
+                             final int numJugglers) throws InvalidSiteswapException
     {
+        super(numJugglers, period, numObjects);
         this.states = states;
-        try
-        {
-            for (int i = 0; i < states.size() - 1; i++)
-            {
-                MultiplexState.transition(states.get(i), states.get(i + 1));
-            }
-            MultiplexState.transition(states.get(states.size()), states.get(0));
-        }
-        catch (NoTransitionException e)
-        {
-            throw new InvalidSiteswapException("Cannot make all transitions", e);
-        }
-
-        this.period = states.size();
-        this.numObjects = states.get(0).getNumObjects();
-        this.stringSiteswap = StringMultiplex.listMultiplexStatesToString(states);
+        this.period = period;
+        this.numObjects = numObjects;
+        this.stringSiteswap = stringSiteswap;
     }
 
     @Override
@@ -49,7 +39,7 @@ public class MultiplexSiteswap
     }
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(final Object o)
     {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -63,5 +53,35 @@ public class MultiplexSiteswap
     public int hashCode()
     {
         return stringSiteswap.hashCode();
+    }
+
+    protected static class MultiplexSiteswapBuilder
+    {
+        protected List<MultiplexState> states;
+        protected int period;
+        protected int numObjects;
+        protected String stringSiteswap;
+
+        private MultiplexSiteswapBuilder(final List<MultiplexState> states) throws InvalidSiteswapException
+        {
+            this.states = states;
+            try
+            {
+                for (int i = 0; i < states.size() - 1; i++)
+                {
+                    MultiplexState.transition(states.get(i), states.get(i + 1));
+                }
+                MultiplexState.transition(states.get(states.size()), states.get(0));
+            }
+            catch (NoTransitionException e)
+            {
+                throw new InvalidSiteswapException("Cannot make all transitions", e);
+            }
+
+            this.period = states.size();
+            this.numObjects = states.get(0).getNumObjects();
+            this.stringSiteswap = "";
+            throw new NotImplementedException();
+        }
     }
 }
