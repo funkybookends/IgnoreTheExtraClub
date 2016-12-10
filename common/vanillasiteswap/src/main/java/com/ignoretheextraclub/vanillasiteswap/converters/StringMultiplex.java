@@ -1,8 +1,5 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
-
-import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
-
 import java.util.LinkedList;
 import java.util.List;
 
