@@ -91,22 +91,22 @@ public class FourHandedSiteswap extends VanillaSiteswap
     private static FourHandedSiteswap createSiteswapOrPrechac(final String siteswap, final boolean sort) throws
                                                                                                          InvalidSiteswapException
     {
-        try
-        {
+//        try
+//        {
             return createGlobalOrLocal(IntVanilla.stringToIntArray(siteswap), sort);
-        }
-        catch (InvalidSiteswapException invalidAsVanillaSiteswap)
-        {
-            try
-            {
-                return createGlobalOrLocal(IntPrechac.prechacToInt(siteswap), sort);
-            }
-            catch (InvalidSiteswapException invalidAsPrechac)
-            {
-                invalidAsVanillaSiteswap.addSuppressed(invalidAsPrechac);
-                throw new InvalidSiteswapException("Invalid as either VanillaSiteswap or Prechac", invalidAsVanillaSiteswap);
-            }
-        }
+//        }
+//        catch (InvalidSiteswapException invalidAsVanillaSiteswap)
+//        {
+//            try
+//            {
+//                return createGlobalOrLocal(IntPrechac.prechacToInt(siteswap), sort);
+//            }
+//            catch (InvalidSiteswapException invalidAsPrechac)
+//            {
+//                invalidAsVanillaSiteswap.addSuppressed(invalidAsPrechac);
+//                throw new InvalidSiteswapException("Invalid as either VanillaSiteswap or Prechac", invalidAsVanillaSiteswap);
+//            }
+//        }
     }
 
     public static FourHandedSiteswap create(int[] siteswap, boolean sort) throws InvalidSiteswapException
