@@ -1,5 +1,7 @@
 package com.ignoretheextraclub.vanillasiteswap.state;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
@@ -15,8 +17,11 @@ import java.util.stream.IntStream;
 @Immutable
 public class VanillaState extends AbstractState
 {
+    @JsonIgnore
     private final int maxThrow;
+    @JsonIgnore
     private final int numObjects;
+    @JsonIgnore
     private final boolean[] occupied;
 
     /**
@@ -37,6 +42,7 @@ public class VanillaState extends AbstractState
         return occupied[0];
     }
 
+    @JsonIgnore
     public int[] getAvailableThrows()
     {
         if (canThrow())
@@ -73,6 +79,7 @@ public class VanillaState extends AbstractState
      * Lower is better
      * @return
      */
+    @JsonProperty
     public int excitedness()
     {
         int result = 0;
@@ -88,6 +95,7 @@ public class VanillaState extends AbstractState
         return result;
     }
 
+    @JsonProperty("occupancy")
     public String toString()
     {
         return toString(this.occupied);

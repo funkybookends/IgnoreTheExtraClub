@@ -1,5 +1,8 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
@@ -30,6 +33,7 @@ public class VanillaSiteswap extends Siteswap
 {
     public static final int MAX_THROW = IntVanilla.charToInt('D');
 
+    @JsonProperty
     protected final VanillaState[] states; //The list of states, ordered, and possibly sorted
     protected final boolean prime; //A pattern is prime if it does not revisit a state twice. If it does this implies it can be decomposed into two or more siteswaps TODO determine decompositions
     protected final boolean grounded; //A pattern is grounded if it goes through the ground state, the ground state is the lowest level of excitiation

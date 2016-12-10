@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumJugglersException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
@@ -19,8 +20,10 @@ public abstract class Siteswap
     public static final int MAX_OBJECTS = MAX_JUGGLERS * 7;
     public static final int MIN_OBJECTS = 1;
 
+    @JsonProperty("num_jugglers")
     protected final int numJugglers;
     protected final int period;
+    @JsonProperty("num_objects")
     protected final int numObjects;
 
     protected Siteswap(final int numJugglers, final int period, final int numObjects) throws InvalidSiteswapException

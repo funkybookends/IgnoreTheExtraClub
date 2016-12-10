@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntPrechac;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
@@ -18,13 +19,13 @@ public class FourHandedSiteswap extends VanillaSiteswap
     private static final int[] ILLEGAL_THROWS = new int[]{1, 3};
     private static final int MAX_THROW = IntVanilla.charToInt('C');
 
-    private final boolean isMirrored;
-    private final int[] leaderIntSiteswap;
-    private final int[] followerIntSiteswap;
-    private final String leaderStringSiteswap;
-    private final String followerStringSiteswap;
-    private final String leaderPrechac;
-    private final String followerPrechac;
+    @JsonProperty("is_mirrored")              private final boolean isMirrored;
+    @JsonProperty("leader_int_siteswap")      private final int[] leaderIntSiteswap;
+    @JsonProperty("follower_int_siteswap")    private final int[] followerIntSiteswap;
+    @JsonProperty("leader_string_siteswap")   private final String leaderStringSiteswap;
+    @JsonProperty("follower_string_siteswap") private final String followerStringSiteswap;
+    @JsonProperty("leader_prechac")           private final String leaderPrechac;
+    @JsonProperty("follower_prechac")         private final String followerPrechac;
 
     protected FourHandedSiteswap(final int numJugglers,
                                  final int period,
@@ -159,6 +160,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         return followerPrechac;
     }
 
+    @JsonProperty("prechac")
     public String getPrechac()
     {
         if (isMirrored) return leaderPrechac;
