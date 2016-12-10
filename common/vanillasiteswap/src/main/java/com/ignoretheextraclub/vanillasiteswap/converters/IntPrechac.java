@@ -10,60 +10,24 @@ import java.util.stream.Collectors;
  */
 public class IntPrechac
 {
-    private static final char PASS = 'p';
-    private static final char DELIMETER = ' ';
-    private static final char DOT = '.';
-    private static final String PREFIX = "";
-    private static final String SUFFIX = "";
+    public static final char PASS = 'p';
+    public static final char DELIMETER = ' ';
+    public static final char DOT = '.';
+    public static final char SEPERATOR = '|';
+    public static final char OPEN = '<';
+    public static final char CLOSE = '>';
 
-    private static final Pattern THROW_PATTERN = Pattern.compile("(\\d+(\\.5)?)[pP]?");
+    public static final String PREFIX = "";
+    public static final String SUFFIX = "";
 
-    public static String intToPrechac(final int thro)
-    {
-        if (thro % 2 == 0) return String.valueOf(thro/2);
-        return String.valueOf(thro/2) + DOT + "5" + PASS;
-    }
+    public static final String THROW = "\\d+(\\.\\d*)?" + PASS + "?";
+    public static final String THROWS = "((\\(" + THROW + "," + THROW + "\\))" + SEPERATOR + THROW + ")";
+    public static final String THROW_SET = "((" + THROWS + " )*" + THROWS + ")";
+    public static final String PRECHAC = OPEN + "(" + THROW_SET + " ?\\| ?)*" + THROW_SET + CLOSE;
 
-    public static String intToPrechac(final int[] thros)
-    {
-        return intToPrechac(thros, PREFIX, SUFFIX);
-    }
-
-    public static String intToPrechac(final int[] thros, final String prefix, final String suffix)
-    {
-        return Arrays.stream(thros).boxed().map(IntPrechac::intToPrechac).collect(Collectors.joining(String.valueOf(DELIMETER), prefix, suffix));
-    }
-
-    /**
-     * Converts a prechac to an int, converts based on the multiplier which represents half the number of hands
-     *
-     * It is your job to deal with converting it to the right number of hands, for example in a {@link com.ignoretheextraclub.vanillasiteswap.siteswap.FourHandedSiteswap}.
-     * @param prechacThrow the precach to parse
-     * @return an int representing the throw, or -1 if invalid
-     */
-    public static int prechacThrowToInt(final String prechacThrow)
-    {
-        try
-        {
-            Matcher matcher = THROW_PATTERN.matcher(prechacThrow);
-            if (!matcher.find()) return -1;
-            return Integer.valueOf(matcher.group(1));
-        }
-        catch (final NumberFormatException nfe)
-        {
-            return -1;
-        }
-    }
-
-    public static int[] prechacToInt(final String prechac)
-    {
-        final String[] splitPrechacs = prechac.split(String.valueOf(DELIMETER));
-        final int[] splitInts = new int[splitPrechacs.length];
-        for (int i = 0; i < splitPrechacs.length; i++)
-        {
-            splitInts[i] = IntPrechac.prechacThrowToInt(splitPrechacs[i]);
-        }
-        return splitInts;
-    }
+    public static final Pattern P_THROW = Pattern.compile(THROW);
+    public static final Pattern P_THROWS = Pattern.compile(THROWS);
+    public static final Pattern P_THROW_SET = Pattern.compile(THROW_SET);
+    public static final Pattern P_PRECHAC = Pattern.compile(PRECHAC);
 
 }
