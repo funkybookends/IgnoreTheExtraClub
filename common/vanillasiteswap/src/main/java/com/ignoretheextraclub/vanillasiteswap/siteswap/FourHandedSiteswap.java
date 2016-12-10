@@ -24,7 +24,6 @@ public class FourHandedSiteswap extends VanillaSiteswap
     private final String followerStringSiteswap;
     private final String leaderPrechac;
     private final String followerPrechac;
-    private final String prechac;
 
     protected FourHandedSiteswap(final int numJugglers,
                                  final int period,
@@ -37,7 +36,6 @@ public class FourHandedSiteswap extends VanillaSiteswap
                                  final int highestThrow,
                                  final int[] startingObjectsPerHand,
                                  final String stringSiteswap,
-                                 final String prechac,
                                  final int[] leaderIntSiteswap,
                                  final String leaderStringSiteswap,
                                  final String leaderPrechac,
@@ -63,7 +61,6 @@ public class FourHandedSiteswap extends VanillaSiteswap
         this.followerStringSiteswap = followerStringSiteswap;
         this.leaderPrechac = leaderPrechac;
         this.followerPrechac = followerPrechac;
-        this.prechac = prechac;
     }
 
     private static FourHandedSiteswap createGlobalOrLocal(int[] siteswap, boolean sort) throws InvalidSiteswapException
@@ -159,11 +156,6 @@ public class FourHandedSiteswap extends VanillaSiteswap
         return followerPrechac;
     }
 
-    public String getPrechac()
-    {
-        return prechac;
-    }
-
     protected static class FourHandedSiteswapBuilder extends VanillaSiteswapBuilder
     {
         private int[] leaderIntSiteswap;
@@ -191,7 +183,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
             leaderStringSiteswap = IntVanilla.intArrayToString(leaderIntSiteswap);
             followerIntSiteswap = GlobalLocal.globalToLocal(this.intSiteswap, 1);
             followerStringSiteswap = IntVanilla.intArrayToString(followerIntSiteswap);
-            prechac = IntPrechac.intToPrechac(intSiteswap);
+
             leaderPrechac = IntPrechac.intToPrechac(leaderIntSiteswap);
             followerPrechac = IntPrechac.intToPrechac(followerIntSiteswap);
 
@@ -203,8 +195,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
             {
                 throw new InvalidSiteswapException("No humans have more than two hands!");
             }
-            return new FourHandedSiteswap(2, period, numObjects, intSiteswap, states, sorted,
-                                          prime,grounded, highestThrow, startingObjectsPerHand, stringSiteswap, prechac,
+            return new FourHandedSiteswap(2, period, numObjects, intSiteswap, states, sorted, prime,
+                                          grounded, highestThrow, startingObjectsPerHand, stringSiteswap,
                                           leaderIntSiteswap, leaderStringSiteswap, leaderPrechac, followerIntSiteswap,
                                           followerStringSiteswap, followerPrechac);
         }
