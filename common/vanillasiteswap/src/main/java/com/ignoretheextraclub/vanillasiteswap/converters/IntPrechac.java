@@ -19,6 +19,7 @@ public class IntPrechac
     public static final String PREFIX = "";
     public static final String SUFFIX = "";
 
+    // Taken from http://jugglingedge.com/smalltalk.php?ThreadID=1655#Small11578
     public static final String THROW = "\\d+(\\.\\d*)?" + PASS + "?";
     public static final String THROWS = "((\\(" + THROW + "," + THROW + "\\))" + SEPERATOR + THROW + ")";
     public static final String THROW_SET = "((" + THROWS + " )*" + THROWS + ")";
