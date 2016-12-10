@@ -16,23 +16,21 @@ import java.util.stream.Collectors;
  */
 public class VanillaSiteswapTest
 {
-    private List<String> invalidSiteswaps = new LinkedList<>();
+    /**
+     * Invalid siteswaps to test against
+     */
+    private String[] invalidSiteswaps = new String[]{
+            "543",
+            "9768458",
+//            "975", // to test that it will throw an exception if given a valid siteswap
+    };
 
     /**
-     * Test cases to use.
+     * Valid TestCases to use.
      */
     private List<VanillaTestCase> validSiteswaps = VanillaTestCase.getValidTestCases().stream()
             .filter(vanillaTestCase -> vanillaTestCase.validVanillaSiteswap)
             .collect(Collectors.toList());
-
-    @Before
-    public void setUp() throws Exception
-    {
-
-        invalidSiteswaps.add("543");
-        invalidSiteswaps.add("9768458");
-//        invalidSiteswaps.add("975"); // to test that it will throw an exception if given a valid siteswap
-    }
 
     @Test
     public void parseNoSort() throws Exception, InvalidSiteswapException
@@ -44,7 +42,7 @@ public class VanillaSiteswapTest
         {
             try
             {
-                VanillaSiteswap vanillaSiteswap = new VanillaSiteswap(testCase.intSiteswap, sorted);
+                VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.intSiteswap, sorted);
                 testCase.verify("parseNoSort", prefix, sorted, vanillaSiteswap);
             }
             catch (ComparisonFailure e)
