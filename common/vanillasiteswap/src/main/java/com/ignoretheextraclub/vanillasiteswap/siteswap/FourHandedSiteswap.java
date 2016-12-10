@@ -30,7 +30,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
                                  final int period,
                                  final int numObjects,
                                  final int[] intSiteswap,
-                                 final List<VanillaState> states,
+                                 final VanillaState[] states,
                                  final boolean sorted,
                                  final boolean prime,
                                  final boolean grounded,

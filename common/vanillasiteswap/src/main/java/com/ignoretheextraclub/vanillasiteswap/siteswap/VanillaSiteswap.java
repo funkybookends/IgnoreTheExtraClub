@@ -30,7 +30,7 @@ public class VanillaSiteswap extends Siteswap
 {
     public static final int MAX_THROW = IntVanilla.charToInt('D');
 
-    protected final List<VanillaState> states; //The list of states, ordered, and possibly sorted
+    protected final VanillaState[] states; //The list of states, ordered, and possibly sorted
     protected final boolean prime; //A pattern is prime if it does not revisit a state twice. If it does this implies it can be decomposed into two or more siteswaps TODO determine decompositions
     protected final boolean grounded; //A pattern is grounded if it goes through the ground state, the ground state is the lowest level of excitiation
     protected final int highestThrow;
@@ -43,7 +43,7 @@ public class VanillaSiteswap extends Siteswap
                               final int period,
                               final int numObjects,
                               final int[] intSiteswap,
-                              final List<VanillaState> states,
+                              final VanillaState[] states,
                               final boolean sorted,
                               final boolean prime,
                               final boolean grounded,
@@ -143,7 +143,7 @@ public class VanillaSiteswap extends Siteswap
      */
     protected static class VanillaSiteswapBuilder
     {
-        protected List<VanillaState> states;
+        protected VanillaState[] states;
         protected boolean prime;
         protected int period;
         protected int numObjects;
@@ -159,7 +159,7 @@ public class VanillaSiteswap extends Siteswap
         {
             try
             {
-                states = new LinkedList<>();
+                states = new VanillaState[vanillaSiteswap.length];
                 startingObjectsPerHand = new int[hands];
                 period = validatePeriod(vanillaSiteswap.length);
                 numObjects = validateNumObjects((int) Arrays.stream(vanillaSiteswap).average().orElse(0));
@@ -177,7 +177,7 @@ public class VanillaSiteswap extends Siteswap
                 throw new InvalidSiteswapException("Invalid Siteswap [" + IntVanilla.intArrayToString(vanillaSiteswap) + "]", cause);
             }
 
-            if (states.size() != period)
+            if (states.length != period)
             {
                 throw new RuntimeException("This shouldn't happen. Built states.size() != vanillaSiteswap.length");
             }
@@ -191,18 +191,17 @@ public class VanillaSiteswap extends Siteswap
         private int[] getAllThrows() throws NoTransitionException
         {
             final int[] thros = new int[period];
-            for (int i = 0; i < period - 1; i++)
+            for (int i = 0; i < period; i++)
             {
-                thros[i] = transition(states.get(i), states.get(i+1));
+                thros[i] = transition(states[i], states[(i + 1) % states.length]);
             }
-            thros[period - 1] = transition(states.get(period - 1), states.get(0));
             return thros;
         }
 
         private boolean containsARepeatedState()
         {
-            Set<VanillaState> stateSet = states.stream().collect(Collectors.toSet());
-            return stateSet.size() != states.size();
+            Set<VanillaState> stateSet = Arrays.stream(states).collect(Collectors.toSet());
+            return stateSet.size() != states.length;
         }
 
         private void buildStatesAndHands(int[] vanillaSiteswap) throws NumObjectsException,
@@ -225,22 +224,22 @@ public class VanillaSiteswap extends Siteswap
             }
 
             VanillaState state = builder.build();
-            states.add(state);
+            states[0] = state;
 
-            for (int pos = 0; pos < vanillaSiteswap.length - 1; pos++)
+            for (int pos = 1; pos < vanillaSiteswap.length; pos++)
             {
-                state = state.thro(vanillaSiteswap[pos]);
-                states.add(state);
+                state = state.thro(vanillaSiteswap[pos-1]);
+                states[pos] = state;
             }
-            if (Arrays.stream(startingObjectsPerHand).sum() != states.get(0).getNumObjects())
+            if (Arrays.stream(startingObjectsPerHand).sum() != states[0].getNumObjects())
             {
                 throw new RuntimeException("Did not calculate the number of objects in each hand correctly. " +
-                                                   "sum(" + startingObjectsPerHand+ ") != " + states.get(0).getNumObjects());
+                                                   "sum(" + startingObjectsPerHand+ ") != " + states[0].getNumObjects());
             }
-            if (!state.thro(vanillaSiteswap[period - 1]).equals(states.get(0)))
+            if (!state.thro(vanillaSiteswap[period - 1]).equals(states[0]))
             {
                 throw new InvalidSiteswapException("Did not return to original state. " +
-                                                           "Final state: [" + states.get(period-1) + "], original state: [" + states.get(0) + "]");
+                                                           "Final state: [" + states[period - 1] + "], original state: [" + states[0] + "]");
             }
         }
 
@@ -256,13 +255,14 @@ public class VanillaSiteswap extends Siteswap
 
             int minPosition = IntStream.range(0, period)
                     .reduce((bestP, candP) -> scores.get(bestP) < scores.get(candP) ? bestP : candP)
-                    .getAsInt();
+                    .orElse(0);
 
-            while (minPosition > 0)
-            {
-                states.add(states.remove(0));
-                minPosition--;
-            }
+            VanillaState[] sortedStates = new VanillaState[states.length];
+
+            System.arraycopy(states, minPosition, sortedStates, 0, states.length - minPosition); // -1?
+            System.arraycopy(states, 0, sortedStates, states.length - minPosition, minPosition);
+
+            states = sortedStates;
         }
 
         private int scoreRotation(int start)
@@ -271,7 +271,7 @@ public class VanillaSiteswap extends Siteswap
             for (int i = 0; i < period; i++)
             {
                 int stateNumber = (start + i) % period;
-                VanillaState state = states.get(stateNumber);
+                VanillaState state = states[stateNumber];
                 int excitedness = state.excitedness();
                 score += excitedness*(-i+1);
             }
