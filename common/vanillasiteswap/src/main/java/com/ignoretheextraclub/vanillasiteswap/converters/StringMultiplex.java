@@ -56,8 +56,7 @@ public class StringMultiplex
         StringBuilder str = new StringBuilder();
         for (List<Integer> beatThros : allThros)
         {
-            if      (beatThros.size() == 0) {} // Silently ignore error
-            else if (beatThros.size() == 1) str.append(beatThros.get(0));
+            if (beatThros.size() <= 1) str.append(beatThros.get(0));
             else
             {
                 str.append(OPEN);
