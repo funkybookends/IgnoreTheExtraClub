@@ -118,10 +118,14 @@ public class VanillaState extends AbstractState
     {
         if (o == null) return false;
         if (this == o) return true;
-        if (o instanceof boolean[]) return Arrays.equals(this.occupied, (boolean[]) o);
         if (getClass() != o.getClass()) return false;
         VanillaState state = (VanillaState) o;
         return Arrays.equals(occupied, state.occupied);
+    }
+
+    public boolean equals(final boolean[] other)
+    {
+        return Arrays.equals(this.occupied, other);
     }
 
     @Override
