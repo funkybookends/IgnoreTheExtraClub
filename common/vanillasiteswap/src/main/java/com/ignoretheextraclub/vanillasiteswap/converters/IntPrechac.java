@@ -1,7 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
 import java.util.Arrays;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -30,6 +29,14 @@ public class IntPrechac
     public static final Pattern P_THROW_SET = Pattern.compile(THROW_SET);
     public static final Pattern P_PRECHAC = Pattern.compile(PRECHAC);
 
+    /**
+     * Converts a throw to a prechac representation.
+     *
+     * Does no checking as to the validity of the thro.
+     *
+     * @param thro
+     * @return the prechac representation of thro
+     */
     public static String fourHandedIntToPrechac(int thro)
     {
         if (thro % 2 == 0 ) return String.valueOf(thro / 2);
