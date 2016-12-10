@@ -84,6 +84,36 @@ public class VanillaSiteswap extends Siteswap
         return create(siteswap, true);
     }
 
+    public boolean isPrime()
+    {
+        return prime;
+    }
+
+    public boolean isGrounded()
+    {
+        return grounded;
+    }
+
+    public int getHighestThrow()
+    {
+        return highestThrow;
+    }
+
+    public boolean isSorted()
+    {
+        return sorted;
+    }
+
+    public String getStringSiteswap()
+    {
+        return stringSiteswap;
+    }
+
+    public int[] getIntSiteswap()
+    {
+        return intSiteswap;
+    }
+
     @Override
     public String toString()
     {
