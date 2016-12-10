@@ -171,10 +171,10 @@ public class MultiplexState extends AbstractState
     public static class MultiplexStateBuilder
     {
         private int[] occupancy;
-        private int expectedObjects;
+        private final int expectedObjects;
         private int givenObjects;
-        private int maxOccupancy;
-        private int maxThrow;
+        private final int maxOccupancy;
+        private final int maxThrow;
 
         public MultiplexStateBuilder(int maxOccupancy, int maxThrow, int expectedObjects) throws StateSizeException, NumObjectsException
         {
