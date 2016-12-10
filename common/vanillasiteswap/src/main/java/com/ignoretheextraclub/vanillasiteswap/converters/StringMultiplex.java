@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.converters;
 
+import com.ignoretheextraclub.vanillasiteswap.state.MultiplexState;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.LinkedList;
@@ -13,7 +14,7 @@ public class StringMultiplex
     private static final char OPEN = '[';
     private static final char CLOSE = ']';
 
-    private static List<List<Integer>> stringToThrows(final String stringSiteswap)
+    public static List<List<Integer>> stringToThrows(final String stringSiteswap)
     {
         List<List<Integer>> allThros = new LinkedList<>();
 
@@ -24,9 +25,10 @@ public class StringMultiplex
             if (thro < 0) //then this is not a token
             {
                 i++; // move past OPEN
-                while (IntVanilla.charToInt(stringSiteswap.charAt(i)) >= 0)
+                while (IntVanilla.charToInt(stringSiteswap.charAt(i)) > 0)
                 {
                     beatThros.add(IntVanilla.charToInt(stringSiteswap.charAt(i)));
+                    i++;
                 }
                 i++; // move past CLOSE
             }
@@ -41,7 +43,7 @@ public class StringMultiplex
         return allThros;
     }
 
-    private static String throwsToString(final List<List<Integer>> allThros) throws InvalidArgumentException
+    public static String throwsToString(final List<List<Integer>> allThros) throws InvalidArgumentException
     {
         StringBuilder str = new StringBuilder();
         for (List<Integer> beatThros : allThros)
