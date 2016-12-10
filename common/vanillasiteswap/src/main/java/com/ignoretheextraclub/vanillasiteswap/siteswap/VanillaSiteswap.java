@@ -25,9 +25,8 @@ import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.transiti
  * Created by caspar on 26/11/16.
  */
 @Immutable
-public class VanillaSiteswap
+public class VanillaSiteswap extends Siteswap
 {
-    public static final int MAX_PERIOD = 15;
 
     protected final List<VanillaState> states = new LinkedList<>(); //The list of states, ordered, and possibly sorted
     protected final boolean prime; //A pattern is prime if it does not revisit a state twice. If it does this implies it can be decomposed into two or more siteswaps TODO determine decompositions
