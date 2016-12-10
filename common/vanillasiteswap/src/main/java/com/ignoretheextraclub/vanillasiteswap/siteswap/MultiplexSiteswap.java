@@ -15,8 +15,6 @@ import java.util.List;
 public class MultiplexSiteswap extends Siteswap
 {
     private final List<MultiplexState> states;
-    private final int period;
-    private final int numObjects;
     private final String stringSiteswap;
 
     public MultiplexSiteswap(final List<MultiplexState> states,
@@ -27,8 +25,6 @@ public class MultiplexSiteswap extends Siteswap
     {
         super(numJugglers, period, numObjects);
         this.states = states;
-        this.period = period;
-        this.numObjects = numObjects;
         this.stringSiteswap = stringSiteswap;
     }
 
