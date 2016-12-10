@@ -15,7 +15,6 @@ import java.util.stream.IntStream;
 @Immutable
 public class VanillaState extends AbstractState
 {
-
     private final int maxThrow;
     private final int numObjects;
     private final boolean[] occupied;
@@ -186,19 +185,9 @@ public class VanillaState extends AbstractState
 
         public VanillaStateBuilder(final int maxThrow, final int expectedObjects) throws StateSizeException, NumObjectsException
         {
-            if (maxThrow < MIN_SIZE || maxThrow > MAX_SIZE)
-            {
-                throw new StateSizeException("State has [" + maxThrow + "] positions, must be between [" + MIN_SIZE + "] and [" + MAX_SIZE + "]");
-            }
-
+            this.maxThrow = validateSize(maxThrow);
+            this.expectedObjects = validateNumObjects(expectedObjects);
             this.occupied = new boolean[maxThrow];
-            this.maxThrow = maxThrow;
-            this.expectedObjects = expectedObjects;
-
-            if (this.expectedObjects < MIN_OBJECTS || this.expectedObjects > MAX_OBJECTS)
-            {
-                throw new NumObjectsException("State has [" + this.expectedObjects + "] objects, must be between [" + MIN_OBJECTS + "] and [" + MAX_OBJECTS + "]");
-            }
         }
 
         public VanillaStateBuilder thenThrow(final int thro) throws BadThrowException, NumObjectsException
