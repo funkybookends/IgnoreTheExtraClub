@@ -22,12 +22,14 @@ public class VanillaSiteswapGenerator
     private int numJugglers = 1;
     private List<VanillaState> bannedStates = new LinkedList<>();
     private List<VanillaState[]> results;
+    private int resultLimit;
 
     public VanillaSiteswapGenerator(final int numObjects,
                                     final int maxThrow,
                                     final boolean prime,
                                     final boolean grounded,
-                                    final int finalPeriod)
+                                    final int finalPeriod,
+                                    final int resultLimit)
     throws StateSizeException, NumObjectsException
     {
         this.finalPeriod = finalPeriod;
@@ -35,6 +37,7 @@ public class VanillaSiteswapGenerator
         for (int i = 0; i < legalThrow.length; i++) legalThrow[i] = true;
         this.prime = prime;
         if (grounded) startState = VanillaState.getGroundState(maxThrow, numObjects);
+        this.resultLimit = resultLimit;
     }
     
     protected VanillaSiteswapGenerator setNumJugglers(final int numJugglers)
@@ -71,6 +74,12 @@ public class VanillaSiteswapGenerator
         if (results != null) throw new UnsupportedOperationException("Already Generated");
         this.bannedStates.add(bannedState);
         return this;
+    }
+
+    public int getNumResults()
+    {
+        if (results == null) throw new UnsupportedOperationException("Must generate first!");
+        return results.size();
     }
 
     public List<VanillaState[]> generateToListOfVanillaStateArray()
