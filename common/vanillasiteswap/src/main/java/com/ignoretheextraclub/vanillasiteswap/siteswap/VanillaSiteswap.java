@@ -278,7 +278,7 @@ public class VanillaSiteswap extends AbstractSiteswap
         }
 
         /**
-         * Sorts the siteswap, finds the groundiest first throw and makes that the first throw.
+         * Sorts the siteswap using the given strategy. If it fails then the no sorting strategy will be used.
          * @param sortingStrategy
          */
         private void sort(SortingStrategy sortingStrategy)
