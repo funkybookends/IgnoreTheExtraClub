@@ -23,6 +23,7 @@ public class VanillaSiteswapGenerator
     private List<VanillaState> bannedStates = new LinkedList<>();
     private List<VanillaState[]> results;
     private int resultLimit;
+    private int numObjects;
 
     public VanillaSiteswapGenerator(final int numObjects,
                                     final int maxThrow,
@@ -32,12 +33,14 @@ public class VanillaSiteswapGenerator
                                     final int resultLimit)
     throws StateSizeException, NumObjectsException
     {
-        this.finalPeriod = finalPeriod;
         this.legalThrow = new boolean[maxThrow];
+        this.finalPeriod = finalPeriod;
+        this.numObjects = numObjects;
         for (int i = 0; i < legalThrow.length; i++) legalThrow[i] = true;
         this.prime = prime;
         if (grounded) startState = VanillaState.getGroundState(maxThrow, numObjects);
         this.resultLimit = resultLimit;
+        this.grounded = grounded;
     }
     
     protected VanillaSiteswapGenerator setNumJugglers(final int numJugglers)
@@ -65,6 +68,7 @@ public class VanillaSiteswapGenerator
     {
         if (results != null) throw new UnsupportedOperationException("Already Generated");
         if (grounded) throw new UnsupportedOperationException("Method not available when grounded");
+        if (startState.getNumObjects() != numObjects) throw new IllegalArgumentException("Your state does not have the same number of objects as the stated number of objects");
         this.startState = startState;
         return this;
     }
@@ -82,18 +86,28 @@ public class VanillaSiteswapGenerator
         return results.size();
     }
 
-    public List<VanillaState[]> generateToListOfVanillaStateArray()
+    private void generate()
     {
         throw new NotImplementedException();
     }
 
+    public List<VanillaState[]> generateToListOfVanillaStateArray()
+    {
+        if (results == null) generate();
+        return results;
+    }
+
     public List<VanillaSiteswap> generateToListOfVanillaSiteswap()
     {
+        if (results == null) generate();
+
         throw new NotImplementedException();
     }
 
     public List<String> generateToListOfStringSiteswaps()
     {
+        if (results == null) generate();
+
         throw new NotImplementedException();
     }
 }

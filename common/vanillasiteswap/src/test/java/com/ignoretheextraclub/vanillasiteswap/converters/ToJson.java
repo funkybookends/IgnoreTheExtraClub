@@ -16,8 +16,8 @@ public class ToJson
     @Test
     public void fhstojson() throws Exception, InvalidSiteswapException
     {
-        FourHandedSiteswap fhs975 = FourHandedSiteswap.create("6789A");
-        VanillaSiteswap db97531 = VanillaSiteswap.create("db97531");
+        FourHandedSiteswap fhs975 = FourHandedSiteswap.create("975");
+        VanillaSiteswap db97531 = VanillaSiteswap.create("975");
 
         String s = objectMapper.writeValueAsString(fhs975);
         String t = objectMapper.writeValueAsString(db97531);

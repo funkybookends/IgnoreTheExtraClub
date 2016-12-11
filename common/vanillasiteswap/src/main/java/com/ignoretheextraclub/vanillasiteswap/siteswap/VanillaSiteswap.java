@@ -84,6 +84,12 @@ public class VanillaSiteswap extends AbstractSiteswap
         return create(siteswap, DEFAULT_SORTING_STRATEGY);
     }
 
+    public static VanillaSiteswap create(final VanillaState[] states) throws InvalidSiteswapException
+    {
+        VanillaSiteswapBuilder builder = new VanillaSiteswapBuilder(states, 2);
+        return builder.buildVanillaSiteswap();
+    }
+
     public boolean isPrime()
     {
         return prime;
@@ -181,17 +187,17 @@ public class VanillaSiteswap extends AbstractSiteswap
         {
             try
             {
-                states = new VanillaState[vanillaSiteswap.length];
-                period = validatePeriod(vanillaSiteswap.length);
-                numObjects = validateNumObjects((int) Arrays.stream(vanillaSiteswap).average().orElse(0));
-                highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
+                this.states = new VanillaState[vanillaSiteswap.length];
+                this.period = validatePeriod(vanillaSiteswap.length);
+                this.numObjects = validateNumObjects((int) Arrays.stream(vanillaSiteswap).average().orElse(0));
+                this.highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
                 buildStates(vanillaSiteswap);
-                grounded = containsAGroundState();
-                prime = !containsARepeatedState();
+                this.grounded = containsAGroundState();
+                this.prime = !containsARepeatedState();
                 sort(sortingStrategy);
-                intSiteswap = rebuildThrows();
+                this.intSiteswap = rebuildThrows();
                 setStartingObjectPerHand(numHands);
-                stringSiteswap = IntVanilla.intArrayToString(intSiteswap);
+                this.stringSiteswap = IntVanilla.intArrayToString(intSiteswap);
             }
             catch (final BadThrowException | NumObjectsException | StateSizeException | NoTransitionException | PeriodException cause)
             {
@@ -202,6 +208,36 @@ public class VanillaSiteswap extends AbstractSiteswap
             {
                 throw new RuntimeException("This shouldn't happen. Built states.size() != vanillaSiteswap.length");
             }
+        }
+
+        public VanillaSiteswapBuilder(final VanillaState[] states, final int numHands) throws InvalidSiteswapException
+        {
+            try
+            {
+                this.period = validatePeriod(states.length);
+                this.states = states;
+                this.numObjects = validateNumObjects(states[0].getNumObjects());
+                this.intSiteswap = rebuildThrows();
+                this.highestThrow = Arrays.stream(intSiteswap).max().orElse(0);
+                this.prime = !containsARepeatedState();
+                this.grounded = containsAGroundState();
+                this.sortingStrategy = SortingStrategy.NO_SORTING_STRATEGY;
+                setStartingObjectPerHand(numHands);
+                this.stringSiteswap = IntVanilla.intArrayToString(intSiteswap);
+
+            }
+            catch (final BadThrowException | NumObjectsException | StateSizeException | NoTransitionException | PeriodException cause)
+            {
+                throw new InvalidSiteswapException("Invalid Siteswap [" +
+                               Arrays.stream(states).map(VanillaState::toString).collect(Collectors.joining(" -> ")) +
+                               "]", cause);
+            }
+
+            if (states.length != period || intSiteswap.length != period)
+            {
+                throw new RuntimeException("This shouldn't happen. Built states.size() != vanillaSiteswap.length");
+            }
+
         }
 
         private void setStartingObjectPerHand(int numHands) throws

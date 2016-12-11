@@ -1,17 +1,10 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
-import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.sorters.SortingStrategy;
-import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ComparisonFailure;
 import org.junit.Test;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by caspar on 26/11/16.
@@ -26,6 +19,13 @@ public class VanillaSiteswapTest
             "9768458",
 //            "975", // to test that it will throw an exception if given a valid siteswap
     };
+    private VanillaSiteswap s975;
+
+    @Before
+    public void setUp() throws Exception, InvalidSiteswapException
+    {
+        s975 = VanillaSiteswap.create("975");
+    }
 
     @Test
     public void whenInvalidSiteswap_DoesNotConstruct() throws Exception
@@ -50,6 +50,7 @@ public class VanillaSiteswapTest
         Assert.assertEquals(3, VanillaSiteswap.create(new int[]{9, 7, 5}).getPeriod());
         Assert.assertEquals(1, VanillaSiteswap.create(new int[]{9}).getPeriod());
         Assert.assertEquals(15, VanillaSiteswap.create(new int[]{7,7,7,7,7, 7,7,7,7,7, 7,7,7,7,7}).getPeriod());
+        Assert.assertEquals(3, VanillaSiteswap.create(s975.getStates()).getPeriod());
     }
 
     @Test
@@ -57,6 +58,7 @@ public class VanillaSiteswapTest
     {
         Assert.assertEquals(1, VanillaSiteswap.create(new int[]{9, 7, 5}).getNumJugglers());
         Assert.assertEquals(1, VanillaSiteswap.create(new int[]{9}).getNumJugglers());
+        Assert.assertEquals(1, VanillaSiteswap.create(s975.getStates()).getNumJugglers());
     }
 
     @Test
@@ -64,6 +66,7 @@ public class VanillaSiteswapTest
     {
         Assert.assertEquals(7, VanillaSiteswap.create(new int[]{9, 7, 5}).getNumObjects());
         Assert.assertEquals(9, VanillaSiteswap.create(new int[]{9}).getNumObjects());
+        Assert.assertEquals(7, VanillaSiteswap.create(s975.getStates()).getNumObjects());
     }
 
     @Test
@@ -72,6 +75,7 @@ public class VanillaSiteswapTest
         Assert.assertEquals(true, VanillaSiteswap.create(new int[]{9, 7, 5}).isPrime());
         Assert.assertEquals(true, VanillaSiteswap.create(new int[]{9}).isPrime());
         Assert.assertEquals(false, VanillaSiteswap.create(new int[]{7,8,6,8,6}).isPrime());
+        Assert.assertEquals(true, VanillaSiteswap.create(s975.getStates()).isPrime());
     }
 
     @Test
@@ -79,6 +83,7 @@ public class VanillaSiteswapTest
     {
         Assert.assertEquals(true, VanillaSiteswap.create(new int[]{9, 7, 5}).isGrounded());
         Assert.assertEquals(false, VanillaSiteswap.create(new int[]{9, 7, 2}).isGrounded());
+        Assert.assertEquals(true, VanillaSiteswap.create(s975.getStates()).isGrounded());
     }
 
     @Test
@@ -87,6 +92,7 @@ public class VanillaSiteswapTest
         Assert.assertEquals(9, VanillaSiteswap.create(new int[]{9,7,5}).getHighestThrow());
         Assert.assertEquals(2, VanillaSiteswap.create(new int[]{2}).getHighestThrow());
         Assert.assertEquals(10, VanillaSiteswap.create(new int[]{6,7,8,9,10}).getHighestThrow());
+        Assert.assertEquals(9, VanillaSiteswap.create(s975.getStates()).getHighestThrow());
     }
 
     @Test
@@ -98,6 +104,7 @@ public class VanillaSiteswapTest
         Assert.assertEquals("975", VanillaSiteswap.create(new int[]{9,7,5}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getStringSiteswap());
         Assert.assertEquals("975", VanillaSiteswap.create(new int[]{7,5,9}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getStringSiteswap());
         Assert.assertEquals("975", VanillaSiteswap.create(new int[]{5,9,7}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getStringSiteswap());
+        Assert.assertEquals("975", VanillaSiteswap.create(s975.getStates()).getStringSiteswap());
     }
 
     @Test
@@ -109,11 +116,14 @@ public class VanillaSiteswapTest
         Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(new int[]{9,7,5}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getIntSiteswap());
         Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(new int[]{7,5,9}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getIntSiteswap());
         Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(new int[]{5,9,7}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getIntSiteswap());
+        Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(s975.getStates()).getIntSiteswap());
+
     }
 
     @Test
     public void testStartingObjectsPerHand() throws Exception, InvalidSiteswapException
     {
         Assert.assertArrayEquals(new int[]{3,2}, VanillaSiteswap.create(new int[]{5}).getStartingObjectsPerHand());
+        Assert.assertArrayEquals(new int[]{4,3}, VanillaSiteswap.create(s975.getStates()).getStartingObjectsPerHand());
     }
 }

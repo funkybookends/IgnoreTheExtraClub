@@ -16,9 +16,10 @@ public class FourHandedSiteswapGenerator extends VanillaSiteswapGenerator
                                        int maxThrow,
                                        boolean prime,
                                        boolean grounded,
-                                       int finalPeriod) throws StateSizeException, NumObjectsException
+                                       int finalPeriod,
+                                       int resultLimit) throws StateSizeException, NumObjectsException
     {
-        super(numObjects, maxThrow, prime, grounded, finalPeriod);
+        super(numObjects, maxThrow, prime, grounded, finalPeriod, resultLimit);
         setNumJugglers(2);
         for (int illegalThrow : FourHandedSiteswap.ILLEGAL_THROWS) banThrow(illegalThrow);
     }
