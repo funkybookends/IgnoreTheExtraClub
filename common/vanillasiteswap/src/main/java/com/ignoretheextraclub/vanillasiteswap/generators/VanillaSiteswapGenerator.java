@@ -21,6 +21,7 @@ public class VanillaSiteswapGenerator
     private VanillaState startState;
     private int numJugglers = 1;
     private List<VanillaState> bannedStates = new LinkedList<>();
+    private List<VanillaState[]> results;
 
     public VanillaSiteswapGenerator(final int numObjects,
                                     final int maxThrow,
@@ -38,24 +39,28 @@ public class VanillaSiteswapGenerator
     
     protected VanillaSiteswapGenerator setNumJugglers(final int numJugglers)
     {
+        if (results != null) throw new UnsupportedOperationException("Already Generated");
         this.numJugglers = numJugglers;
         return this;
     }
 
     public VanillaSiteswapGenerator banThrows(int... thros)
     {
+        if (results != null) throw new UnsupportedOperationException("Already Generated");
         for (int thro : thros) banThrow(thro);
         return this;
     }
 
     public VanillaSiteswapGenerator banThrow(int thro)
     {
+        if (results != null) throw new UnsupportedOperationException("Already Generated");
         if (thro > legalThrow.length && thro >= 0) legalThrow[thro] = false;
         return this;
     }
 
     public VanillaSiteswapGenerator setStartState(VanillaState startState)
     {
+        if (results != null) throw new UnsupportedOperationException("Already Generated");
         if (grounded) throw new UnsupportedOperationException("Method not available when grounded");
         this.startState = startState;
         return this;
@@ -63,6 +68,7 @@ public class VanillaSiteswapGenerator
 
     public VanillaSiteswapGenerator banState(VanillaState bannedState)
     {
+        if (results != null) throw new UnsupportedOperationException("Already Generated");
         this.bannedStates.add(bannedState);
         return this;
     }
