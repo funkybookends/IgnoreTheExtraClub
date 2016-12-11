@@ -136,6 +136,18 @@ public class VanillaSiteswap extends AbstractSiteswap
         }
     }
 
+    protected static int validateHighestThrow(int highestThrow) throws BadThrowException
+    {
+        if (highestThrow > MAX_THROW) throw new BadThrowException("Higest throw too large, cannot be larger than " + MAX_THROW);
+        return highestThrow;
+    }
+
+    protected static int validateHighestThrow(int[] thors) throws BadThrowException
+    {
+        final int highestThrow = Arrays.stream(thors).max().orElse(0);
+        return validateHighestThrow(highestThrow);
+    }
+
     @Override
     public String toString()
     {
@@ -184,7 +196,7 @@ public class VanillaSiteswap extends AbstractSiteswap
                 states = new VanillaState[vanillaSiteswap.length];
                 period = validatePeriod(vanillaSiteswap.length);
                 numObjects = validateNumObjects((int) Arrays.stream(vanillaSiteswap).average().orElse(0));
-                highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
+                highestThrow = validateHighestThrow(vanillaSiteswap);
                 buildStates(vanillaSiteswap);
                 grounded = containsAGroundState();
                 prime = !containsARepeatedState();
