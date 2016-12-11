@@ -15,7 +15,7 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
 @Immutable
 public class FourHandedSiteswap extends VanillaSiteswap
 {
-    private static final int[] ILLEGAL_THROWS = new int[]{1, 3};
+    public static final int[] ILLEGAL_THROWS = new int[]{1, 3};
     private static final int MAX_THROW = IntVanilla.charToInt('C');
     private static final SortingStrategy DEFAULT_SORTING_STRATEGY = SortingStrategy.FOUR_HANDED_PASSING_STRATEGY;
 
