@@ -95,6 +95,17 @@ public class VanillaState extends AbstractState
         return result;
     }
 
+    public static VanillaState getGroundState(final int maxThrow, final int numObjects)
+        throws StateSizeException, NumObjectsException
+    {
+        final boolean[] occupied = new boolean[maxThrow];
+        for (int i = 0; i < maxThrow; i++)
+        {
+            occupied[i] = (i < maxThrow);
+        }
+        return new VanillaState(occupied);
+    }
+
     @JsonProperty("occupancy")
     public String toString()
     {
