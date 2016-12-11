@@ -142,6 +142,18 @@ public class VanillaSiteswap extends AbstractSiteswap
         }
     }
 
+    protected static int validateHighestThrow(int highestThrow) throws BadThrowException
+    {
+        if (highestThrow > MAX_THROW) throw new BadThrowException("Higest throw too large, cannot be larger than " + MAX_THROW);
+        return highestThrow;
+    }
+
+    protected static int validateHighestThrow(int[] thors) throws BadThrowException
+    {
+        final int highestThrow = Arrays.stream(thors).max().orElse(0);
+        return validateHighestThrow(highestThrow);
+    }
+
     @Override
     public String toString()
     {
@@ -190,7 +202,7 @@ public class VanillaSiteswap extends AbstractSiteswap
                 this.states = new VanillaState[vanillaSiteswap.length];
                 this.period = validatePeriod(vanillaSiteswap.length);
                 this.numObjects = validateNumObjects((int) Arrays.stream(vanillaSiteswap).average().orElse(0));
-                this.highestThrow = Arrays.stream(vanillaSiteswap).max().orElse(0);
+                this.highestThrow = validateHighestThrow(vanillaSiteswap);
                 buildStates(vanillaSiteswap);
                 this.grounded = containsAGroundState();
                 this.prime = !containsARepeatedState();
@@ -218,7 +230,7 @@ public class VanillaSiteswap extends AbstractSiteswap
                 this.states = states;
                 this.numObjects = validateNumObjects(states[0].getNumObjects());
                 this.intSiteswap = rebuildThrows();
-                this.highestThrow = Arrays.stream(intSiteswap).max().orElse(0);
+                this.highestThrow = validateHighestThrow(intSiteswap);
                 this.prime = !containsARepeatedState();
                 this.grounded = containsAGroundState();
                 this.sortingStrategy = SortingStrategy.NO_SORTING_STRATEGY;
