@@ -44,7 +44,7 @@ public class VanillaSiteswapGenerator
 
     public VanillaSiteswapGenerator banThrows(int... thros)
     {
-        for (int thro : thros) lega1lThrow[thro] = false;
+        for (int thro : thros) legalThrow[thro] = false;
         return this;
     }
 
