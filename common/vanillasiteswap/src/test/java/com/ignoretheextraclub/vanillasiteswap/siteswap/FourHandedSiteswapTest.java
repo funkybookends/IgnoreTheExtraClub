@@ -12,26 +12,26 @@ import java.util.stream.Collectors;
  */
 public class FourHandedSiteswapTest
 {
-    private List<VanillaTestCase> validFHSs;
+//    private List<VanillaTestCase> validFHSs;
+//
+//    @Before
+//    public void setUp() throws Exception
+//    {
+//        validFHSs = VanillaTestCase.getValidTestCases().stream()
+//                .filter(testCase -> testCase.validGlobalFHS || testCase.validLocalFHS)
+//                .collect(Collectors.toList());
+//    }
 
-    @Before
-    public void setUp() throws Exception
-    {
-        validFHSs = VanillaTestCase.getValidTestCases().stream()
-                .filter(testCase -> testCase.validGlobalFHS || testCase.validLocalFHS)
-                .collect(Collectors.toList());
-    }
-
-    @Test
-    public void create() throws Exception, InvalidSiteswapException
-    {
-        final String prefix = "";
-        final boolean sorted = true;
-        for (VanillaTestCase validFHS : validFHSs)
-        {
-            FourHandedSiteswap fourHandedSiteswap = FourHandedSiteswap.create(validFHS.intSiteswap, sorted);
-            validFHS.verify("create", prefix, sorted, fourHandedSiteswap);
-        }
-    }
+//    @Test
+//    public void create() throws Exception, InvalidSiteswapException
+//    {
+//        final String prefix = "";
+//        final boolean sorted = true;
+//        for (VanillaTestCase validFHS : validFHSs)
+//        {
+//            FourHandedSiteswap fourHandedSiteswap = FourHandedSiteswap.create(validFHS.intSiteswap, sorted);
+//            validFHS.verify("create", prefix, sorted, fourHandedSiteswap);
+//        }
+//    }
 
 }

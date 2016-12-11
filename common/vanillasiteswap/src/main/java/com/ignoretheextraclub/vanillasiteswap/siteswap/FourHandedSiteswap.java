@@ -5,10 +5,9 @@ import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntPrechac;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+import com.ignoretheextraclub.vanillasiteswap.sorters.SortingStrategy;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import jdk.nashorn.internal.ir.annotations.Immutable;
-
-import java.util.List;
 
 /**
  * Created by caspar on 27/11/16.
@@ -18,6 +17,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
 {
     private static final int[] ILLEGAL_THROWS = new int[]{1, 3};
     private static final int MAX_THROW = IntVanilla.charToInt('C');
+    private static final SortingStrategy DEFAULT_SORTING_STRATEGY = SortingStrategy.FOUR_HANDED_PASSING_STRATEGY;
 
     @JsonProperty("is_mirrored")              private final boolean isMirrored;
     @JsonProperty("leader_int_siteswap")      private final int[] leaderIntSiteswap;
@@ -32,13 +32,13 @@ public class FourHandedSiteswap extends VanillaSiteswap
                                  final int numObjects,
                                  final int[] intSiteswap,
                                  final VanillaState[] states,
-                                 final boolean sorted,
+                                 final SortingStrategy sorted,
                                  final boolean prime,
                                  final boolean grounded,
                                  final int highestThrow,
                                  final int[] startingObjectsPerHand,
                                  final String stringSiteswap,
-                                 boolean isMirrored,
+                                 final boolean isMirrored,
                                  final int[] leaderIntSiteswap,
                                  final String leaderStringSiteswap,
                                  final String leaderPrechac,
@@ -67,7 +67,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         this.followerPrechac = followerPrechac;
     }
 
-    private static FourHandedSiteswap createGlobalOrLocal(int[] siteswap, boolean sort) throws InvalidSiteswapException
+    private static FourHandedSiteswap createGlobalOrLocal(int[] siteswap, SortingStrategy sort) throws InvalidSiteswapException
     {
         try
         {
@@ -89,7 +89,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         }
     }
 
-    private static FourHandedSiteswap createSiteswapOrPrechac(final String siteswap, final boolean sort) throws
+    private static FourHandedSiteswap createSiteswapOrPrechac(final String siteswap, final SortingStrategy sort) throws
                                                                                                          InvalidSiteswapException
     {
 //        try
@@ -110,24 +110,24 @@ public class FourHandedSiteswap extends VanillaSiteswap
 //        }
     }
 
-    public static FourHandedSiteswap create(int[] siteswap, boolean sort) throws InvalidSiteswapException
+    public static FourHandedSiteswap create(int[] siteswap, SortingStrategy sort) throws InvalidSiteswapException
     {
         return FourHandedSiteswap.createGlobalOrLocal(siteswap, sort);
     }
 
     public static FourHandedSiteswap create(int[] siteswap) throws InvalidSiteswapException
     {
-        return FourHandedSiteswap.createGlobalOrLocal(siteswap, true);
+        return FourHandedSiteswap.createGlobalOrLocal(siteswap, DEFAULT_SORTING_STRATEGY);
     }
 
-    public static FourHandedSiteswap create(String siteswap, boolean sort) throws InvalidSiteswapException
+    public static FourHandedSiteswap create(String siteswap, SortingStrategy sort) throws InvalidSiteswapException
     {
         return FourHandedSiteswap.createSiteswapOrPrechac(siteswap, sort);
     }
 
     public static FourHandedSiteswap create(String siteswap) throws InvalidSiteswapException
     {
-        return FourHandedSiteswap.createSiteswapOrPrechac(siteswap, true);
+        return FourHandedSiteswap.createSiteswapOrPrechac(siteswap, DEFAULT_SORTING_STRATEGY);
     }
 
     public int[] getLeaderIntSiteswap()
@@ -177,9 +177,9 @@ public class FourHandedSiteswap extends VanillaSiteswap
         private String followerPrechac;
         private boolean isMirrored;
 
-        public FourHandedSiteswapBuilder(int[] vanillaSiteswap, boolean sort) throws InvalidSiteswapException
+        public FourHandedSiteswapBuilder(int[] vanillaSiteswap, SortingStrategy sortingStrategy) throws InvalidSiteswapException
         {
-            super(vanillaSiteswap, sort, 4);
+            super(vanillaSiteswap, sortingStrategy, 4);
 
             if (this.highestThrow > MAX_THROW) throw new InvalidSiteswapException("Four Handed Siteswaps Cannot have throws larger than " + MAX_THROW);
             for (int thro : vanillaSiteswap)
@@ -208,7 +208,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
             {
                 throw new InvalidSiteswapException("No humans have more than two hands!");
             }
-            return new FourHandedSiteswap(2, period, numObjects, intSiteswap, states, sorted, prime,
+            return new FourHandedSiteswap(2, period, numObjects, intSiteswap, states, sortingStrategy, prime,
                                           grounded, highestThrow, startingObjectsPerHand, stringSiteswap,
                                           isMirrored, leaderIntSiteswap, leaderStringSiteswap, leaderPrechac, followerIntSiteswap,
                                           followerStringSiteswap, followerPrechac);

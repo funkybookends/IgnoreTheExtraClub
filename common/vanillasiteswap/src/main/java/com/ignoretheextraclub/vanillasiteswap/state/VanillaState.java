@@ -79,7 +79,7 @@ public class VanillaState extends AbstractState
      * Lower is better
      * @return
      */
-    @JsonProperty
+    @JsonIgnore
     public int excitedness()
     {
         int result = 0;

@@ -2,6 +2,8 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+import com.ignoretheextraclub.vanillasiteswap.sorters.SortingStrategy;
+import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ComparisonFailure;
@@ -25,97 +27,93 @@ public class VanillaSiteswapTest
 //            "975", // to test that it will throw an exception if given a valid siteswap
     };
 
-    /**
-     * Valid TestCases to use.
-     */
-    private List<VanillaTestCase> validSiteswaps = VanillaTestCase.getValidTestCases().stream()
-            .filter(vanillaTestCase -> vanillaTestCase.validVanillaSiteswap)
-            .collect(Collectors.toList());
-
     @Test
-    public void parseNoSort() throws Exception, InvalidSiteswapException
-    {
-        final String prefix = "";
-        final boolean sorted = false;
-        int failures = 0;
-        for (VanillaTestCase testCase : validSiteswaps)
-        {
-            try
-            {
-                VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.intSiteswap, sorted);
-                testCase.verify("parseNoSort", prefix, sorted, vanillaSiteswap);
-            }
-            catch (ComparisonFailure e)
-            {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
-                failures++;
-            }
-        }
-        if (failures > 0) Assert.fail("There were " + failures + " failures");
-
-    }
-
-    @Test
-    public void parseGlobalStringNoSort() throws InvalidSiteswapException, BadThrowException
-    {
-        final String prefix = "";
-        final boolean sorted = false;
-        int failures = 0;
-        for (VanillaTestCase testCase : validSiteswaps)
-        {
-            try
-            {
-                VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
-                testCase.verify("parseGlobalStringNoSort", prefix, sorted, vanillaSiteswap);
-            }
-            catch (ComparisonFailure e)
-            {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
-                failures++;
-            }
-        }
-        if (failures > 0) Assert.fail("There were " + failures + " failures");
-    }
-
-    @Test
-    public void parseGlobalStringSorted() throws InvalidSiteswapException, BadThrowException
-    {
-        final boolean sorted = true;
-        final String prefix = "";
-        int failures = 0;
-        for (VanillaTestCase testCase : validSiteswaps)
-        {
-            try
-            {
-                VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create(testCase.unsortedStringSiteswap, sorted);
-                testCase.verify("parseGlobalStringSorted", prefix, sorted, vanillaSiteswap);
-            }
-            catch (ComparisonFailure e)
-            {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
-                failures++;
-            }
-        }
-        if (failures > 0) Assert.fail("There were " + failures + " failures");
-    }
-
-    @Test
-    public void invalidSiteswapsDontCompile() throws Exception
+    public void whenInvalidSiteswap_DoesNotConstruct() throws Exception
     {
         for (String invalidSiteswap : invalidSiteswaps)
         {
             try
             {
-                VanillaSiteswap.create(invalidSiteswap, true);
-                throw new RuntimeException(invalidSiteswap + " should've thrown an exception");
+                VanillaSiteswap.create(invalidSiteswap);
+                throw new RuntimeException("[" + invalidSiteswap + "] should've thrown an exception");
             }
-            catch (InvalidSiteswapException e)
+            catch (InvalidSiteswapException expected)
             {
                 // do nothing
             }
         }
+    }
+
+    @Test
+    public void testPeriod() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertEquals(3, VanillaSiteswap.create(new int[]{9, 7, 5}).getPeriod());
+        Assert.assertEquals(1, VanillaSiteswap.create(new int[]{9}).getPeriod());
+        Assert.assertEquals(15, VanillaSiteswap.create(new int[]{7,7,7,7,7, 7,7,7,7,7, 7,7,7,7,7}).getPeriod());
+    }
+
+    @Test
+    public void testNumJugglers() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertEquals(1, VanillaSiteswap.create(new int[]{9, 7, 5}).getNumJugglers());
+        Assert.assertEquals(1, VanillaSiteswap.create(new int[]{9}).getNumJugglers());
+    }
+
+    @Test
+    public void testNumObjects() throws InvalidSiteswapException
+    {
+        Assert.assertEquals(7, VanillaSiteswap.create(new int[]{9, 7, 5}).getNumObjects());
+        Assert.assertEquals(9, VanillaSiteswap.create(new int[]{9}).getNumObjects());
+    }
+
+    @Test
+    public void testPrime() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertEquals(true, VanillaSiteswap.create(new int[]{9, 7, 5}).isPrime());
+        Assert.assertEquals(true, VanillaSiteswap.create(new int[]{9}).isPrime());
+        Assert.assertEquals(false, VanillaSiteswap.create(new int[]{7,8,6,8,6}).isPrime());
+    }
+
+    @Test
+    public void testGrounded() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertEquals(true, VanillaSiteswap.create(new int[]{9, 7, 5}).isGrounded());
+        Assert.assertEquals(false, VanillaSiteswap.create(new int[]{9, 7, 2}).isGrounded());
+    }
+
+    @Test
+    public void testHighestThrow() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertEquals(9, VanillaSiteswap.create(new int[]{9,7,5}).getHighestThrow());
+        Assert.assertEquals(2, VanillaSiteswap.create(new int[]{2}).getHighestThrow());
+        Assert.assertEquals(10, VanillaSiteswap.create(new int[]{6,7,8,9,10}).getHighestThrow());
+    }
+
+    @Test
+    public void testStringSiteswap() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertEquals("975", VanillaSiteswap.create(new int[]{9,7,5}, SortingStrategy.NO_SORTING_STRATEGY).getStringSiteswap());
+        Assert.assertEquals("759", VanillaSiteswap.create(new int[]{7,5,9}, SortingStrategy.NO_SORTING_STRATEGY).getStringSiteswap());
+        Assert.assertEquals("597", VanillaSiteswap.create(new int[]{5,9,7}, SortingStrategy.NO_SORTING_STRATEGY).getStringSiteswap());
+        Assert.assertEquals("975", VanillaSiteswap.create(new int[]{9,7,5}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getStringSiteswap());
+        Assert.assertEquals("975", VanillaSiteswap.create(new int[]{7,5,9}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getStringSiteswap());
+        Assert.assertEquals("975", VanillaSiteswap.create(new int[]{5,9,7}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getStringSiteswap());
+    }
+
+    @Test
+    public void testIntSiteswap() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(new int[]{9,7,5}, SortingStrategy.NO_SORTING_STRATEGY).getIntSiteswap());
+        Assert.assertArrayEquals(new int[]{7,5,9}, VanillaSiteswap.create(new int[]{7,5,9}, SortingStrategy.NO_SORTING_STRATEGY).getIntSiteswap());
+        Assert.assertArrayEquals(new int[]{5,9,7}, VanillaSiteswap.create(new int[]{5,9,7}, SortingStrategy.NO_SORTING_STRATEGY).getIntSiteswap());
+        Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(new int[]{9,7,5}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getIntSiteswap());
+        Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(new int[]{7,5,9}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getIntSiteswap());
+        Assert.assertArrayEquals(new int[]{9,7,5}, VanillaSiteswap.create(new int[]{5,9,7}, SortingStrategy.HIGHEST_THROW_FIRST_STRATEGY).getIntSiteswap());
+    }
+
+    @Test
+    public void testStartingObjectsPerHand() throws Exception, InvalidSiteswapException
+    {
+        Assert.assertArrayEquals(new int[]{3,2}, VanillaSiteswap.create(new int[]{5}).getStartingObjectsPerHand());
     }
 }
