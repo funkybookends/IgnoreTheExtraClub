@@ -44,13 +44,13 @@ public class VanillaSiteswapGenerator
 
     public VanillaSiteswapGenerator banThrows(int... thros)
     {
-        for (int thro : thros) legalThrow[thro] = false;
+        for (int thro : thros) banThrow(thro);
         return this;
     }
 
     public VanillaSiteswapGenerator banThrow(int thro)
     {
-        legalThrow[thro] = false;
+        if (thro > legalThrow.length && thro >= 0) legalThrow[thro] = false;
         return this;
     }
 
