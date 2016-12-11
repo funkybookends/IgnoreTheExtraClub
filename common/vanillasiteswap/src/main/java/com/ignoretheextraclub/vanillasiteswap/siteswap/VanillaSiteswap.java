@@ -29,7 +29,7 @@ import static com.ignoretheextraclub.vanillasiteswap.state.VanillaState.transiti
  * Created by caspar on 26/11/16.
  */
 @Immutable
-public class VanillaSiteswap extends Siteswap
+public class VanillaSiteswap extends AbstractSiteswap
 {
     public static final int MAX_THROW = IntVanilla.charToInt('D');
 

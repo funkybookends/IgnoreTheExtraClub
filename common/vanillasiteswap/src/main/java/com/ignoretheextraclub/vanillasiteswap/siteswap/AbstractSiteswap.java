@@ -9,7 +9,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.PeriodException;
 /**
  * Created by caspar on 10/12/16.
  */
-public abstract class Siteswap
+public abstract class AbstractSiteswap
 {
     public static final int MAX_PERIOD = 15;
     public static final int MIN_PERIOD = 1;
@@ -26,7 +26,7 @@ public abstract class Siteswap
     @JsonProperty("num_objects")
     protected final int numObjects;
 
-    protected Siteswap(final int numJugglers, final int period, final int numObjects) throws InvalidSiteswapException
+    protected AbstractSiteswap(final int numJugglers, final int period, final int numObjects) throws InvalidSiteswapException
     {
         try {
             this.numJugglers = validateNumJugglers(numJugglers);

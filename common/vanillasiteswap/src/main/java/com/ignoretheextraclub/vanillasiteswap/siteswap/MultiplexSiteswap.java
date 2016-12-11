@@ -12,7 +12,7 @@ import java.util.List;
  * Created by caspar on 07/12/16.
  */
 @Immutable
-public class MultiplexSiteswap extends Siteswap
+public class MultiplexSiteswap extends AbstractSiteswap
 {
     private final List<MultiplexState> states;
     private final String stringSiteswap;
