@@ -216,8 +216,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
         {
             isMirrored = (intSiteswap.length % 2 == 1);
             leaderIntSiteswap = GlobalLocal.globalToLocal(this.intSiteswap, 0);
-            leaderStringSiteswap = IntVanilla.intArrayToString(leaderIntSiteswap);
             followerIntSiteswap = GlobalLocal.globalToLocal(this.intSiteswap, 1);
+            leaderStringSiteswap = IntVanilla.intArrayToString(leaderIntSiteswap);
             followerStringSiteswap = IntVanilla.intArrayToString(followerIntSiteswap);
             leaderPrechac = IntPrechac.fourHandedIntsToPrechac(leaderIntSiteswap);
             followerPrechac = IntPrechac.fourHandedIntsToPrechac(followerIntSiteswap);
