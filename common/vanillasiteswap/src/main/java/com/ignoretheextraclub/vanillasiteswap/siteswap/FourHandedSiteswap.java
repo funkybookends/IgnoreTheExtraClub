@@ -231,8 +231,8 @@ public class FourHandedSiteswap extends VanillaSiteswap
             }
             return new FourHandedSiteswap(2, period, numObjects, intSiteswap, states, sortingStrategy, prime,
                                           grounded, highestThrow, startingObjectsPerHand, stringSiteswap,
-                                          isMirrored, leaderIntSiteswap, leaderStringSiteswap, leaderPrechac, followerIntSiteswap,
-                                          followerStringSiteswap, followerPrechac);
+                                          isMirrored, leaderIntSiteswap, leaderStringSiteswap, leaderPrechac,
+                                          followerIntSiteswap, followerStringSiteswap, followerPrechac);
         }
     }
 
