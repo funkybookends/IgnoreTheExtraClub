@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 /**
  * Created by caspar on 11/12/16.
  */
-public class AbstractSortingStrategy
+public abstract class AbstractSortingStrategy
 {
     /**
      * Returns the index that should be first state in the array.
