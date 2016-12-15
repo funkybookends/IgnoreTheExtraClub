@@ -251,7 +251,19 @@ public class VanillaSiteswap extends AbstractSiteswap
      */
     public VanillaSiteswap sort(final IntVanillaStateSorter sorter)
     {
-        throw new NotImplementedException();
+        VanillaSiteswapBuilder vanillaSiteswapBuilder = null;
+        try
+        {
+            vanillaSiteswapBuilder = new VanillaSiteswapBuilder(this.states,
+                                                                startingObjectsPerHand.length,
+                                                                sorter);
+            return vanillaSiteswapBuilder.buildVanillaSiteswap();
+        }
+        catch (InvalidSiteswapException e)
+        {
+            e.printStackTrace();
+            return this;
+        }
     }
 
     public VanillaSiteswap join(final VanillaSiteswap second)
