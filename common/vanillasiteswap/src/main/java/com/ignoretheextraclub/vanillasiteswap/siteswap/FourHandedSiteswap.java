@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntPrechac;
@@ -27,24 +28,25 @@ public class FourHandedSiteswap extends VanillaSiteswap
     @JsonProperty("follower_prechac")         private final String followerPrechac;
     @JsonProperty("prechac")                  private final String prechac;
 
-    protected FourHandedSiteswap(final int numJugglers,
-                                 final int period,
-                                 final int numObjects,
-                                 final int[] intSiteswap,
-                                 final VanillaState[] states,
-                                 final boolean prime,
-                                 final boolean grounded,
-                                 final int highestThrow,
-                                 final int[] startingObjectsPerHand,
-                                 final String stringSiteswap,
-                                 final String sortingStrategyName,
-                                 final boolean reversible,
-                                 final int[] leaderIntSiteswap,
-                                 final String leaderStringSiteswap,
-                                 final String leaderPrechac,
-                                 final int[] followerIntSiteswap,
-                                 final String followerStringSiteswap,
-                                 final String followerPrechac) throws InvalidSiteswapException
+    @JsonCreator
+    protected FourHandedSiteswap(@JsonProperty("num_jugglers") final int numJugglers,
+                                 @JsonProperty("period") final int period,
+                                 @JsonProperty("num_objects") final int numObjects,
+                                 @JsonProperty("int_siteswap") final int[] intSiteswap,
+                                 @JsonProperty("states") final VanillaState[] states,
+                                 @JsonProperty("prime") final boolean prime,
+                                 @JsonProperty("grounded") final boolean grounded,
+                                 @JsonProperty("highest_throw") final int highestThrow,
+                                 @JsonProperty("starting_objects_per_hand") final int[] startingObjectsPerHand,
+                                 @JsonProperty("string_siteswap") final String stringSiteswap,
+                                 @JsonProperty("sorting_strategy") final String sortingStrategyName,
+                                 @JsonProperty("reversible") final boolean reversible,
+                                 @JsonProperty("leader_int_siteswap") final int[] leaderIntSiteswap,
+                                 @JsonProperty("leader_string_siteswap") final String leaderStringSiteswap,
+                                 @JsonProperty("leader_prechac") final String leaderPrechac,
+                                 @JsonProperty("follower_int_siteswap") final int[] followerIntSiteswap,
+                                 @JsonProperty("follower_string_siteswap") final String followerStringSiteswap,
+                                 @JsonProperty("follower_prechac") final String followerPrechac) throws InvalidSiteswapException
     {
         super(numJugglers,
               period,

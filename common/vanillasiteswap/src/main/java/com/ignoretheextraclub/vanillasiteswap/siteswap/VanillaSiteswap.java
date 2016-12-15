@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
@@ -52,17 +53,18 @@ public class VanillaSiteswap extends AbstractSiteswap
      * @param sortingStrategyName
      * @throws InvalidSiteswapException
      */
-    VanillaSiteswap(final int numJugglers,
-                    final int period,
-                    final int numObjects,
-                    final int[] intSiteswap,
-                    final VanillaState[] states,
-                    final boolean prime,
-                    final boolean grounded,
-                    final int highestThrow,
-                    final int[] startingObjectsPerHand,
-                    final String stringSiteswap,
-                    final String sortingStrategyName) throws InvalidSiteswapException
+    @JsonCreator
+    VanillaSiteswap(@JsonProperty("num_jugglers") final int numJugglers,
+                    @JsonProperty("period") final int period,
+                    @JsonProperty("num_objects") final int numObjects,
+                    @JsonProperty("int_siteswap") final int[] intSiteswap,
+                    @JsonProperty("states") final VanillaState[] states,
+                    @JsonProperty("prime") final boolean prime,
+                    @JsonProperty("grounded") final boolean grounded,
+                    @JsonProperty("highest_throw") final int highestThrow,
+                    @JsonProperty("starting_objects_per_hand") final int[] startingObjectsPerHand,
+                    @JsonProperty("string_siteswap") final String stringSiteswap,
+                    @JsonProperty("sorting_strategy") final String sortingStrategyName) throws InvalidSiteswapException
     {
         super(numJugglers,
               period,
