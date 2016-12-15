@@ -293,4 +293,14 @@ public class VanillaState extends AbstractState
         for (boolean position : array) if (position) i++;
         return i;
     }
+
+    public static int[] convert(final VanillaState[] from) throws NoTransitionException
+    {
+        final int[] to = new int[from.length];
+        for (int i = 0; i < from.length; i++)
+        {
+            to[i] = transition(from[i], from[(i+1)%from.length]);
+        }
+        return to;
+    }
 }

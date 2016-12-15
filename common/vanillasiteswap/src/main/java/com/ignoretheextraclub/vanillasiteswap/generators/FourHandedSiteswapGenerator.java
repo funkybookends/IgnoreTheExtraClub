@@ -21,7 +21,7 @@ public class FourHandedSiteswapGenerator extends VanillaSiteswapGenerator
     {
         super(numObjects, maxThrow, prime, grounded, finalPeriod, resultLimit);
         setNumJugglers(2);
-        for (int illegalThrow : FourHandedSiteswap.ILLEGAL_THROWS) banThrow(illegalThrow);
+        for (int illegalThrow : FourHandedSiteswap.getIllegalThrows()) banThrow(illegalThrow);
     }
 
     public List<FourHandedSiteswap> generateToFourHandedSiteswaps()

@@ -1,6 +1,11 @@
-package com.ignoretheextraclub.vanillasiteswap.sorters;
+package com.ignoretheextraclub.vanillasiteswap.sorters.impl;
 
+import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
+import com.ignoretheextraclub.vanillasiteswap.sorters.SortingStrategy;
+import com.ignoretheextraclub.vanillasiteswap.sorters.SortingUtils;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,8 +14,16 @@ import java.util.stream.IntStream;
 /**
  * Created by caspar on 10/12/16.
  */
-public class FourHandedPassingStrategy extends AbstractSortingStrategy
+public class FourHandedPassingStrategy implements IntVanillaStateSorter
 {
+    private static final String NAME = "FourHandedPassing";
+
+    @Override
+    public int sort(final int[] unsorted) throws NotImplementedException, InvalidSiteswapException
+    {
+        throw new NotImplementedException();
+    }
+
     public int sort(final VanillaState[] unsorted)
     {
         final int period = unsorted.length;
@@ -20,7 +33,7 @@ public class FourHandedPassingStrategy extends AbstractSortingStrategy
                 .boxed()
                 .collect(Collectors.toList());
 
-        return getFirstMinIndex(scores);
+        return SortingUtils.getFirstMinIndex(scores);
     }
 
     private int scoreRotation(int start, int period, VanillaState[] states)
@@ -34,5 +47,11 @@ public class FourHandedPassingStrategy extends AbstractSortingStrategy
             score += excitedness*(-i+1);
         }
         return score;
+    }
+
+    @Override
+    public String getName()
+    {
+        return NAME;
     }
 }
