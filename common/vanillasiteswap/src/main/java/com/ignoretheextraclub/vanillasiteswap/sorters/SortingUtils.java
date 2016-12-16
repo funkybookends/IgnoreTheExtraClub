@@ -62,24 +62,24 @@ public class SortingUtils
         {
             final List<AbstractState[]> maxes = new LinkedList<>();
             maxes.add(states);
-            IntStream.range(1, states.length).forEach(i ->
-                  {
-                      AbstractState[] rot = getCopy(states, i);
-                      int diff = comparator.compare(maxes.get(0), rot);
-                      if (diff == 0)
-                      {
-                          maxes.add(rot);
-                      }
-                      else if (diff > 0)
-                      {
-                          maxes.clear();
-                          maxes.add(rot);
-                      }
-                      else
-                      {
-                          //rot is not new max
-                      }new 
-                  });
+            forEach(i ->
+                    {
+                        AbstractState[] rot = getCopy(states, i);
+                        int diff = comparator.compare(maxes.get(0), rot);
+                        if (diff == 0)
+                        {
+                            maxes.add(rot);
+                        }
+                        else if (diff > 0)
+                        {
+                            maxes.clear();
+                            maxes.add(rot);
+                        }
+                        else
+                        {
+                            //rot is not new max
+                        }
+                    });
             return maxes;
         }
 
