@@ -39,21 +39,21 @@ public abstract class AbstractSiteswap
         }
     }
 
-    protected static int validatePeriod(final int period) throws PeriodException
+    public static int validatePeriod(final int period) throws PeriodException
     {
         if (period > MAX_PERIOD)      throw new PeriodException("Period too long, cannot be longer than " + MAX_PERIOD);
         else if (period < MIN_PERIOD) throw new PeriodException("Period too short cannot be shorter than " + MIN_PERIOD);
         return period;
     }
 
-    protected static int validateNumObjects(final int numObjects) throws NumObjectsException
+    public static int validateNumObjects(final int numObjects) throws NumObjectsException
     {
         if (numObjects > MAX_OBJECTS)      throw new NumObjectsException("Too many objects, cannot have more than " + MAX_OBJECTS);
         else if (numObjects < MIN_OBJECTS) throw new NumObjectsException("Not enough objects, must at least have " + MIN_OBJECTS);
         return numObjects;
     }
 
-    protected static int validateNumJugglers(final int numJugglers) throws NumJugglersException
+    public static int validateNumJugglers(final int numJugglers) throws NumJugglersException
     {
         if (numJugglers > MAX_JUGGLERS)      throw new NumJugglersException("Too many jugglers, cannot be more than " + MAX_JUGGLERS);
         else if (numJugglers < MIN_JUGGLERS) throw new NumJugglersException("Too few jugglers, cannot be less than " + MIN_JUGGLERS);
