@@ -2,7 +2,7 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
-import com.ignoretheextraclub.vanillasiteswap.sorters.NoSortingStrategy;
+import com.ignoretheextraclub.vanillasiteswap.sorters.NoStateSorter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.junit.Test;
  */
 public class FourHandedSiteswapTest
 {
-    private static final IntVanillaStateSorter NO_SORTING_STRATEGY = new NoSortingStrategy();
+    private static final IntVanillaStateSorter NO_SORTING_STRATEGY = new NoStateSorter();
 
 
     private FourHandedSiteswap s975;

@@ -9,7 +9,7 @@ import org.apache.commons.lang.NotImplementedException;
 /**
  * Created by caspar on 15/12/16.
  */
-public class NoSortingStrategy implements IntVanillaStateSorter, MultiplexStateSorter, SynchronousStateSorter
+public class NoStateSorter implements IntVanillaStateSorter, MultiplexStateSorter, SynchronousStateSorter
 {
     private static final String NAME = "NoSortingStrategy";
     @Override

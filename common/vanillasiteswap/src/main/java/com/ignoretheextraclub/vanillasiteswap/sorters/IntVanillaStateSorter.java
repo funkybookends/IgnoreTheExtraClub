@@ -7,7 +7,7 @@ import org.apache.commons.lang.NotImplementedException;
 /**
  * Created by caspar on 15/12/16.
  */
-public interface IntVanillaStateSorter extends SortingStrategy
+public interface IntVanillaStateSorter extends StateSorter
 {
     int sort(int[] unsorted) throws NotImplementedException, InvalidSiteswapException;
 

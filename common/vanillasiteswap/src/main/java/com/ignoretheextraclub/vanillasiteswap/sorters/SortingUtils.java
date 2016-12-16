@@ -1,10 +1,13 @@
 package com.ignoretheextraclub.vanillasiteswap.sorters;
 
+import com.ignoretheextraclub.vanillasiteswap.exceptions.PeriodException;
+import com.ignoretheextraclub.vanillasiteswap.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.vanillasiteswap.state.AbstractState;
 
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
@@ -48,15 +51,16 @@ public class SortingUtils
         private final List<Predicate<? super AbstractState[]>> predicates = new LinkedList<>();
         private final AbstractState[] states;
 
-        public Rotations(final AbstractState[] states)
+        public Rotations(final AbstractState[] states) throws PeriodException
         {
+            AbstractSiteswap.validatePeriod(states.length);
             this.states = new AbstractState[states.length];
             System.arraycopy(states, 0, this.states, 0, states.length);
         }
 
         public List<AbstractState[]> max(Comparator<? super AbstractState[]> comparator)
         {
-            List<AbstractState[]> maxes = new LinkedList<>();
+            final List<AbstractState[]> maxes = new LinkedList<>();
             maxes.add(states);
             IntStream.range(1, states.length).forEach(i ->
                   {
@@ -74,7 +78,7 @@ public class SortingUtils
                       else
                       {
                           //rot is not new max
-                      }
+                      }new 
                   });
             return maxes;
         }
@@ -82,6 +86,11 @@ public class SortingUtils
         public List<AbstractState[]> min(Comparator<? super AbstractState[]> comparator)
         {
             return max((a, b) -> (-1 * comparator.compare(a, b)));
+        }
+
+        public void forEach(Consumer<? super AbstractState[]> consumer)
+        {
+            IntStream.range(1, states.length).forEach(i -> consumer.accept(getCopy(states, i)));
         }
 
         private AbstractState[] getCopy(final AbstractState[] src, final int start)

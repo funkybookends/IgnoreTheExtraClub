@@ -6,7 +6,7 @@ import com.ignoretheextraclub.vanillasiteswap.state.SynchronousState;
 /**
  * Created by caspar on 15/12/16.
  */
-public interface SynchronousStateSorter extends SortingStrategy
+public interface SynchronousStateSorter extends StateSorter
 {
     int sort(SynchronousState[] unsorted) throws InvalidSiteswapException;
 }

@@ -2,7 +2,6 @@ package com.ignoretheextraclub.vanillasiteswap.sorters.impl;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
-import com.ignoretheextraclub.vanillasiteswap.sorters.SortingStrategy;
 import com.ignoretheextraclub.vanillasiteswap.sorters.SortingUtils;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import org.apache.commons.lang.NotImplementedException;

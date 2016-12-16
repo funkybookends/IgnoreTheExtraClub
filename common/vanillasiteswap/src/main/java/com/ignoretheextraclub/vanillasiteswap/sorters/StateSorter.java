@@ -3,7 +3,7 @@ package com.ignoretheextraclub.vanillasiteswap.sorters;
 /**
  * Created by caspar on 15/12/16.
  */
-public interface SortingStrategy
+public interface StateSorter
 {
     String getName();
 }
