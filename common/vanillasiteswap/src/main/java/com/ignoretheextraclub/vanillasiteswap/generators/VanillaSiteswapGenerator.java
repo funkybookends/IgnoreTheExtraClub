@@ -1,29 +1,37 @@
 package com.ignoretheextraclub.vanillasiteswap.generators;
 
+import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
 import com.ignoretheextraclub.vanillasiteswap.siteswap.VanillaSiteswap;
+import com.ignoretheextraclub.vanillasiteswap.siteswap.VanillaSiteswapBuilder;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import org.apache.commons.lang.NotImplementedException;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Created by caspar on 11/12/16.
  */
 public class VanillaSiteswapGenerator
 {
+    private int numHands;
     private boolean[] legalThrow;
     private int finalPeriod;
     private boolean prime;
     private boolean grounded;
-    private VanillaState startState;
     private int numJugglers = 1;
-    private List<VanillaState> bannedStates = new LinkedList<>();
-    private List<VanillaState[]> results;
+    private Set<VanillaState> bannedStates = new TreeSet<>();
     private int resultLimit;
     private int numObjects;
+
+    private Set<VanillaState[]> results;
+    private Set<VanillaSiteswap> resultsVanillaSiteswap;
+    private Set<String> resultsString;
 
     public VanillaSiteswapGenerator(final int numObjects,
                                     final int maxThrow,
@@ -38,15 +46,23 @@ public class VanillaSiteswapGenerator
         this.numObjects = numObjects;
         for (int i = 0; i < legalThrow.length; i++) legalThrow[i] = true;
         this.prime = prime;
-        if (grounded) startState = VanillaState.getGroundState(maxThrow, numObjects);
         this.resultLimit = resultLimit;
         this.grounded = grounded;
+        this.numJugglers = 1;
+        this.numHands = 2;
     }
     
-    protected VanillaSiteswapGenerator setNumJugglers(final int numJugglers)
+    public VanillaSiteswapGenerator setNumJugglers(final int numJugglers)
     {
         if (results != null) throw new UnsupportedOperationException("Already Generated");
         this.numJugglers = numJugglers;
+        return this;
+    }
+
+    public VanillaSiteswapGenerator setNumHands(final int numHands)
+    {
+        if (results != null) throw new UnsupportedOperationException("Already Generated");
+        this.numHands = numHands;
         return this;
     }
 
@@ -57,19 +73,17 @@ public class VanillaSiteswapGenerator
         return this;
     }
 
+    public VanillaSiteswapGenerator banThrows(Set<Integer> thros)
+    {
+        if (results != null) throw new UnsupportedOperationException("Already Generated");
+        for (int thro : thros) banThrow(thro);
+        return this;
+    }
+
     public VanillaSiteswapGenerator banThrow(int thro)
     {
         if (results != null) throw new UnsupportedOperationException("Already Generated");
         if (thro > legalThrow.length && thro >= 0) legalThrow[thro] = false;
-        return this;
-    }
-
-    public VanillaSiteswapGenerator setStartState(VanillaState startState)
-    {
-        if (results != null) throw new UnsupportedOperationException("Already Generated");
-        if (grounded) throw new UnsupportedOperationException("Method not available when grounded");
-        if (startState.getNumObjects() != numObjects) throw new IllegalArgumentException("Your state does not have the same number of objects as the stated number of objects");
-        this.startState = startState;
         return this;
     }
 
@@ -91,23 +105,59 @@ public class VanillaSiteswapGenerator
         throw new NotImplementedException();
     }
 
-    public List<VanillaState[]> generateToListOfVanillaStateArray()
+    public Set<VanillaState[]> generateToListOfVanillaStateArray()
     {
         if (results == null) generate();
         return results;
     }
 
-    public List<VanillaSiteswap> generateToListOfVanillaSiteswap()
+    public Set<VanillaSiteswap> generateToSetOfVanillaSiteswap()
     {
         if (results == null) generate();
-
-        throw new NotImplementedException();
+        if (resultsVanillaSiteswap == null)
+        {
+            results.stream().map(states -> {
+                try
+                {
+                    final VanillaSiteswapBuilder builder = new VanillaSiteswapBuilder(states, numHands, VanillaSiteswap.DEFAULT_SORTING_STRATEGY);
+                    return builder.buildVanillaSiteswap();
+                }
+                catch (InvalidSiteswapException e)
+                {
+                    throw new RuntimeException("Generated a siteswap the builder didn't like");
+                }
+            }).collect(Collectors.toSet());
+        }
+        return resultsVanillaSiteswap;
     }
 
-    public List<String> generateToListOfStringSiteswaps()
+    public Set<String> generateToSetOfStringSiteswaps()
     {
         if (results == null) generate();
-
-        throw new NotImplementedException();
+        if (resultsString == null)
+        {
+            if (resultsVanillaSiteswap != null)
+            {
+                resultsString = resultsVanillaSiteswap.stream()
+                        .map(VanillaSiteswap::toString)
+                        .collect(Collectors.toSet());
+            }
+            else
+            {
+                resultsString = results.stream().map(
+                        states ->
+                        {
+                            try
+                            {
+                                return IntVanilla.intArrayToString(VanillaState.convert(states));
+                            }
+                            catch (NoTransitionException e)
+                            {
+                                throw new RuntimeException("Generated a siteswap the convertor didn't like");
+                            }
+                        }).collect(Collectors.toSet());
+            }
+        }
+        return resultsString;
     }
 }

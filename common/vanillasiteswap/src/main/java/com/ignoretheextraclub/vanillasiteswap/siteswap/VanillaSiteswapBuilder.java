@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * A builder class that calculates all the values.
  */
-class VanillaSiteswapBuilder
+public class VanillaSiteswapBuilder
 {
     protected VanillaState[] states;
     protected boolean prime;
@@ -47,7 +47,9 @@ class VanillaSiteswapBuilder
         }
     }
 
-    protected VanillaSiteswapBuilder(final VanillaState[] states, final int numHands, final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+    public VanillaSiteswapBuilder(final VanillaState[] states,
+                                  final int numHands,
+                                  final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         try
         {
@@ -210,7 +212,7 @@ class VanillaSiteswapBuilder
         return false;
     }
 
-    VanillaSiteswap buildVanillaSiteswap() throws InvalidSiteswapException
+    public VanillaSiteswap buildVanillaSiteswap() throws InvalidSiteswapException
     {
         if (startingObjectsPerHand.length > 2)
         {
