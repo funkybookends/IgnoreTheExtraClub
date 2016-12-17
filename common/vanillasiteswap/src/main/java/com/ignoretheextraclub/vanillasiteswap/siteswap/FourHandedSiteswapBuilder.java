@@ -4,7 +4,7 @@ import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntPrechac;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
+import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.sorters.impl.FourHandedPassingStrategy;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 
@@ -13,7 +13,6 @@ import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
  */
 class FourHandedSiteswapBuilder extends VanillaSiteswapBuilder
 {
-    private static final IntVanillaStateSorter DEFAULT_SORTING_STRATEGY = new FourHandedPassingStrategy();
     private int[] leaderIntSiteswap;
     private int[] followerIntSiteswap;
     private String leaderStringSiteswap;
@@ -22,7 +21,7 @@ class FourHandedSiteswapBuilder extends VanillaSiteswapBuilder
     private String followerPrechac;
     private boolean isMirrored;
 
-    public FourHandedSiteswapBuilder(int[] vanillaSiteswap, IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+    public FourHandedSiteswapBuilder(int[] vanillaSiteswap, VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         super(vanillaSiteswap,4, sortingStrategy);
         initFourHandedSiteswapFields();
@@ -30,7 +29,7 @@ class FourHandedSiteswapBuilder extends VanillaSiteswapBuilder
 
     public FourHandedSiteswapBuilder(VanillaState[] states) throws InvalidSiteswapException
     {
-        super(states, 4, DEFAULT_SORTING_STRATEGY);
+        super(states, 4, VanillaSiteswap.DEFAULT_SORTING_STRATEGY);
         initFourHandedSiteswapFields();
     }
 

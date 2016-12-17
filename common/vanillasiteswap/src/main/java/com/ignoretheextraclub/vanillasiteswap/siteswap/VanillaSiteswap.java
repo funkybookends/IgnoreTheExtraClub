@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
-import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
+import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.sorters.impl.HighestThrowFirstStrategy;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import jdk.nashorn.internal.ir.annotations.Immutable;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 public class VanillaSiteswap extends AbstractSiteswap
 {
     public static final int MAX_THROW = IntVanilla.charToInt('D');
-    public static final IntVanillaStateSorter DEFAULT_SORTING_STRATEGY = new HighestThrowFirstStrategy();
+    public static final VanillaStateSorter DEFAULT_SORTING_STRATEGY = new HighestThrowFirstStrategy();
 
     protected final VanillaState[] states; //The list of states, ordered, and possibly sorted
     protected final boolean prime; //A pattern is prime if it does not revisit a state twice. If it does this implies it can be decomposed into two or more siteswaps TODO determine decompositions
@@ -81,7 +81,7 @@ public class VanillaSiteswap extends AbstractSiteswap
 
     public static VanillaSiteswap create(final int[] siteswap,
                                          final int numHands,
-                                         final IntVanillaStateSorter sortingStrategy)
+                                         final VanillaStateSorter sortingStrategy)
             throws InvalidSiteswapException
     {
         VanillaSiteswapBuilder builder = new VanillaSiteswapBuilder(siteswap, numHands, sortingStrategy);
@@ -89,7 +89,7 @@ public class VanillaSiteswap extends AbstractSiteswap
     }
 
     public static VanillaSiteswap create(final int[] siteswap,
-                                         final IntVanillaStateSorter sortingStrategy)
+                                         final VanillaStateSorter sortingStrategy)
     throws InvalidSiteswapException
     {
         return create(siteswap, 2, sortingStrategy);
@@ -110,13 +110,13 @@ public class VanillaSiteswap extends AbstractSiteswap
 
     public static VanillaSiteswap create(final String stringSiteswap,
                                          final int numHands,
-                                         final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+                                         final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         return create(IntVanilla.stringToIntArray(stringSiteswap), numHands, sortingStrategy);
     }
 
     public static VanillaSiteswap create(final String stringSiteswap,
-                                         final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+                                         final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         return create(stringSiteswap, 2, sortingStrategy);
     }
@@ -134,14 +134,14 @@ public class VanillaSiteswap extends AbstractSiteswap
 
     public static VanillaSiteswap create(final VanillaState[] states,
                                          final int numHands,
-                                         final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+                                         final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         VanillaSiteswapBuilder builder = new VanillaSiteswapBuilder(states, numHands, sortingStrategy);
         return builder.buildVanillaSiteswap();
     }
 
     public static VanillaSiteswap create(final VanillaState[] states,
-                                         final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+                                         final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         return create(states, 2, sortingStrategy);
     }
@@ -249,7 +249,7 @@ public class VanillaSiteswap extends AbstractSiteswap
     /**
      * Methods
      */
-    public VanillaSiteswap sort(final IntVanillaStateSorter sorter)
+    public VanillaSiteswap sort(final VanillaStateSorter sorter)
     {
         VanillaSiteswapBuilder vanillaSiteswapBuilder = null;
         try

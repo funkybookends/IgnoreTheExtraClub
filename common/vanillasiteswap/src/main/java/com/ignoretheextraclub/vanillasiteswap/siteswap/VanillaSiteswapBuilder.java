@@ -2,9 +2,9 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
-import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
+import com.ignoretheextraclub.vanillasiteswap.sorters.SortingUtils;
+import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import org.apache.commons.lang.NotImplementedException;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -24,11 +24,11 @@ public class VanillaSiteswapBuilder
     protected String stringSiteswap;
     protected int[] intSiteswap;
     protected int[] startingObjectsPerHand;
-    protected IntVanillaStateSorter sortingStrategy;
+    protected VanillaStateSorter sortingStrategy;
 
     protected VanillaSiteswapBuilder(final int[] vanillaSiteswap,
                                      final int numHands,
-                                     final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+                                     final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         try
         {
@@ -49,7 +49,7 @@ public class VanillaSiteswapBuilder
 
     public VanillaSiteswapBuilder(final VanillaState[] states,
                                   final int numHands,
-                                  final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+                                  final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         try
         {
@@ -75,7 +75,7 @@ public class VanillaSiteswapBuilder
 
     }
 
-    private void postStatesInit(int numHands, IntVanillaStateSorter sortingStrategy) throws
+    private void postStatesInit(int numHands, VanillaStateSorter sortingStrategy) throws
                                                                                      StateSizeException,
                                                                                      NumObjectsException,
                                                                                      BadThrowException,
@@ -168,42 +168,11 @@ public class VanillaSiteswapBuilder
      * Sorts the siteswap using the given strategy. If it fails then the no sorting strategy will be used.
      * @param sortingStrategy
      */
-    private void sort(IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+    private void sort(VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
-        int newZeroIndex;
-        try
-        {
-            newZeroIndex = sortingStrategy.sort(states);
-        }
-        catch (final NotImplementedException stateSortingNotImplemented)
-        {
-            try
-            {
-                newZeroIndex = sortingStrategy.sort(intSiteswap);
-            }
-            catch (final NotImplementedException intSortingNotImplemented)
-            {
-                final String message = "Sorting Strategy does not implement either of the sorting options.";
-                RuntimeException runtimeException = new RuntimeException(message, intSortingNotImplemented);
-                runtimeException.addSuppressed(stateSortingNotImplemented);
-                throw runtimeException;
-            }
-        }
-        this.sortingStrategy = sortingStrategy;
-        rotate(newZeroIndex);
-    }
-
-    private void rotate(final int newZeroIndexPosition)
-    {
-        if (newZeroIndexPosition != 0 )
-        {
-            VanillaState[] sortedStates = new VanillaState[states.length];
-
-            System.arraycopy(states, newZeroIndexPosition, sortedStates, 0, states.length - newZeroIndexPosition);
-            System.arraycopy(states, 0, sortedStates, states.length - newZeroIndexPosition, newZeroIndexPosition);
-
-            states = sortedStates;
-        }
+            SortingUtils.Rotations<VanillaState> rotations = new SortingUtils.Rotations<>(states);
+            states = rotations.sort(sortingStrategy);
+            this.sortingStrategy = sortingStrategy;
     }
 
     private boolean containsAGroundState()

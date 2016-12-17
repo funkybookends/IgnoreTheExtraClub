@@ -1,57 +1,40 @@
 package com.ignoretheextraclub.vanillasiteswap.sorters.impl;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.PeriodException;
-import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
-import com.ignoretheextraclub.vanillasiteswap.sorters.SortingUtils;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
+import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import org.apache.commons.lang.NotImplementedException;
-
-import java.util.List;
-import java.util.function.Function;
 
 /**
  * Created by caspar on 10/12/16.
  */
-public class HighestThrowFirstStrategy implements IntVanillaStateSorter
+public class HighestThrowFirstStrategy implements VanillaStateSorter
 {
     private static final String NAME = "HighestThrowFirst";
-
-    public int sort(final VanillaState[] unsorted) throws InvalidSiteswapException
-    {
-        throw new NotImplementedException();
-    }
-
-    public int sort(final int[] unsorted) throws InvalidSiteswapException
-    {
-        try
-        {
-            List<SortingUtils.Rotation> candidates;
-            int dist = 0;
-            do
-            {
-                candidates = new SortingUtils.Rotations(unsorted).getMaxesByInt(getMapper(dist));
-                dist++;
-            }
-            while (candidates.size() > 1 && dist < unsorted.length);
-
-            return candidates.get(0).getIndex();
-
-        }
-        catch (PeriodException e)
-        {
-            throw new InvalidSiteswapException("Could not find best start", e);
-        }
-    }
-
-    private Function<int[], Integer> getMapper(final int dist)
-    {
-        return thros -> thros[dist];
-    }
 
     @Override
     public String getName()
     {
         return NAME;
+    }
+
+    @Override
+    public boolean takeFirst(VanillaState[] first, VanillaState[] second) throws InvalidSiteswapException
+    {
+        try
+        {
+            for (int i = 0; i < first.length; i++)
+            {
+                int ftran = VanillaState.transition(first[i] , first[ (i + 1) % first.length ]);
+                int stran = VanillaState.transition(second[i], second[(i + 1) % second.length]);
+                if (ftran > stran) return true;
+                if (ftran < stran) return false;
+            }
+            return true; //they are equivalent
+        }
+        catch (NoTransitionException e)
+        {
+            throw new InvalidSiteswapException("Could not determine transition", e);
+        }
     }
 }

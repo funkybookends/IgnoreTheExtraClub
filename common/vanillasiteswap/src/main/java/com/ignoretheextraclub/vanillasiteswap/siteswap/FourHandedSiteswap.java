@@ -6,7 +6,7 @@ import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntPrechac;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
+import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
@@ -70,7 +70,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         else this.prechac = IntPrechac.OPEN + leaderPrechac + IntPrechac.SEPERATOR + followerPrechac + IntPrechac.CLOSE;
     }
 
-    private static FourHandedSiteswap createGlobalOrLocal(int[] siteswap, final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+    private static FourHandedSiteswap createGlobalOrLocal(int[] siteswap, final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         try
         {
@@ -93,7 +93,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
     }
 
     private static FourHandedSiteswap createSiteswapOrPrechac(final String siteswap,
-                                                              final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+                                                              final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
 //        try
 //        {
@@ -113,7 +113,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
 //        }
     }
 
-    public static FourHandedSiteswap create(int[] siteswap, final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+    public static FourHandedSiteswap create(int[] siteswap, final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         return FourHandedSiteswap.createGlobalOrLocal(siteswap, sortingStrategy);
     }
@@ -123,7 +123,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         return create(siteswap, DEFAULT_SORTING_STRATEGY);
     }
 
-    public static FourHandedSiteswap create(String siteswap, final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+    public static FourHandedSiteswap create(String siteswap, final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         return FourHandedSiteswap.createSiteswapOrPrechac(siteswap, sortingStrategy);
     }
@@ -133,7 +133,7 @@ public class FourHandedSiteswap extends VanillaSiteswap
         return create(siteswap, DEFAULT_SORTING_STRATEGY);
     }
 
-    public static FourHandedSiteswap create(VanillaState[] states, final IntVanillaStateSorter sortingStrategy) throws InvalidSiteswapException
+    public static FourHandedSiteswap create(VanillaState[] states, final VanillaStateSorter sortingStrategy) throws InvalidSiteswapException
     {
         FourHandedSiteswapBuilder builder = new FourHandedSiteswapBuilder(states);
         return builder.buildFourHandedSiteswap();

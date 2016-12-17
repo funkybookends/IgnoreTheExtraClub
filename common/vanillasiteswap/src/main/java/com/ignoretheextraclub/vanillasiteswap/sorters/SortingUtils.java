@@ -1,12 +1,11 @@
 package com.ignoretheextraclub.vanillasiteswap.sorters;
 
+import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.PeriodException;
 import com.ignoretheextraclub.vanillasiteswap.siteswap.AbstractSiteswap;
-import com.ignoretheextraclub.vanillasiteswap.state.AbstractState;
 
-import java.util.LinkedList;
+import java.lang.reflect.Array;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -45,133 +44,63 @@ public class SortingUtils
                 .orElse(0);
     }
 
-    private static class Rotation
+    public static class Rotations<T>
     {
-        private final AbstractState[] states;
-        private final int[] thros;
-        private final int index;
-        private final boolean isStates;
+        private final List<Rotation<T>> rotations;
 
-        public Rotation(final AbstractState[] states, final int index)
+        public Rotations(final T[] states)
         {
-            this.states = states;
-            this.index = index;
-            this.thros = new int[]{};
-            this.isStates = true;
-        }
-
-        public Rotation(final int[] thros, final int index)
-        {
-            this.thros = thros;
-            this.index = index;
-            this.states = new AbstractState[]{};
-            this.isStates = false;
-        }
-
-        public AbstractState[] getStates()
-        {
-            if (!isStates) throw new UnsupportedOperationException("Did you mean int?");
-            return states;
-        }
-
-        public int[] getThros()
-        {
-            if (isStates) throw new UnsupportedOperationException("Did you mean states?");
-            return thros;
-        }
-
-        public int getIndex()
-        {
-            return index;
-        }
-
-        public boolean isStates()
-        {
-            return isStates;
-        }
-    }
-
-    public static class Rotations //implements Stream
-    {
-        private final Rotation[] rotations;
-
-        public Rotations(final AbstractState[] states) throws PeriodException
-        {
-            rotations = (Rotation[]) IntStream.range(0, AbstractSiteswap.validatePeriod(states.length))
-                    .boxed()
-                    .map(i -> {return new Rotation(getCopy(states, i), i);})
-                    .collect(Collectors.toList()).toArray();
-        }
-
-        public Rotations(final int[] thros) throws PeriodException
-        {
-            rotations = (Rotation[]) IntStream.range(0, AbstractSiteswap.validatePeriod(thros.length))
-                    .boxed()
-                    .map(i -> {return new Rotation(getCopy(thros, i), i);})
-                    .collect(Collectors.toList()).toArray();
-        }
-
-        public Rotations(final Rotation[] rotations)
-        {
-            this.rotations = rotations;
-        }
-
-        public List<Rotation> getMaxesByState(Function<AbstractState[], Integer> mapper)
-        {
-            final List<Rotation> maxes = new LinkedList<>();
-            int max = Integer.MIN_VALUE;
-            for (Rotation rotation : rotations)
+            try
             {
-                int value = mapper.apply(rotation.getStates());
-                if (value > max)
-                {
-                    maxes.clear();
-                    maxes.add(rotation);
-                    max = value;
-                }
+                rotations = IntStream.range(0, AbstractSiteswap.validatePeriod(states.length))
+                        .boxed()
+                        .map(i -> new Rotation<>(states, i))
+                        .collect(Collectors.toList());
             }
-            return maxes;
-        }
-
-        public List<Rotation> getMaxesByInt(Function<int[], Integer> mapper)
-        {
-            final List<Rotation> maxes = new LinkedList<>();
-            int max = Integer.MIN_VALUE;
-            for (Rotation rotation : rotations)
+            catch (PeriodException e)
             {
-                int value = mapper.apply(rotation.getThros());
-                if (value > max)
-                {
-                    maxes.clear();
-                    maxes.add(rotation);
-                    max = value;
-                }
+                throw new RuntimeException("Invalid Period", e);
             }
-            return maxes;
+
         }
 
-        public List<Rotation> getMinsByStates(Function<AbstractState[], Integer> mapper)
+        public T[] sort(final StateSorter<T> chooser) throws InvalidSiteswapException
         {
-            return getMaxesByState(abstractStates -> -1 * mapper.apply(abstractStates));
+            Rotation<T> winner = rotations.get(0);
+            for (int i = 1; i < rotations.size(); i++)
+            {
+                winner = chooser.takeFirst(winner.getStates(), rotations.get(i).getStates()) ? winner : rotations.get(i);
+            }
+            return winner.getStates();
         }
 
-        public List<Rotation> getMinsByInt(Function<int[], Integer> mapper)
+        private static class Rotation<T>
         {
-            return getMaxesByInt(thros -> -1 * mapper.apply(thros));
+            private final T[] states;
+            private final int index;
+
+            public Rotation(final T[] states, final int index)
+            {
+                this.states = getCopy(states, index);
+                this.index = index;
+            }
+
+            public T[] getStates()
+            {
+                return states;
+            }
+
+            public int getIndex()
+            {
+                return index;
+            }
         }
     }
 
-    private static AbstractState[] getCopy(final AbstractState[] src, final int start)
+    @SuppressWarnings("unchecked")
+    private static <T> T[] getCopy(final T[] src, final int start)
     {
-        final AbstractState[] dest = new AbstractState[src.length];
-        System.arraycopy(src, start, dest, 0, src.length - start);
-        System.arraycopy(src, 0, dest, src.length - start, start);
-        return dest;
-    }
-
-    private static int[] getCopy(final int[] src, final int start)
-    {
-        final int[] dest = new int[src.length];
+        final T[] dest = (T[]) Array.newInstance(src.getClass().getComponentType(), src.length);
         System.arraycopy(src, start, dest, 0, src.length - start);
         System.arraycopy(src, 0, dest, src.length - start, start);
         return dest;

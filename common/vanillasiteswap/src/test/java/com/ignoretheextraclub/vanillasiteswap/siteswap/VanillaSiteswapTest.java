@@ -1,9 +1,9 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
-import com.ignoretheextraclub.vanillasiteswap.sorters.NoStateSorter;
+import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.sorters.impl.HighestThrowFirstStrategy;
+import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +13,21 @@ import org.junit.Test;
  */
 public class VanillaSiteswapTest
 {
-    private static final IntVanillaStateSorter NO_SORTING_STRATEGY = new NoStateSorter();
-    private static final IntVanillaStateSorter HIGHEST_THROW_FIRST_STRATEGY = new HighestThrowFirstStrategy();
+    private static final VanillaStateSorter NO_SORTING_STRATEGY = new VanillaStateSorter()
+    {
+        @Override
+        public String getName()
+        {
+            return "No Sorting Strategy";
+        }
+
+        @Override
+        public boolean takeFirst(VanillaState[] first, VanillaState[] second) throws InvalidSiteswapException
+        {
+            return true;
+        }
+    };
+    private static final VanillaStateSorter HIGHEST_THROW_FIRST_STRATEGY = new HighestThrowFirstStrategy();
     /**
      * Invalid siteswaps to test against
      */

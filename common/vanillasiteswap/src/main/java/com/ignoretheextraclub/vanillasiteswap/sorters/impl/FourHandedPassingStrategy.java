@@ -1,49 +1,22 @@
 package com.ignoretheextraclub.vanillasiteswap.sorters.impl;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.sorters.IntVanillaStateSorter;
-import com.ignoretheextraclub.vanillasiteswap.sorters.SortingUtils;
+import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import org.apache.commons.lang.NotImplementedException;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by caspar on 10/12/16.
  */
-public class FourHandedPassingStrategy implements IntVanillaStateSorter
+public class FourHandedPassingStrategy implements VanillaStateSorter
 {
     private static final String NAME = "FourHandedPassing";
 
-    @Override
-    public int sort(final int[] unsorted) throws NotImplementedException, InvalidSiteswapException
-    {
-        throw new NotImplementedException();
-    }
-
-    public int sort(final VanillaState[] unsorted)
-    {
-        final int period = unsorted.length;
-
-        List<Integer> scores = IntStream.range(0, period)
-                .map(start -> scoreRotation(start, period, unsorted))
-                .boxed()
-                .collect(Collectors.toList());
-
-        return SortingUtils.getFirstMinIndex(scores);
-    }
-
-    private int scoreRotation(int start, int period, VanillaState[] states)
+    private int scoreRotation(final VanillaState[] states)
     {
         int score = 0;
-        for (int i = 0; i < period; i++)
+        for (int i = 0; i < states.length; i++)
         {
-            int stateNumber = (start + i) % period;
-            VanillaState state = states[stateNumber];
-            int excitedness = state.excitedness();
-            score += excitedness*(-i+1);
+            score += states[i].excitedness() * (-i + 1);
         }
         return score;
     }
@@ -52,5 +25,16 @@ public class FourHandedPassingStrategy implements IntVanillaStateSorter
     public String getName()
     {
         return NAME;
+    }
+
+    @Override
+    public boolean takeFirst(final VanillaState[] first, final VanillaState[] second) throws InvalidSiteswapException
+    {
+        final int scoreFirst  = scoreRotation(first );
+        final int scoreSecond = scoreRotation(second);
+        if (scoreFirst > scoreSecond) return true;
+        if (scoreFirst < scoreSecond) return false;
+        throw new RuntimeException("This should be removed when not debugging. The two starts were equivalent, need to" +
+                                           "add way to decide tiebreaks");
     }
 }
