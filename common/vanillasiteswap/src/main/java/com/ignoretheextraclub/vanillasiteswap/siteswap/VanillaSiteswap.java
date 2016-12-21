@@ -251,10 +251,9 @@ public class VanillaSiteswap extends AbstractSiteswap
      */
     public VanillaSiteswap sort(final VanillaStateSorter sorter)
     {
-        VanillaSiteswapBuilder vanillaSiteswapBuilder = null;
         try
         {
-            vanillaSiteswapBuilder = new VanillaSiteswapBuilder(this.states,
+            VanillaSiteswapBuilder vanillaSiteswapBuilder = new VanillaSiteswapBuilder(this.states,
                                                                 startingObjectsPerHand.length,
                                                                 sorter);
             return vanillaSiteswapBuilder.buildVanillaSiteswap();

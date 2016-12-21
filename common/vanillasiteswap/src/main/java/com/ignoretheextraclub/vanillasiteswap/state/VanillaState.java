@@ -8,7 +8,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -43,20 +43,22 @@ public class VanillaState extends AbstractState
     }
 
     @JsonIgnore
-    public int[] getAvailableThrows()
+    public Set<Integer> getAvailableThrows()
     {
+        final Set<Integer> availableThros = new TreeSet<>();
         if (canThrow())
         {
-            return IntStream.range(0, maxThrow + 1).filter(pos ->
+            for (int pos = 0; pos < maxThrow; pos++)
             {
-                if (pos != maxThrow) return !occupied[pos];
-                return true; //to capture max throw as available
-            }).toArray();
+                if (!occupied[pos]) availableThros.add(pos);
+            }
+            availableThros.add(maxThrow);
         }
         else
         {
-            return new int[]{0};
+            availableThros.add(0);
         }
+        return availableThros;
     }
 
     public int getMaxThrow()
@@ -98,10 +100,11 @@ public class VanillaState extends AbstractState
     public static VanillaState getGroundState(final int maxThrow, final int numObjects)
         throws StateSizeException, NumObjectsException
     {
-        final boolean[] occupied = new boolean[maxThrow];
+        final boolean[] occupied = new boolean[validateSize(maxThrow)];
+        validateNumObjects(numObjects);
         for (int i = 0; i < maxThrow; i++)
         {
-            occupied[i] = (i < maxThrow);
+            occupied[i] = (i < numObjects);
         }
         return new VanillaState(occupied);
     }
@@ -294,6 +297,11 @@ public class VanillaState extends AbstractState
         return i;
     }
 
+    /**
+     * Some public methods to deal with VanillaState[]. Here so you don't have to go to the effort of creating a Vanilla
+     * Siteswap all the time
+     */
+
     public static int[] convert(final VanillaState[] from) throws NoTransitionException
     {
         final int[] to = new int[from.length];
@@ -303,4 +311,33 @@ public class VanillaState extends AbstractState
         }
         return to;
     }
+
+    public static VanillaState[] reduce(final VanillaState[] duplicated)
+    {
+//        for (int i = 0; i < duplicated.length ; i++)
+//        {
+//            if (i % duplicated.length == 0)
+//            {
+//                final int repeats = duplicated.length / 2;
+//                for (int j = 1; j < repeats; j++)
+//                {
+                    Spliterator<VanillaState> spliterator = Spliterators.spliterator(duplicated, 0, 2, Spliterator.ORDERED);
+                    int j = 0;
+                    while (true)
+                    {
+
+                        if (!spliterator.tryAdvance(vanillaState -> {
+                            System.out.println("recieved = " + vanillaState);
+                        }))
+                            break;
+                        j++;
+                    }
+//                    spliterator.forEachRemaining(System.out::println);
+//                }
+//            }
+//        }
+        return null;
+    }
+
+//    public class thing extends Spliterators
 }

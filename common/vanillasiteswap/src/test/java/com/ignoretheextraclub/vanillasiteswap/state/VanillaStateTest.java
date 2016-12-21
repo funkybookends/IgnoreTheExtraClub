@@ -1,22 +1,21 @@
 package com.ignoretheextraclub.vanillasiteswap.state;
 
-import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
+import com.ignoretheextraclub.vanillasiteswap.siteswap.VanillaSiteswap;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState.VanillaStateBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by caspar on 26/11/16.
  */
 public class VanillaStateTest
 {
+
     private VanillaState sB3M5ground;
     private VanillaState sB3M5topExcitation;
 
@@ -31,9 +30,14 @@ public class VanillaStateTest
     @Test
     public void getAvailableThrows() throws Exception, StateSizeException, NumObjectsException, BadThrowException
     {
-        Assert.assertArrayEquals("3 Ball Max Throw 5 ground available throws", new int[]{3,4,5}, sB3M5ground.getAvailableThrows());
-        Assert.assertArrayEquals("3 Ball Max Throw 5 highly excited available throws", new int[]{0}, sB3M5topExcitation.getAvailableThrows());
-        Assert.assertArrayEquals("3 Ball Max Throw 5 highly excited available throws 1 drop", new int[]{0}, sB3M5topExcitation.thro(0).getAvailableThrows());
+        Assert.assertEquals("3 Ball Max Throw 5 ground available throws", toSet(3,4,5), sB3M5ground.getAvailableThrows());
+        Assert.assertEquals("3 Ball Max Throw 5 highly excited available throws", toSet(0), sB3M5topExcitation.getAvailableThrows());
+        Assert.assertEquals("3 Ball Max Throw 5 highly excited available throws 1 drop", toSet(0), sB3M5topExcitation.thro(0).getAvailableThrows());
+    }
+
+    private Set<Integer> toSet(final int... thros)
+    {
+        return Arrays.stream(thros).boxed().collect(Collectors.toSet());
     }
 
     @Test
@@ -121,4 +125,10 @@ public class VanillaStateTest
 
     }
 
+    @Test
+    public void name() throws Exception, InvalidSiteswapException
+    {
+        VanillaSiteswap vanillaSiteswap = VanillaSiteswap.create("975975");
+        VanillaState.reduce(vanillaSiteswap.getStates());
+    }
 }

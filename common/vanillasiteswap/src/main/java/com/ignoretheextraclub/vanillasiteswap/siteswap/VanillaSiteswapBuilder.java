@@ -6,6 +6,7 @@ import com.ignoretheextraclub.vanillasiteswap.sorters.SortingUtils;
 import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class VanillaSiteswapBuilder
     {
         try
         {
-            buildStates(vanillaSiteswap);
+            buildStates(SortingUtils.reduce(vanillaSiteswap));
             this.intSiteswap = rebuildThrows();
             postStatesInit(numHands, sortingStrategy);
         }
@@ -53,26 +54,23 @@ public class VanillaSiteswapBuilder
     {
         try
         {
-            this.states = states;
+            this.states = SortingUtils.reduce(states);
             //init things build states does
-            this.period = AbstractSiteswap.validatePeriod(states.length);
-            this.numObjects = AbstractSiteswap.validateNumObjects(states[0].getNumObjects());
+            this.period = AbstractSiteswap.validatePeriod(this.states.length);
+            this.numObjects = AbstractSiteswap.validateNumObjects(this.states[0].getNumObjects());
             this.intSiteswap = rebuildThrows();
             this.highestThrow = VanillaSiteswap.validateHighestThrow(intSiteswap);
             postStatesInit(numHands, sortingStrategy);
         }
         catch (final BadThrowException | NumObjectsException | StateSizeException | NoTransitionException | PeriodException cause)
         {
-            throw new InvalidSiteswapException("Invalid Siteswap [" +
-                           Arrays.stream(states).map(VanillaState::toString).collect(Collectors.joining(" -> ")) +
-                           "]", cause);
+            throw new InvalidSiteswapException("Invalid Siteswap [" + Arrays.toString(states) + "]", cause);
         }
 
-        if (states.length != period || intSiteswap.length != period)
+        if (this.states.length != period || intSiteswap.length != period)
         {
             throw new RuntimeException("This shouldn't happen. Built states.size() != vanillaSiteswap.length");
         }
-
     }
 
     private void postStatesInit(int numHands, VanillaStateSorter sortingStrategy) throws
@@ -109,7 +107,7 @@ public class VanillaSiteswapBuilder
         if (Arrays.stream(startingObjectsPerHand).sum() != states[0].getNumObjects())
         {
             throw new RuntimeException("Did not calculate the number of objects in each hand correctly. " +
-                                               "sum(" + startingObjectsPerHand + ") != " + states[0].getNumObjects());
+                   "sum(" + Arrays.toString(startingObjectsPerHand) + ") != " + states[0].getNumObjects());
         }
     }
 
