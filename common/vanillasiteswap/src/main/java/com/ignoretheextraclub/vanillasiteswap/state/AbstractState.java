@@ -5,8 +5,6 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
 
 /**
  * Created by caspar on 04/12/16.
@@ -36,4 +34,8 @@ public abstract class AbstractState
                 "State has [" + numObjects + "] objects, must be between [" + MIN_OBJECTS + "] and [" + MAX_OBJECTS + "]");
         return numObjects;
     }
+
+    public abstract <State extends AbstractState> Collection<State> getNextStates();
+
+    public abstract boolean canTransition(AbstractState to);
 }

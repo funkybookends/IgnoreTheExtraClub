@@ -3,8 +3,10 @@ package com.ignoretheextraclub.vanillasiteswap.state;
 import com.ignoretheextraclub.vanillasiteswap.converters.IntVanilla;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import jdk.nashorn.internal.ir.annotations.Immutable;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -166,6 +168,26 @@ public class MultiplexState extends AbstractState
     public int getNumObjects()
     {
         return numObjects;
+    }
+
+    @Override
+    public Collection<MultiplexState> getNextStates()
+    {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public boolean canTransition(AbstractState to)
+    {
+        try
+        {
+            transition(this, (MultiplexState) to);
+            return true;
+        }
+        catch (final Exception any)
+        {
+            return false;
+        }
     }
 
     public static class MultiplexStateBuilder

@@ -9,6 +9,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -196,6 +197,35 @@ public class VanillaState extends AbstractState
             }
         }
         throw new NoTransitionException("Cannot transition between these two states, from [" + from.toString() + "] to [" + to.toString() + "]");
+    }
+
+    @Override
+    public Collection<VanillaState> getNextStates()
+    {
+        return getAvailableThrows().stream().map(thro -> {
+            try
+            {
+                return thro(thro);
+            }
+            catch (final BadThrowException e)
+            {
+                throw new RuntimeException("Vanilla State could not throw an available throw", e);
+            }
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean canTransition(AbstractState to)
+    {
+        try
+        {
+            transition(this, (VanillaState) to);
+            return true;
+        }
+        catch (final Exception any)
+        {
+            return false;
+        }
     }
 
     public static class VanillaStateBuilder
