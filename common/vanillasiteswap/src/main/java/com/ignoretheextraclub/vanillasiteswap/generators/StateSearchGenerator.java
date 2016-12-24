@@ -130,23 +130,26 @@ public class StateSearchGenerator
         {
             try
             {
-                VanillaState.transition(path.lastElement(), path.firstElement());
-                VanillaState[] result = new VanillaState[finalPeriod];
-                path.toArray(result);
-                if (!allRotations)
+
+                if (!bannedThrows.contains(VanillaState.transition(path.lastElement(), path.firstElement())))
                 {
-                    try
+                    VanillaState[] result = new VanillaState[finalPeriod];
+                    path.toArray(result);
+                    if (!allRotations)
                     {
-                        result = SortingUtils.sort(result, DEFAULT_SORTER);
+                        try
+                        {
+                            result = SortingUtils.sort(result, sorter);
+                        }
+                        catch (InvalidSiteswapException e)
+                        {
+                            throw new RuntimeException("Could not sort what should be a valid siteswap", e);
+                        }
                     }
-                    catch (InvalidSiteswapException e)
-                    {
-                        throw new RuntimeException("Could not sort what should be a valid siteswap", e);
-                    }
+                    Result<VanillaState> resultObject = new Result<>(result);
+                    results.add(resultObject);
+                    if (results.size() >= resultLimit) throw new ResultLimitReached();
                 }
-                Result<VanillaState> resultObject = new Result<>(result);
-                results.add(resultObject);
-                if (results.size() >= resultLimit) throw new ResultLimitReached();
             }
             catch (final NoTransitionException ignored)
             {
@@ -162,7 +165,7 @@ public class StateSearchGenerator
                 {
                     if (!bannedThrows.contains(thro))
                     {
-                        VanillaState child = parent.thro(thro); //TODO cache results
+                        VanillaState child = getChild(parent, thro);
                         if (!bannedStates.contains(child))
                         {
                             if (!(prime && path.contains(child)))
@@ -180,6 +183,22 @@ public class StateSearchGenerator
             }
         }
         path.pop();
+    }
+
+    private Map<VanillaState, Map<Integer, VanillaState>> childrenCache = new HashMap<>();
+
+    private VanillaState getChild(VanillaState parent, int thro) throws BadThrowException
+    {
+        if (!childrenCache.containsKey(parent))
+        {
+            childrenCache.put(parent, new TreeMap<>());
+        }
+        Map<Integer, VanillaState> children = childrenCache.get(parent);
+        if (!children.containsKey(thro))
+        {
+            children.put(thro, parent.thro(thro));
+        }
+        return children.get(thro);
     }
 
     public Collection<VanillaState[]> generateToCollectionOfVanillaStateArray() throws StateSizeException, NumObjectsException
