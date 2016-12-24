@@ -3,16 +3,15 @@ package com.ignoretheextraclub.vanillasiteswap.generators;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
+import com.ignoretheextraclub.vanillasiteswap.generators.runners.StateSearcher;
 import com.ignoretheextraclub.vanillasiteswap.siteswap.VanillaSiteswap;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**

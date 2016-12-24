@@ -10,7 +10,6 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by caspar on 26/11/16.
@@ -341,33 +340,4 @@ public class VanillaState extends AbstractState
         }
         return to;
     }
-
-    public static VanillaState[] reduce(final VanillaState[] duplicated)
-    {
-//        for (int i = 0; i < duplicated.length ; i++)
-//        {
-//            if (i % duplicated.length == 0)
-//            {
-//                final int repeats = duplicated.length / 2;
-//                for (int j = 1; j < repeats; j++)
-//                {
-                    Spliterator<VanillaState> spliterator = Spliterators.spliterator(duplicated, 0, 2, Spliterator.ORDERED);
-                    int j = 0;
-                    while (true)
-                    {
-
-                        if (!spliterator.tryAdvance(vanillaState -> {
-                            System.out.println("recieved = " + vanillaState);
-                        }))
-                            break;
-                        j++;
-                    }
-//                    spliterator.forEachRemaining(System.out::println);
-//                }
-//            }
-//        }
-        return null;
-    }
-
-//    public class thing extends Spliterators
 }

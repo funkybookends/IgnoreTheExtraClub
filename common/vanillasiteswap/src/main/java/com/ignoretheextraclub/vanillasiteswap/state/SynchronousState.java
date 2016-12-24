@@ -1,5 +1,7 @@
 package com.ignoretheextraclub.vanillasiteswap.state;
 
+import com.ignoretheextraclub.vanillasiteswap.thros.SynchronousThrow;
+
 import java.util.Collection;
 
 /**

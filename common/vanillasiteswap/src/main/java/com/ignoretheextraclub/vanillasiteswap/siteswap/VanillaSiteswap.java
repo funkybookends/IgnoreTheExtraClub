@@ -8,6 +8,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
 import com.ignoretheextraclub.vanillasiteswap.sorters.impl.HighestThrowFirstStrategy;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
+import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 import org.apache.commons.lang.NotImplementedException;
 
@@ -24,7 +25,7 @@ import java.util.Arrays;
  * Created by caspar on 26/11/16.
  */
 @Immutable
-public class VanillaSiteswap extends AbstractSiteswap
+public class VanillaSiteswap extends AbstractSiteswap<VanillaState, VanillaThro>
 {
     public static final int MAX_THROW = IntVanilla.charToInt('D');
     public static final VanillaStateSorter DEFAULT_SORTING_STRATEGY = new HighestThrowFirstStrategy();

@@ -5,11 +5,13 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapExceptio
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumJugglersException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.PeriodException;
+import com.ignoretheextraclub.vanillasiteswap.state.AbstractState;
+import com.ignoretheextraclub.vanillasiteswap.thros.AbstractThro;
 
 /**
  * Created by caspar on 10/12/16.
  */
-public abstract class AbstractSiteswap
+public abstract class AbstractSiteswap<State extends AbstractState, Thro extends AbstractThro>
 {
     public static final int MAX_PERIOD = 15;
     public static final int MIN_PERIOD = 1;

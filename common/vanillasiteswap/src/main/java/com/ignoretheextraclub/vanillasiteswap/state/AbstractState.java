@@ -4,7 +4,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
  * Created by caspar on 04/12/16.
