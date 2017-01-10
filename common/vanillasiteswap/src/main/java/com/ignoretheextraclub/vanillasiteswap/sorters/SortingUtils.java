@@ -4,6 +4,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapExceptio
 import com.ignoretheextraclub.vanillasiteswap.exceptions.PeriodException;
 import com.ignoretheextraclub.vanillasiteswap.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.vanillasiteswap.state.AbstractState;
+import com.ignoretheextraclub.vanillasiteswap.thros.AbstractThro;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -46,34 +47,45 @@ public class SortingUtils
                 .orElse(0);
     }
 
-    public static class Rotations<T>
+    public static class Rotations<Thro extends AbstractThro, State extends AbstractState<Thro>>
     {
-        private final List<Rotation<T>> rotations;
+        private final State[] origin;
+        private int winningIndex;
+        private boolean sorted = false;
 
-        public Rotations(final T[] states)
+        public Rotations(final State[] states)
         {
-            try
-            {
-                rotations = IntStream.range(0, AbstractSiteswap.validatePeriod(states.length))
-                        .boxed()
-                        .map(i -> new Rotation<>(states, i))
-                        .collect(Collectors.toList());
-            }
-            catch (PeriodException e)
-            {
-                throw new RuntimeException("Invalid Period", e);
-            }
-
+            origin = states;
         }
 
-        public T[] sort(final StateSorter<T> chooser) throws InvalidSiteswapException
+        public State[] sort(final StateSorter<Thro, State> chooser) throws InvalidSiteswapException
         {
-            Rotation<T> winner = rotations.get(0);
-            for (int i = 1; i < rotations.size(); i++)
+            winningIndex = 0;
+            Rotation<State> winner = new Rotation<>(origin, winningIndex);
+            for (int second = 1; second < origin.length; second++)
             {
-                winner = chooser.takeFirst(winner.getStates(), rotations.get(i).getStates()) ? winner : rotations.get(i);
+                Rotation<State> candidate = new Rotation<State>(origin, second);
+                boolean takeFirst = chooser.takeFirst(winner.getStates(), candidate.getStates());
+                if (!takeFirst)
+                {
+                    winner = candidate;
+                    winningIndex = second;
+                }
             }
+            sorted = true;
             return winner.getStates();
+        }
+
+        public int getWinningIndex()
+        {
+            return winningIndex;
+        }
+
+        public <K> K[] sortToMatch(K[] unsorted)
+        {
+            if (!sorted) throw new IllegalStateException("Cannot sort to match when have not sorted.");
+            if (unsorted.length != origin.length) throw new IllegalArgumentException("Lengths differ");
+            return (new Rotation<K>(unsorted, winningIndex)).getStates();
         }
 
         private static class Rotation<T>
@@ -109,9 +121,9 @@ public class SortingUtils
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T[] sort(final T[] unsorted, final StateSorter sorter) throws InvalidSiteswapException
+    public static <Thro extends AbstractThro, State extends AbstractState<Thro>> State[] sort(final State[] unsorted, final StateSorter sorter) throws InvalidSiteswapException
     {
-        return (T[]) (new Rotations<>(unsorted)).sort(sorter);
+        return (State[]) (new Rotations<>(unsorted)).sort(sorter);
     }
 
     public static <T> T[] reduce(final T[] duplicated)
@@ -139,11 +151,6 @@ public class SortingUtils
                 return false;
         return true;
     }
-
-
-
-
-
 
     public static int[] reduce(final int[] duplicated)
     {

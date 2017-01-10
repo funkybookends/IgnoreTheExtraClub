@@ -1,7 +1,11 @@
 package com.ignoretheextraclub.vanillasiteswap.state;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.StateSizeException;
+import com.ignoretheextraclub.vanillasiteswap.thros.AbstractThro;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.Collection;
@@ -10,7 +14,7 @@ import java.util.Collection;
  * Created by caspar on 04/12/16.
  */
 @Immutable
-public abstract class AbstractState
+public abstract class AbstractState<Throw extends AbstractThro>
 {
     protected static final String EMPTY  = "_";
     protected static final String FILLED = "X";
@@ -35,7 +39,28 @@ public abstract class AbstractState
         return numObjects;
     }
 
+    @JsonIgnore
     public abstract <State extends AbstractState> Collection<State> getNextStates();
 
+    @JsonIgnore
+    public abstract Collection<Throw> getAvailableThrows();
+
+    @JsonIgnore
     public abstract boolean canTransition(AbstractState to);
+
+    @JsonIgnore
+    public abstract <State extends AbstractState<Throw>> State thro(Throw thro) throws BadThrowException;
+
+    public abstract int getNumObjects();
+
+    public abstract boolean isGroundState();
+
+    @JsonIgnore
+    public abstract <Thro extends AbstractThro, State extends AbstractState<Thro>> Thro getThrow(State state) throws NoTransitionException;
+
+    public abstract boolean equals(Object o);
+
+    public abstract int hashCode();
+
+
 }
