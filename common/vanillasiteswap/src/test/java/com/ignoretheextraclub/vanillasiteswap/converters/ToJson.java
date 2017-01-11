@@ -2,9 +2,13 @@ package com.ignoretheextraclub.vanillasiteswap.converters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.siteswap.FourHandedSiteswap;
-import com.ignoretheextraclub.vanillasiteswap.siteswap.VanillaSiteswap;
+import com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla.FourHandedSiteswap;
+import com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla.TwoHandedSiteswap;
+import com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla.VanillaStateSiteswap;
+import com.ignoretheextraclub.vanillasiteswap.sorters.impl.HighestThrowFirstStrategy;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 /**
  * Created by caspar on 10/12/16.
@@ -16,15 +20,21 @@ public class ToJson
     @Test
     public void fhstojson() throws Exception, InvalidSiteswapException
     {
-        FourHandedSiteswap fhs975 = FourHandedSiteswap.create("975");
-        VanillaSiteswap db97531 = VanillaSiteswap.create("975");
+        final String[] fhs = {"6789A"};
+        final String[] ths = {"6789A"};
 
-        String s = objectMapper.writeValueAsString(fhs975);
-        String t = objectMapper.writeValueAsString(db97531);
-
-        System.out.println(s);
-        System.out.println("");
-        System.out.println(t);
+        for (String fh : fhs)
+        {
+            FourHandedSiteswap fourHandedSiteswap = FourHandedSiteswap.create(fh);
+            System.out.println(objectMapper.writeValueAsString(fourHandedSiteswap));
+            System.out.println();
+        }
+        System.out.println();
+        for (String fh : ths)
+        {
+            System.out.println(objectMapper.writeValueAsString(TwoHandedSiteswap.create(fh)));
+            System.out.println();
+        }
 
 
     }

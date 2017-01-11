@@ -1,41 +1,156 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.NumJugglersException;
-import com.ignoretheextraclub.vanillasiteswap.exceptions.NumObjectsException;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.PeriodException;
+import com.ignoretheextraclub.vanillasiteswap.sorters.SortingUtils;
+import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
+import com.ignoretheextraclub.vanillasiteswap.sorters.impl.HighestThrowFirstStrategy;
+import com.ignoretheextraclub.vanillasiteswap.state.AbstractState;
+import com.ignoretheextraclub.vanillasiteswap.thros.AbstractThro;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * Created by caspar on 10/12/16.
  */
-public abstract class AbstractSiteswap
+@JsonPropertyOrder({
+        "num_objects"
+})
+public abstract class AbstractSiteswap<Thro extends AbstractThro, State extends AbstractState<Thro>>
 {
     public static final int MAX_PERIOD = 15;
     public static final int MIN_PERIOD = 1;
 
-    public static final int MAX_JUGGLERS = 8;
-    public static final int MIN_JUGGLERS = 1;
+    private static final StateSorter DEFAULT_SORTER = HighestThrowFirstStrategy.get();
 
-    public static final int MAX_OBJECTS = MAX_JUGGLERS * 7;
-    public static final int MIN_OBJECTS = 1;
+    // Properties that define the state graph
+    @JsonProperty("num_objects") protected final int numObjects;
 
-    @JsonProperty("num_jugglers")
-    protected final int numJugglers;
+    // Route through the state graph
+    protected final State[] states;
+    @JsonProperty("global_throws") protected final Thro[] thros;
+
+    // Properties of the route
     protected final int period;
-    @JsonProperty("num_objects")
-    protected final int numObjects;
+    protected final boolean prime;
+    @JsonProperty("highest_throw") protected final Thro highestThrow;
+    protected final boolean grounded;
+    @JsonIgnore protected final StateSorter<Thro, State> sorter;
 
-    protected AbstractSiteswap(final int numJugglers, final int period, final int numObjects) throws InvalidSiteswapException
+
+    /**
+     *
+     * @param states
+     * @param thros
+     * @param sorter
+     * @throws InvalidSiteswapException
+     */
+    protected AbstractSiteswap(State[] states,
+                               Thro[] thros,
+                               final StateSorter<Thro, State> sorter) throws InvalidSiteswapException
     {
         try {
-            this.numJugglers = validateNumJugglers(numJugglers);
-            this.period = validatePeriod(period);
-            this.numObjects = validateNumObjects(numObjects);
+            if (states.length != thros.length) throw new InvalidSiteswapException("States and Throws are unequal in length");
+            states = SortingUtils.reduce(states);
+            thros = SortingUtils.reduce(thros);
+
+            SortingUtils.Rotations<Thro, State> rotations = new SortingUtils.Rotations<>(states);
+            states = rotations.sort(sorter);
+            thros = rotations.sortToMatch(thros);
+
+            this.period = validatePeriod(states.length);
+
+            for (int i = 0; i < states.length; i++)
+            {
+                if (states[i].getNumObjects() != states[0].getNumObjects())
+                {
+                    throw new InvalidSiteswapException("All states in sequence must have the same number of objects");
+                }
+                if (!states[i].thro(thros[i]).equals(states[(i + 1) % period]))
+                {
+                    throw new InvalidSiteswapException("States and throws do not match"); // TODO improve description
+                }
+            }
+
+            this.states = states;
+            this.thros = thros;
+            this.sorter = sorter;
+            this.numObjects = states[0].getNumObjects();
+            this.prime = !containsARepeatedState(states);
+            this.highestThrow = getHighestThro(thros);
+            this.grounded = containsGround(states);
         }
-        catch (final PeriodException | NumJugglersException | NumObjectsException cause)
+        catch (final PeriodException | BadThrowException cause)
         {
             throw new InvalidSiteswapException("Cannot construct siteswap", cause);
+        }
+    }
+
+    /**
+     *
+     * @param startingState
+     * @param thros
+     * @param sorter
+     * @throws InvalidSiteswapException
+     */
+    protected AbstractSiteswap(final State startingState,
+                               final Thro[] thros,
+                               final StateSorter<Thro, State> sorter) throws InvalidSiteswapException
+    {
+        this(getAllStates(startingState, thros), thros, sorter);
+    }
+
+    protected AbstractSiteswap(final State startingState,
+                               final Thro[] thros) throws InvalidSiteswapException
+    {
+        this(startingState, thros, DEFAULT_SORTER);
+    }
+
+    /*
+                Static Utility Methods
+     */
+
+    @SuppressWarnings("unchecked")
+    private static <Thro extends AbstractThro, State extends AbstractState<Thro>> Thro[] getAllThrows(State[] states, Class<Thro> clazz) throws InvalidSiteswapException
+    {
+        try
+        {
+            final Thro first = states[0].getThrow(states[1 % states.length]);
+            final Thro[] thros = (Thro[]) Array.newInstance(clazz, states.length);
+            thros[0] = first;
+            for (int i = 1; i < states.length; i++)
+            {
+                thros[i] = states[i].getThrow(states[(i+1) % states.length]);
+            }
+            return thros;
+        }
+        catch (final NoTransitionException cause)
+        {
+            throw new InvalidSiteswapException("Cannot construct all throws", cause);
+        }
+    }
+
+    private static <Thro extends AbstractThro, State extends AbstractState<Thro>> State[] getAllStates(State startingState, Thro[] thros) throws InvalidSiteswapException
+    {
+        try
+        {
+            final State[] states = (State[]) Array.newInstance(startingState.getClass(), thros.length);
+            states[0] = startingState;
+            for (int i = 0; i < thros.length - 1; i++)
+            {
+                states[i + 1] = states[i].thro(thros[i]);
+            }
+            return states;
+        }
+        catch (final BadThrowException cause)
+        {
+            throw new InvalidSiteswapException("Cannot construct all states", cause);
         }
     }
 
@@ -46,32 +161,111 @@ public abstract class AbstractSiteswap
         return period;
     }
 
-    public static int validateNumObjects(final int numObjects) throws NumObjectsException
+    public static <State extends AbstractState> boolean containsARepeatedState(State[] states)
     {
-        if (numObjects > MAX_OBJECTS)      throw new NumObjectsException("Too many objects, cannot have more than " + MAX_OBJECTS);
-        else if (numObjects < MIN_OBJECTS) throw new NumObjectsException("Not enough objects, must at least have " + MIN_OBJECTS);
-        return numObjects;
+        for (int i = 0; i < states.length; i++)
+            for (int j = i+1; j < states.length; j++)
+                if (states[i] == states[j])
+                    return true;
+        return false;
     }
 
-    public static int validateNumJugglers(final int numJugglers) throws NumJugglersException
+    @SuppressWarnings("unchecked")
+    public static <Thro extends AbstractThro> Thro getHighestThro(Thro[] thros)
     {
-        if (numJugglers > MAX_JUGGLERS)      throw new NumJugglersException("Too many jugglers, cannot be more than " + MAX_JUGGLERS);
-        else if (numJugglers < MIN_JUGGLERS) throw new NumJugglersException("Too few jugglers, cannot be less than " + MIN_JUGGLERS);
-        return  numJugglers;
+        Thro highest = thros[0];
+        for (int i = 1; i < thros.length; i++)
+            if (highest.compareTo(thros[i]) > 0)
+                highest = thros[i];
+        return highest;
     }
 
-    public int getNumJugglers()
+    public static <State extends AbstractState> boolean containsGround(State[] states)
     {
-        return numJugglers;
+        for (State state : states)
+            if (state.isGroundState())
+                return true;
+        return false;
     }
 
-    public int getPeriod()
+    /*
+                Getters
+     */
+
+    public final int getPeriod()
     {
         return period;
     }
 
-    public int getNumObjects()
+    public final int getNumObjects()
     {
         return numObjects;
+    }
+
+    @JsonProperty("global_throws")
+    public final Thro[] getThrows()
+    {
+        return this.thros;
+    };
+
+    public final State[] getStates()
+    {
+        return this.states;
+    };
+
+    public final Thro getHighestThrow()
+    {
+        return highestThrow;
+    }
+
+    public final boolean isPrime()
+    {
+        return prime;
+    }
+
+    public final boolean isGrounded()
+    {
+        return grounded;
+    }
+
+    @JsonIgnore
+    public StateSorter<Thro, State> getSorter()
+    {
+        return sorter;
+    }
+
+    @JsonProperty("sorting_strategy")
+    public String getSortingStrategyName()
+    {
+        return sorter.getName();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractSiteswap<?, ?> that = (AbstractSiteswap<?, ?>) o;
+
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(states, that.states);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Arrays.hashCode(states);
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder(thros.length);
+        for (Thro thro : thros)
+        {
+            sb.append(thro.toString());
+        }
+        return sb.toString();
     }
 }

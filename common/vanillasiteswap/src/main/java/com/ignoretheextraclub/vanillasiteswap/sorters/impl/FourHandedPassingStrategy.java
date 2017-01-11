@@ -1,24 +1,44 @@
 package com.ignoretheextraclub.vanillasiteswap.sorters.impl;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.vanillasiteswap.sorters.VanillaStateSorter;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
+import com.ignoretheextraclub.vanillasiteswap.thros.AbstractThro;
+import com.ignoretheextraclub.vanillasiteswap.thros.FourHandedSiteswapThro;
+import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
+import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
+
+import java.util.Arrays;
 
 /**
  * Created by caspar on 10/12/16.
  */
-public class FourHandedPassingStrategy implements VanillaStateSorter
+public class FourHandedPassingStrategy implements StateSorter<FourHandedSiteswapThro, VanillaState<FourHandedSiteswapThro>>
 {
     private static final String NAME = "FourHandedPassing";
 
-    private int scoreRotation(final VanillaState[] states)
+    private static FourHandedPassingStrategy instance;
+
+    private FourHandedPassingStrategy()
     {
-        int score = 0;
-        for (int i = 0; i < states.length; i++)
+    }
+
+    private int scoreRotation(final VanillaState[] states) throws InvalidSiteswapException
+    {
+        try
         {
-            score += states[i].excitedness() * (-i + 1);
+            int score = 0;
+            for (int i = 0; i < states.length; i++)
+            {
+                final int thro = ((VanillaThro) states[i].getThrow(states[(i + 1) % states.length])).getThro();
+                score += (states.length - i) * (thro + (thro % 2));
+            }
+            return score;
         }
-        return score;
+        catch (final NoTransitionException cause)
+        {
+            throw new InvalidSiteswapException("Expected to score a valid siteswap, could not transition", cause);
+        }
     }
 
     @Override
@@ -34,7 +54,15 @@ public class FourHandedPassingStrategy implements VanillaStateSorter
         final int scoreSecond = scoreRotation(second);
         if (scoreFirst > scoreSecond) return true;
         if (scoreFirst < scoreSecond) return false;
-        throw new RuntimeException("This should be removed when not debugging. The two starts were equivalent, need to" +
-                                           "add way to decide tiebreaks");
+        return first[0].excitedness() < second[0].excitedness();
+    }
+
+    public static StateSorter get()
+    {
+        if (instance == null)
+        {
+            instance = new FourHandedPassingStrategy();
+        }
+        return instance;
     }
 }
