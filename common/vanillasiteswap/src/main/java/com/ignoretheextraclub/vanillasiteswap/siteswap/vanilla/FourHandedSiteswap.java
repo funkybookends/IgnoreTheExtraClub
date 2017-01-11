@@ -2,6 +2,7 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.ignoretheextraclub.vanillasiteswap.converters.GlobalLocal;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
@@ -14,6 +15,33 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
  * Created by caspar on 27/11/16.
  */
 @Immutable
+@JsonPropertyOrder({
+        "global_string_siteswap",
+        "global_int_siteswap",
+        "global_prechac",
+        "leader_prechac",
+        "follower_prechac",
+        "leader_siteswap_string",
+        "leader_siteswap_int",
+        "follower_siteswap_string",
+        "follower_siteswap_int",
+        "num_objects",
+        "period",
+        "prime",
+        "grounded",
+        "mixed_ability",
+        "sorting_strategy",
+        "states",
+        "global_throws",
+        "states",
+        "highest_throw",
+        "leader_first_hand_objects",
+        "leader_second_hand_objects",
+        "follower_first_hand_objects",
+        "follower_second_hand_objects",
+        "leader_throws",
+        "follower_throws",
+})
 public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapThro, VanillaState<FourHandedSiteswapThro>>
 {
     private static final int LEADER_START_POS = 0;
@@ -106,7 +134,7 @@ public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapT
         return FourHandedSiteswapThro.fourHandedIntsToPrechac(getFollowerIntSiteswap());
     }
 
-    @JsonProperty("global_precahc")
+    @JsonProperty("global_prechac")
     public String getPrechac()
     {
         return FourHandedSiteswapThro.fourHandedIntsToPrechac(getGlobalIntSiteswap());
@@ -149,7 +177,7 @@ public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapT
         return GlobalLocal.globalToLocal(thros, LEADER_START_POS);
     }
 
-    @JsonProperty("follower_thros")
+    @JsonProperty("follower_throws")
     public FourHandedSiteswapThro[] getFollowerThrows()
     {
         return GlobalLocal.globalToLocal(thros, FOLLOWER_START_POS);

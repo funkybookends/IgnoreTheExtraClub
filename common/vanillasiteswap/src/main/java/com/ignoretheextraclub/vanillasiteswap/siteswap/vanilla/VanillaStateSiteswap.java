@@ -2,6 +2,7 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
@@ -10,6 +11,19 @@ import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 @Immutable
+@JsonPropertyOrder({
+        "global_string_siteswap",
+        "global_int_siteswap",
+        "num_objects",
+        "period",
+        "prime",
+        "grounded",
+        "sorting_strategy",
+        "states",
+        "global_throws",
+        "states",
+        "highest_throw",
+})
 public abstract class VanillaStateSiteswap<Thro extends VanillaThro, State extends VanillaState<Thro>> extends
                                                                                                        AbstractSiteswap<Thro, State>
 {

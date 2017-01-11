@@ -20,7 +20,15 @@ import java.util.Arrays;
  * Created by caspar on 10/12/16.
  */
 @JsonPropertyOrder({
-        "num_objects"
+        "num_objects",
+        "period",
+        "prime",
+        "grounded",
+        "sorting_strategy",
+        "states",
+        "global_throws",
+        "states",
+        "highest_throw"
 })
 public abstract class AbstractSiteswap<Thro extends AbstractThro, State extends AbstractState<Thro>>
 {
@@ -202,7 +210,7 @@ public abstract class AbstractSiteswap<Thro extends AbstractThro, State extends 
         return numObjects;
     }
 
-    @JsonProperty("global_throws")
+    @JsonIgnore
     public final Thro[] getThrows()
     {
         return this.thros;

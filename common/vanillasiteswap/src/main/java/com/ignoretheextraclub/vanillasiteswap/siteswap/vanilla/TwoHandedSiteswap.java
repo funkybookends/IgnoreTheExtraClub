@@ -1,6 +1,7 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
@@ -9,6 +10,21 @@ import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
 /**
  * Created by caspar on 07/01/17.
  */
+@JsonPropertyOrder({
+        "global_string_siteswap",
+        "global_int_siteswap",
+        "num_objects",
+        "period",
+        "prime",
+        "grounded",
+        "sorting_strategy",
+        "states",
+        "global_throws",
+        "states",
+        "highest_throw",
+        "first_hand_objects",
+        "second_hand_objects"
+})
 public class TwoHandedSiteswap extends VanillaStateSiteswap<VanillaThro, VanillaState<VanillaThro>>
 {
     private static final int NUMBER_OF_HANDS = 2;
