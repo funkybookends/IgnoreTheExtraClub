@@ -34,9 +34,9 @@ public class VanillaThrowTest
     @Test
     public void getThroAsString() throws Exception
     {
-        assertEquals("0", ZERO.getThroAsString());
-        assertEquals("1", ONE.getThroAsString());
-        assertEquals("6", SIX.getThroAsString());
+        assertEquals("0", ZERO.toString());
+        assertEquals("1", ONE.toString());
+        assertEquals("6", SIX.toString());
     }
 
     @Test
