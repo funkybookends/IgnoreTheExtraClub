@@ -7,7 +7,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapExceptio
 import com.ignoretheextraclub.vanillasiteswap.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
+import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThrow;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 @Immutable
@@ -24,7 +24,7 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
         "states",
         "highest_throw",
 })
-public abstract class VanillaStateSiteswap<Thro extends VanillaThro, State extends VanillaState<Thro>> extends
+public abstract class VanillaStateSiteswap<Thro extends VanillaThrow, State extends VanillaState<Thro>> extends
                                                                                                        AbstractSiteswap<Thro, State>
 {
 

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Created by caspar on 07/01/17.
  */
-public class FourHandedSiteswapThro extends VanillaThro
+public class FourHandedSiteswapThrow extends VanillaThrow
 {
     public static final int[] ILLEGAL_THROWS = new int[]{1, 3};
 
@@ -57,9 +57,9 @@ public class FourHandedSiteswapThro extends VanillaThro
     public static final Pattern P_THROW_SET = Pattern.compile(THROW_SET);
     public static final Pattern P_PRECHAC = Pattern.compile(PRECHAC);
 
-    private static Map<Integer, FourHandedSiteswapThro> instances = new TreeMap<>();
+    private static Map<Integer, FourHandedSiteswapThrow> instances = new TreeMap<>();
 
-    protected FourHandedSiteswapThro(int thro) throws BadThrowException
+    protected FourHandedSiteswapThrow(int thro) throws BadThrowException
     {
         super(thro);
         if (thro > MAX_THROW)
@@ -75,16 +75,16 @@ public class FourHandedSiteswapThro extends VanillaThro
         }
     }
 
-    public static FourHandedSiteswapThro get(int thro) throws BadThrowException
+    public static FourHandedSiteswapThrow get(int thro) throws BadThrowException
     {
         if (!instances.containsKey(thro))
         {
-            instances.put(thro, new FourHandedSiteswapThro(thro));
+            instances.put(thro, new FourHandedSiteswapThrow(thro));
         }
         return instances.get(thro);
     }
 
-    public static FourHandedSiteswapThro get(char thro) throws BadThrowException
+    public static FourHandedSiteswapThrow get(char thro) throws BadThrowException
     {
         return get(charToInt(thro));
     }
@@ -125,16 +125,16 @@ public class FourHandedSiteswapThro extends VanillaThro
     {
         return Arrays.stream(thros)
                 .boxed()
-                .map(FourHandedSiteswapThro::fourHandedIntToPrechac)
+                .map(FourHandedSiteswapThrow::fourHandedIntToPrechac)
                 .collect(Collectors.joining(String.valueOf(DELIMETER)));
     }
 
-    public static FourHandedSiteswapThro[] intArrayToFourHandedSiteswapThrowArray(final int[] siteswap) throws
+    public static FourHandedSiteswapThrow[] intArrayToFourHandedSiteswapThrowArray(final int[] siteswap) throws
                                                                                                         InvalidSiteswapException
     {
         try
         {
-            final FourHandedSiteswapThro[] thros = new FourHandedSiteswapThro[siteswap.length];
+            final FourHandedSiteswapThrow[] thros = new FourHandedSiteswapThrow[siteswap.length];
             for (int i = 0; i < siteswap.length; i++)
             {
                 thros[i] = get(siteswap[i]);

@@ -10,9 +10,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Created by caspar on 24/12/16.
+ * Represents a Vanilla Siteswap Throw
+ *
+ * Contains validation to ensure it is valid. Maximum throw is 'Z' == 35.
+ * Has methods which are guranteed to not throw exceptions, perhaps will return null instead.
+ * Has convenience methods for converting between representations.
  */
-public class VanillaThro extends AbstractThro implements Comparable
+public class VanillaThrow extends AbstractThro implements Comparable
 {
     public static final char INVALID_CHAR = '?';
     public static final int INVALID_INT = -1;
@@ -22,19 +26,19 @@ public class VanillaThro extends AbstractThro implements Comparable
     @JsonIgnore
     protected final int thro;
 
-    private static Map<Integer, VanillaThro> instances = new TreeMap<>();
+    private static Map<Integer, VanillaThrow> instances = new TreeMap<>();
 
-    protected VanillaThro(final int thro) throws BadThrowException
+    protected VanillaThrow(final int thro) throws BadThrowException
     {
         if (thro < MIN_THROW) throw new BadThrowException("Cannot throw Vanilla Throw less than 0");
         this.thro = thro;
     }
 
-    public static VanillaThro get(final int thro) throws BadThrowException
+    public static VanillaThrow get(final int thro) throws BadThrowException
     {
         if (!instances.containsKey(thro))
         {
-            instances.put(thro, new VanillaThro(thro));
+            instances.put(thro, new VanillaThrow(thro));
         }
         return instances.get(thro);
     }
@@ -44,7 +48,7 @@ public class VanillaThro extends AbstractThro implements Comparable
         instances = null;
     }
 
-    public static VanillaThro get(final char thro) throws BadThrowException
+    public static VanillaThrow get(final char thro) throws BadThrowException
     {
         return get(charToInt(thro));
     }
@@ -58,7 +62,7 @@ public class VanillaThro extends AbstractThro implements Comparable
     @Override
     public int compareTo(Object o)
     {
-        return this.getThro() - ((VanillaThro) o).getThro();
+        return this.getThro() - ((VanillaThrow) o).getThro();
     }
 
     @Override
@@ -67,7 +71,7 @@ public class VanillaThro extends AbstractThro implements Comparable
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        VanillaThro that = (VanillaThro) o;
+        VanillaThrow that = (VanillaThrow) o;
 
         return thro == that.thro;
     }
@@ -93,12 +97,12 @@ public class VanillaThro extends AbstractThro implements Comparable
         return thro == 0 ? 0 : 1;
     }
 
-    public static String vanillaThrowArrayToString(VanillaThro[] thros)
+    public static String vanillaThrowArrayToString(VanillaThrow[] thros)
     {
         return intArrayToString(vanillaThrowArrayToIntArray(thros));
     }
 
-    public static int[] vanillaThrowArrayToIntArray(VanillaThro[] thros)
+    public static int[] vanillaThrowArrayToIntArray(VanillaThrow[] thros)
     {
         final int[] intThros = new int[thros.length];
         for (int i = 0; i < thros.length; i++)
@@ -194,7 +198,7 @@ public class VanillaThro extends AbstractThro implements Comparable
         return new String(intArrayToCharArray(thros));
     }
 
-    public static VanillaThro getOrNull(final char thro)
+    public static VanillaThrow getOrNull(final char thro)
     {
         try
         {
@@ -206,7 +210,7 @@ public class VanillaThro extends AbstractThro implements Comparable
         }
     }
 
-    public static VanillaThro getOrNull(final int thro)
+    public static VanillaThrow getOrNull(final int thro)
     {
         try
         {
@@ -218,16 +222,16 @@ public class VanillaThro extends AbstractThro implements Comparable
         }
     }
 
-    public static VanillaThro[] intArrayToVanillaThrowArray(final int[] siteswap) throws InvalidSiteswapException
+    public static VanillaThrow[] intArrayToVanillaThrowArray(final int[] siteswap) throws InvalidSiteswapException
     {
         try
         {
-            final VanillaThro[] vanillaThros = new VanillaThro[siteswap.length];
+            final VanillaThrow[] vanillaThrows = new VanillaThrow[siteswap.length];
             for (int i = 0; i < siteswap.length; i++)
             {
-                vanillaThros[i] = get(siteswap[i]);
+                vanillaThrows[i] = get(siteswap[i]);
             }
-            return vanillaThros;
+            return vanillaThrows;
         }
         catch (final BadThrowException cause)
         {
@@ -240,21 +244,21 @@ public class VanillaThro extends AbstractThro implements Comparable
      * @param thros
      * @return
      */
-    public static int numObjects(final VanillaThro[] thros)
+    public static int numObjects(final VanillaThrow[] thros)
     {
-        return (int) Arrays.stream(thros).mapToInt(VanillaThro::getThro).average().getAsDouble();
+        return (int) Arrays.stream(thros).mapToInt(VanillaThrow::getThro).average().getAsDouble();
     }
 
-    public static VanillaThro getHighestThro(VanillaThro[] thros)
+    public static VanillaThrow getHighestThro(VanillaThrow[] thros)
     {
-        VanillaThro highest = thros[0];
+        VanillaThrow highest = thros[0];
         for (int i = 1; i < thros.length; i++)
             if (highest.compareTo(thros[i]) < 0)
                 highest = thros[i];
         return highest;
     }
 
-    public static VanillaThro[] stringToVanillaThrowArray(String siteswap) throws InvalidSiteswapException
+    public static VanillaThrow[] stringToVanillaThrowArray(String siteswap) throws InvalidSiteswapException
     {
         return intArrayToVanillaThrowArray(stringToIntArray(siteswap));
     }

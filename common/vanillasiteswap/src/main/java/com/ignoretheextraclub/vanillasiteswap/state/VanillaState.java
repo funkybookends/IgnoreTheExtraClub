@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.*;
 import com.ignoretheextraclub.vanillasiteswap.thros.AbstractThro;
-import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
+import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThrow;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.*;
@@ -13,7 +13,7 @@ import java.util.*;
  * Created by caspar on 26/11/16.
  */
 @Immutable
-public class VanillaState<Throw extends VanillaThro> extends AbstractState<Throw>
+public class VanillaState<Throw extends VanillaThrow> extends AbstractState<Throw>
 {
     @JsonIgnore private final int maxThrow;
     @JsonIgnore private final int numObjects;
@@ -238,13 +238,13 @@ public class VanillaState<Throw extends VanillaThro> extends AbstractState<Throw
         }
     }
 
-    public static <Thro extends VanillaThro> VanillaState<Thro> getFirstState(Thro[] thros, final ThrowConstructor<Thro> throwConstructor) throws InvalidSiteswapException
+    public static <Thro extends VanillaThrow> VanillaState<Thro> getFirstState(Thro[] thros, final ThrowConstructor<Thro> throwConstructor) throws InvalidSiteswapException
     {
         try
         {
-            final int numObjects = VanillaThro.numObjects(thros);
+            final int numObjects = VanillaThrow.numObjects(thros);
             final int period = thros.length;
-            final VanillaThro highestThro = VanillaThro.getHighestThro(thros);
+            final VanillaThrow highestThro = VanillaThrow.getHighestThro(thros);
             final VanillaState.VanillaStateBuilder<Thro> builder = new VanillaStateBuilder<Thro>((Thro) highestThro, numObjects);
 
             int index = 0;
@@ -261,7 +261,7 @@ public class VanillaState<Throw extends VanillaThro> extends AbstractState<Throw
         }
     }
 
-    protected static class VanillaStateBuilder<Thro extends VanillaThro>
+    protected static class VanillaStateBuilder<Thro extends VanillaThrow>
     {
         private boolean[] occupied;
         private final int maxThrow;
@@ -361,7 +361,7 @@ public class VanillaState<Throw extends VanillaThro> extends AbstractState<Throw
         return i;
     }
 
-    public interface ThrowConstructor<Throw extends VanillaThro>
+    public interface ThrowConstructor<Throw extends VanillaThrow>
     {
         Throw constructThrow(int val) throws BadThrowException;
     }

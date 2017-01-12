@@ -2,18 +2,15 @@ package com.ignoretheextraclub.vanillasiteswap.sorters.impl;
 
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.NoTransitionException;
-import com.ignoretheextraclub.vanillasiteswap.thros.AbstractThro;
-import com.ignoretheextraclub.vanillasiteswap.thros.FourHandedSiteswapThro;
+import com.ignoretheextraclub.vanillasiteswap.thros.FourHandedSiteswapThrow;
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
-
-import java.util.Arrays;
+import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThrow;
 
 /**
  * Created by caspar on 10/12/16.
  */
-public class FourHandedPassingStrategy implements StateSorter<FourHandedSiteswapThro, VanillaState<FourHandedSiteswapThro>>
+public class FourHandedPassingStrategy implements StateSorter<FourHandedSiteswapThrow, VanillaState<FourHandedSiteswapThrow>>
 {
     private static final String NAME = "FourHandedPassing";
 
@@ -30,7 +27,7 @@ public class FourHandedPassingStrategy implements StateSorter<FourHandedSiteswap
             int score = 0;
             for (int i = 0; i < states.length; i++)
             {
-                final int thro = ((VanillaThro) states[i].getThrow(states[(i + 1) % states.length])).getThro();
+                final int thro = ((VanillaThrow) states[i].getThrow(states[(i + 1) % states.length])).getThro();
                 score += (states.length - i) * (thro + (thro % 2));
             }
             return score;

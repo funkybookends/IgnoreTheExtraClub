@@ -9,7 +9,7 @@ import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapExceptio
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
 import com.ignoretheextraclub.vanillasiteswap.sorters.impl.FourHandedPassingStrategy;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import com.ignoretheextraclub.vanillasiteswap.thros.FourHandedSiteswapThro;
+import com.ignoretheextraclub.vanillasiteswap.thros.FourHandedSiteswapThrow;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 /**
@@ -43,7 +43,7 @@ import jdk.nashorn.internal.ir.annotations.Immutable;
         "leader_throws",
         "follower_throws",
 })
-public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapThro, VanillaState<FourHandedSiteswapThro>>
+public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapThrow, VanillaState<FourHandedSiteswapThrow>>
 {
     private static final int LEADER_START_POS = 0;
     private static final int FOLLOWER_START_POS = 1;
@@ -64,23 +64,23 @@ public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapT
         }
     }
 
-    public FourHandedSiteswap(VanillaState<FourHandedSiteswapThro> startingState,
-                                 FourHandedSiteswapThro[] thros,
-                                 StateSorter<FourHandedSiteswapThro, VanillaState<FourHandedSiteswapThro>> sorter) throws InvalidSiteswapException
+    public FourHandedSiteswap(VanillaState<FourHandedSiteswapThrow> startingState,
+                                 FourHandedSiteswapThrow[] thros,
+                                 StateSorter<FourHandedSiteswapThrow, VanillaState<FourHandedSiteswapThrow>> sorter) throws InvalidSiteswapException
     {
         super(startingState, thros, sorter);
     }
 
-    public FourHandedSiteswap(VanillaState<FourHandedSiteswapThro> startingState,
-                                 FourHandedSiteswapThro[] thros) throws InvalidSiteswapException
+    public FourHandedSiteswap(VanillaState<FourHandedSiteswapThrow> startingState,
+                                 FourHandedSiteswapThrow[] thros) throws InvalidSiteswapException
     {
         super(startingState, thros);
     }
 
-    public static FourHandedSiteswap create(final int[] siteswap, StateSorter<FourHandedSiteswapThro, VanillaState<FourHandedSiteswapThro>> sorter) throws InvalidSiteswapException
+    public static FourHandedSiteswap create(final int[] siteswap, StateSorter<FourHandedSiteswapThrow, VanillaState<FourHandedSiteswapThrow>> sorter) throws InvalidSiteswapException
     {
-        final FourHandedSiteswapThro[] thros = FourHandedSiteswapThro.intArrayToFourHandedSiteswapThrowArray(siteswap);
-        final VanillaState<FourHandedSiteswapThro> firstState = VanillaState.getFirstState(thros, FourHandedSiteswapThro::get);
+        final FourHandedSiteswapThrow[] thros = FourHandedSiteswapThrow.intArrayToFourHandedSiteswapThrowArray(siteswap);
+        final VanillaState<FourHandedSiteswapThrow> firstState = VanillaState.getFirstState(thros, FourHandedSiteswapThrow::get);
         return new FourHandedSiteswap(firstState, thros, sorter);
     }
 
@@ -89,9 +89,9 @@ public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapT
         return create(siteswap, DEFAULT_SORTER);
     }
 
-    public static FourHandedSiteswap create(final String siteswap, StateSorter<FourHandedSiteswapThro, VanillaState<FourHandedSiteswapThro>> sorter) throws InvalidSiteswapException
+    public static FourHandedSiteswap create(final String siteswap, StateSorter<FourHandedSiteswapThrow, VanillaState<FourHandedSiteswapThrow>> sorter) throws InvalidSiteswapException
     {
-        return create(FourHandedSiteswapThro.stringToIntArray(siteswap), sorter);
+        return create(FourHandedSiteswapThrow.stringToIntArray(siteswap), sorter);
     }
 
     public static FourHandedSiteswap create(final String siteswap) throws InvalidSiteswapException
@@ -114,31 +114,31 @@ public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapT
     @JsonProperty("leader_siteswap_string")
     public String getLeaderStringSiteswap()
     {
-        return FourHandedSiteswapThro.intArrayToString(getLeaderIntSiteswap());
+        return FourHandedSiteswapThrow.intArrayToString(getLeaderIntSiteswap());
     }
 
     @JsonProperty("follower_siteswap_string")
     public String getFollowerStringSiteswap()
     {
-        return FourHandedSiteswapThro.intArrayToString(getFollowerIntSiteswap());
+        return FourHandedSiteswapThrow.intArrayToString(getFollowerIntSiteswap());
     }
 
     @JsonProperty("leader_prechac")
     public String getLeaderPrechac()
     {
-        return FourHandedSiteswapThro.fourHandedIntsToPrechac(getLeaderIntSiteswap());
+        return FourHandedSiteswapThrow.fourHandedIntsToPrechac(getLeaderIntSiteswap());
     }
 
     @JsonProperty("follower_prechac")
     public String getFollowerPrechac()
     {
-        return FourHandedSiteswapThro.fourHandedIntsToPrechac(getFollowerIntSiteswap());
+        return FourHandedSiteswapThrow.fourHandedIntsToPrechac(getFollowerIntSiteswap());
     }
 
     @JsonProperty("global_prechac")
     public String getPrechac()
     {
-        return FourHandedSiteswapThro.fourHandedIntsToPrechac(getGlobalIntSiteswap());
+        return FourHandedSiteswapThrow.fourHandedIntsToPrechac(getGlobalIntSiteswap());
     }
 
     @JsonProperty("mixed_ability")
@@ -173,20 +173,20 @@ public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapT
     }
 
     @JsonProperty("leader_throws")
-    public FourHandedSiteswapThro[] getLeaderThrows()
+    public FourHandedSiteswapThrow[] getLeaderThrows()
     {
         return GlobalLocal.globalToLocal(thros, LEADER_START_POS);
     }
 
     @JsonProperty("follower_throws")
-    public FourHandedSiteswapThro[] getFollowerThrows()
+    public FourHandedSiteswapThrow[] getFollowerThrows()
     {
         return GlobalLocal.globalToLocal(thros, FOLLOWER_START_POS);
     }
 
     public static int[] getIllegalThrows()
     {
-        return FourHandedSiteswapThro.ILLEGAL_THROWS;
+        return FourHandedSiteswapThrow.ILLEGAL_THROWS;
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
-import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
+import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThrow;
 
 /**
  * Created by caspar on 07/01/17.
@@ -25,7 +25,7 @@ import com.ignoretheextraclub.vanillasiteswap.thros.VanillaThro;
         "first_hand_objects",
         "second_hand_objects"
 })
-public class TwoHandedSiteswap extends VanillaStateSiteswap<VanillaThro, VanillaState<VanillaThro>>
+public class TwoHandedSiteswap extends VanillaStateSiteswap<VanillaThrow, VanillaState<VanillaThrow>>
 {
     private static final int NUMBER_OF_HANDS = 2;
 
@@ -41,15 +41,15 @@ public class TwoHandedSiteswap extends VanillaStateSiteswap<VanillaThro, Vanilla
         }
     }
 
-    public TwoHandedSiteswap(VanillaState<VanillaThro> startingState,
-                             VanillaThro[] thros,
-                             StateSorter<VanillaThro, VanillaState<VanillaThro>> sorter) throws InvalidSiteswapException
+    public TwoHandedSiteswap(VanillaState<VanillaThrow> startingState,
+                             VanillaThrow[] thros,
+                             StateSorter<VanillaThrow, VanillaState<VanillaThrow>> sorter) throws InvalidSiteswapException
     {
         super(startingState, thros, sorter);
     }
 
-    public TwoHandedSiteswap(VanillaState<VanillaThro> startingState,
-                             VanillaThro[] thros) throws InvalidSiteswapException
+    public TwoHandedSiteswap(VanillaState<VanillaThrow> startingState,
+                             VanillaThrow[] thros) throws InvalidSiteswapException
     {
         super(startingState, thros);
     }
@@ -66,27 +66,29 @@ public class TwoHandedSiteswap extends VanillaStateSiteswap<VanillaThro, Vanilla
         return getStartingNumberOfObjects(NUMBER_OF_HANDS, Hand.SECOND.globalStartingHand);
     }
 
-    public static TwoHandedSiteswap create(final int[] siteswap, final StateSorter<VanillaThro, VanillaState<VanillaThro>> sorter) throws InvalidSiteswapException
+    public static TwoHandedSiteswap create(final int[] siteswap, final StateSorter<VanillaThrow, VanillaState<VanillaThrow>> sorter) throws InvalidSiteswapException
     {
-        final VanillaThro[] vanillaThros = VanillaThro.intArrayToVanillaThrowArray(siteswap);
-        final VanillaState<VanillaThro> firstState = VanillaState.getFirstState(VanillaThro.intArrayToVanillaThrowArray(siteswap), VanillaThro::get);
-        return new TwoHandedSiteswap(firstState, vanillaThros, sorter);
+        final VanillaThrow[] vanillaThrows = VanillaThrow.intArrayToVanillaThrowArray(siteswap);
+        final VanillaState<VanillaThrow> firstState = VanillaState.getFirstState(
+                VanillaThrow.intArrayToVanillaThrowArray(siteswap), VanillaThrow::get);
+        return new TwoHandedSiteswap(firstState, vanillaThrows, sorter);
     }
 
     public static TwoHandedSiteswap create(final int[] siteswap) throws InvalidSiteswapException
     {
-        final VanillaThro[] vanillaThros = VanillaThro.intArrayToVanillaThrowArray(siteswap);
-        final VanillaState<VanillaThro> firstState = VanillaState.getFirstState(VanillaThro.intArrayToVanillaThrowArray(siteswap), VanillaThro::get);
-        return new TwoHandedSiteswap(firstState, vanillaThros);
+        final VanillaThrow[] vanillaThrows = VanillaThrow.intArrayToVanillaThrowArray(siteswap);
+        final VanillaState<VanillaThrow> firstState = VanillaState.getFirstState(
+                VanillaThrow.intArrayToVanillaThrowArray(siteswap), VanillaThrow::get);
+        return new TwoHandedSiteswap(firstState, vanillaThrows);
     }
 
-    public static TwoHandedSiteswap create(final String siteswap, final StateSorter<VanillaThro, VanillaState<VanillaThro>> sorter) throws InvalidSiteswapException
+    public static TwoHandedSiteswap create(final String siteswap, final StateSorter<VanillaThrow, VanillaState<VanillaThrow>> sorter) throws InvalidSiteswapException
     {
-        return create(VanillaThro.stringToIntArray(siteswap), sorter);
+        return create(VanillaThrow.stringToIntArray(siteswap), sorter);
     }
 
     public static TwoHandedSiteswap create(final String siteswap) throws InvalidSiteswapException
     {
-        return create(VanillaThro.stringToIntArray(siteswap));
+        return create(VanillaThrow.stringToIntArray(siteswap));
     }
 }
