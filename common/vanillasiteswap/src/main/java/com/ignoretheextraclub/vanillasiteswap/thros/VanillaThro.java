@@ -58,7 +58,7 @@ public class VanillaThro extends AbstractThro implements Comparable
     @Override
     public int compareTo(Object o)
     {
-        return ((VanillaThro) o).getThro() - this.getThro();
+        return this.getThro() - ((VanillaThro) o).getThro();
     }
 
     @Override
@@ -249,7 +249,7 @@ public class VanillaThro extends AbstractThro implements Comparable
     {
         VanillaThro highest = thros[0];
         for (int i = 1; i < thros.length; i++)
-            if (highest.compareTo(thros[i]) > 0)
+            if (highest.compareTo(thros[i]) < 0)
                 highest = thros[i];
         return highest;
     }
