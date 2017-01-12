@@ -2,6 +2,7 @@ package com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.sorters.StateSorter;
 import com.ignoretheextraclub.vanillasiteswap.state.VanillaState;
@@ -68,18 +69,32 @@ public class TwoHandedSiteswap extends VanillaStateSiteswap<VanillaThrow, Vanill
 
     public static TwoHandedSiteswap create(final int[] siteswap, final StateSorter<VanillaThrow, VanillaState<VanillaThrow>> sorter) throws InvalidSiteswapException
     {
-        final VanillaThrow[] vanillaThrows = VanillaThrow.intArrayToVanillaThrowArray(siteswap);
-        final VanillaState<VanillaThrow> firstState = VanillaState.getFirstState(
-                VanillaThrow.intArrayToVanillaThrowArray(siteswap), VanillaThrow::get);
-        return new TwoHandedSiteswap(firstState, vanillaThrows, sorter);
+        try
+        {
+            final VanillaThrow[] vanillaThrows = VanillaThrow.intArrayToVanillaThrowArray(siteswap);
+            final VanillaState<VanillaThrow> firstState = VanillaState.getFirstState(
+                    VanillaThrow.intArrayToVanillaThrowArray(siteswap), VanillaThrow::get);
+            return new TwoHandedSiteswap(firstState, vanillaThrows, sorter);
+        }
+        catch (final BadThrowException cause)
+        {
+            throw new InvalidSiteswapException("Could not construct siteswap", cause);
+        }
     }
 
     public static TwoHandedSiteswap create(final int[] siteswap) throws InvalidSiteswapException
     {
-        final VanillaThrow[] vanillaThrows = VanillaThrow.intArrayToVanillaThrowArray(siteswap);
-        final VanillaState<VanillaThrow> firstState = VanillaState.getFirstState(
-                VanillaThrow.intArrayToVanillaThrowArray(siteswap), VanillaThrow::get);
-        return new TwoHandedSiteswap(firstState, vanillaThrows);
+        try
+        {
+            final VanillaThrow[] vanillaThrows = VanillaThrow.intArrayToVanillaThrowArray(siteswap);
+            final VanillaState<VanillaThrow> firstState = VanillaState.getFirstState(
+                    VanillaThrow.intArrayToVanillaThrowArray(siteswap), VanillaThrow::get);
+            return new TwoHandedSiteswap(firstState, vanillaThrows);
+        }
+        catch (final BadThrowException cause)
+        {
+            throw new InvalidSiteswapException("Could not construct siteswap", cause);
+        }
     }
 
     public static TwoHandedSiteswap create(final String siteswap, final StateSorter<VanillaThrow, VanillaState<VanillaThrow>> sorter) throws InvalidSiteswapException

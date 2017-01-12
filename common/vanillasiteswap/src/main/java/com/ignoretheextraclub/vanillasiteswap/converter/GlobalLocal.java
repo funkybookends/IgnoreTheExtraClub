@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.vanillasiteswap.converters;
+package com.ignoretheextraclub.vanillasiteswap.converter;
 
 import java.lang.reflect.Array;
 

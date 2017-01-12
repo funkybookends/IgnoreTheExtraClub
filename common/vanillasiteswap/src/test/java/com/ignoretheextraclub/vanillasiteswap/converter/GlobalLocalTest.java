@@ -1,11 +1,7 @@
-package com.ignoretheextraclub.vanillasiteswap.converters;
+package com.ignoretheextraclub.vanillasiteswap.converter;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by caspar on 04/12/16.

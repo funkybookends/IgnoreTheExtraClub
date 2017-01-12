@@ -1,14 +1,10 @@
-package com.ignoretheextraclub.vanillasiteswap.converters;
+package com.ignoretheextraclub.vanillasiteswap.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla.FourHandedSiteswap;
 import com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla.TwoHandedSiteswap;
-import com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla.VanillaStateSiteswap;
-import com.ignoretheextraclub.vanillasiteswap.sorters.impl.HighestThrowFirstStrategy;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 /**
  * Created by caspar on 10/12/16.

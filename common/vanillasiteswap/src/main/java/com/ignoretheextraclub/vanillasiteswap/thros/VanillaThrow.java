@@ -1,6 +1,5 @@
 package com.ignoretheextraclub.vanillasiteswap.thros;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.ignoretheextraclub.vanillasiteswap.exceptions.BadThrowException;
