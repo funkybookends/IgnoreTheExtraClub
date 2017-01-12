@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.vanillasiteswap.siteswap.vanilla;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -186,5 +187,12 @@ public class FourHandedSiteswap extends VanillaStateSiteswap<FourHandedSiteswapT
     public static int[] getIllegalThrows()
     {
         return FourHandedSiteswapThro.ILLEGAL_THROWS;
+    }
+
+    @Override
+    @JsonIgnore
+    public String toString()
+    {
+        return getStringSiteswap();
     }
 }
