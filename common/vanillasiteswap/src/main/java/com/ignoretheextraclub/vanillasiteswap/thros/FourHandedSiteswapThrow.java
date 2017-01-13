@@ -57,7 +57,7 @@ public class FourHandedSiteswapThrow extends VanillaThrow
     public static final Pattern P_THROW_SET = Pattern.compile(THROW_SET);
     public static final Pattern P_PRECHAC = Pattern.compile(PRECHAC);
 
-    private static Map<Integer, FourHandedSiteswapThrow> instances = new TreeMap<>();
+    private static FourHandedSiteswapThrow[] instances = new FourHandedSiteswapThrow[MAX_THROW];
 
     protected FourHandedSiteswapThrow(int thro) throws BadThrowException
     {
@@ -77,11 +77,18 @@ public class FourHandedSiteswapThrow extends VanillaThrow
 
     public static FourHandedSiteswapThrow get(int thro) throws BadThrowException
     {
-        if (!instances.containsKey(thro))
+        try
         {
-            instances.put(thro, new FourHandedSiteswapThrow(thro));
+            if (instances[thro] == null)
+            {
+                instances[thro] = new FourHandedSiteswapThrow(thro);
+            }
+            return instances[thro];
         }
-        return instances.get(thro);
+        catch (final IndexOutOfBoundsException e)
+        {
+            return new FourHandedSiteswapThrow(thro); // Guaranteed to throw an exception, with the correct message.
+        }
     }
 
     public static FourHandedSiteswapThrow get(char thro) throws BadThrowException
