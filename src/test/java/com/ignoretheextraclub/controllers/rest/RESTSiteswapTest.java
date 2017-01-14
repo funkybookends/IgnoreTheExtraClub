@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.controllers;
+package com.ignoretheextraclub.controllers.rest;
 
 import org.junit.Before;
 import org.junit.Test;
