@@ -16,10 +16,12 @@ version = '0.1.0'
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
 //        compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'com.github.funkybookends:SiteswapFactory:0.0.1'
     testCompile 'junit:junit:4.12'
     compile("org.springframework.boot:spring-boot-starter-web")
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.4.2.RELEASE'
