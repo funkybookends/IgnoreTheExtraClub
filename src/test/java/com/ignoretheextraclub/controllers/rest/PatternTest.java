@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @EnableWebMvc
-public class RESTSiteswapTest
+public class PatternTest
 {
     @Autowired
     private WebApplicationContext context;

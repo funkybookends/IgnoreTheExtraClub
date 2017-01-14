@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/rest/v1")
-public class RESTSiteswap
+public class Pattern
 {
-    private static final Logger LOG = LoggerFactory.getLogger(RESTSiteswap.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Pattern.class);
 
     @RequestMapping(path = "/p/fhs/{siteswap}", method = RequestMethod.GET)
     public FourHandedSiteswap fhsController(@PathVariable(value = "siteswap") final String siteswap) throws InvalidSiteswapException
