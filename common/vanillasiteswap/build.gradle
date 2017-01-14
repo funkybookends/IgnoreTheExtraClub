@@ -1,5 +1,0 @@
-dependencies {
-    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.5'
-
-}

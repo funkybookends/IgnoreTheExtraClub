@@ -1,7 +1,1 @@
 rootProject.name = 'IgnoreTheExtraClub'
-
-include ':common:vanillasiteswap'
-//include ':common:vanillamultiplexsiteswap'
-//include ':common:vanillafourhandedsiteswap'
-include ':components:itec'
-//include ':components:restitec'
