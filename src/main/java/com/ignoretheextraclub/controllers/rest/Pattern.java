@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by caspar on 14/01/17.
  */
 @RestController
-@RequestMapping("/rest/v1")
+@RequestMapping("/rest/v1/p")
 public class Pattern
 {
     private static final Logger LOG = LoggerFactory.getLogger(Pattern.class);
 
-    @RequestMapping(path = "/p/fhs/{siteswap}", method = RequestMethod.GET)
+    @RequestMapping(path = "/fhs/{siteswap}", method = RequestMethod.GET)
     public FourHandedSiteswap fhsController(@PathVariable(value = "siteswap") final String siteswap) throws InvalidSiteswapException
     {
         LOG.info("Request for FHS: {}", siteswap);
         return FourHandedSiteswap.create(siteswap);
     }
 
-    @RequestMapping(path = "/p/ths/{siteswap}", method = RequestMethod.GET)
+    @RequestMapping(path = "/ths/{siteswap}", method = RequestMethod.GET)
     public TwoHandedSiteswap thsController(@PathVariable(value = "siteswap") final String siteswap) throws InvalidSiteswapException
     {
         LOG.info("Request for THS: {}", siteswap);
