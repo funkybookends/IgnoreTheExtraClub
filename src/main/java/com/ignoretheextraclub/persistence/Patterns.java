@@ -1,18 +1,18 @@
 package com.ignoretheextraclub.persistence;
 
 import com.ignoretheextraclub.model.Pattern;
-import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
+import static com.ignoretheextraclub.model.Pattern.NAMES_FIELD;
+
 /**
- * Created by caspar on 06/02/17.
+ * Created by caspar on 04/03/17.
  */
-public interface Patterns
+public interface Patterns extends MongoRepository<Pattern, String>
 {
-    void save(Pattern pattern);
-
-    Pattern get(String id, Class<? extends AbstractSiteswap> siteswapType);
-
-    List<Pattern> get(String name);
+    @Query("{ '" + NAMES_FIELD + ".name' : ?0 }")
+    Pattern findByName(String name);
 }

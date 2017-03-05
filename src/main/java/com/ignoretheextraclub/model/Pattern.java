@@ -1,19 +1,17 @@
 package com.ignoretheextraclub.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
-import org.joda.time.DateTime;
+import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -22,38 +20,64 @@ import java.util.stream.Collectors;
 @Document(collection = "patterns")
 public class Pattern
 {
-    public static final String COLLECTION_NAME = "patterns";
+    public static final String NAMES_FIELD = "pattern_names";
 
-    private String id;
-    private AbstractSiteswap siteswap;
-
-    private List<PatternName> names;
-    private Instant createdDate;
+    private final                     String            id;
+    private final @Transient          AbstractSiteswap  siteswap;
+    private final                     String            siteswapConstructor;
+    private final                     String            siteswapTypeSimpleName;
+    private final @Field(NAMES_FIELD) List<PatternName> names;
+    private final @CreatedDate        Instant           createdDate;
 
     public Pattern(AbstractSiteswap siteswap)
     {
         this.siteswap = siteswap;
         this.names = new ArrayList<>();
+        this.id = null;
+        this.createdDate = Instant.now();
+
+        if (siteswap.getClass() == FourHandedSiteswap.class)
+        {
+            this.siteswapTypeSimpleName = FourHandedSiteswap.class.getSimpleName();
+            this.siteswapConstructor = siteswap.toString();
+        }
+        else
+        {
+            throw new UnsupportedOperationException(
+                    "This siteswap type is not supported.");
+        }
     }
 
     @PersistenceConstructor
-    public Pattern(AbstractSiteswap siteswap,
-                   List<PatternName> names,
-                   Instant createdDate)
+    Pattern(String id,
+            String siteswapConstructor,
+            String siteswapTypeSimpleName,
+            List<PatternName> names,
+            Instant createdDate)
+            throws
+            InvalidSiteswapException
     {
-        this.siteswap = siteswap;
-        this.names = names == null ? new ArrayList<>() : names;
+        this.id = id;
+        this.siteswapConstructor = siteswapConstructor;
+        this.siteswapTypeSimpleName = siteswapTypeSimpleName;
+        this.names = names;
         this.createdDate = createdDate;
+
+        if (siteswapTypeSimpleName.equals(
+                FourHandedSiteswap.class.getSimpleName()))
+        {
+            this.siteswap = FourHandedSiteswap.create(this.siteswapConstructor);
+        }
+        else
+        {
+            throw new UnsupportedOperationException(
+                    "Could not reconstruct siteswap.");
+        }
     }
 
     public String getId()
     {
         return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
     }
 
     public AbstractSiteswap getSiteswap()
@@ -68,7 +92,8 @@ public class Pattern
 
     public List<PatternName> getNames()
     {
-        return names.stream().collect(Collectors.toList());
+        return names.stream()
+                    .collect(Collectors.toList());
     }
 
     public void setName(final PatternName patternName)
