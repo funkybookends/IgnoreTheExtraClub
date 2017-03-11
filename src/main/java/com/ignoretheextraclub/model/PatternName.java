@@ -2,7 +2,6 @@ package com.ignoretheextraclub.model;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.Comparator;
@@ -15,16 +14,13 @@ public class PatternName
         implements Comparable
 {
     private @Indexed(unique = true)     String  name;
-    private              int     usages;
     private              int     weight; // Used to override the usages, if admin prefers
     private @CreatedDate Instant createdDate;
 
     public PatternName(final String name,
-                       final int usages,
                        final int weight)
     {
         this.name = name;
-        this.usages = usages;
         this.weight = weight;
         this.createdDate = Instant.now();
     }
@@ -32,11 +28,6 @@ public class PatternName
     public String getName()
     {
         return name;
-    }
-
-    public int getUsages()
-    {
-        return usages;
     }
 
     public int getWeight()
@@ -57,10 +48,6 @@ public class PatternName
             {
                 return -1;
             }
-            if (first.usages > second.usages)
-            {
-                return -1;
-            }
             return first.name.compareTo(second.name);
         };
     }
@@ -69,11 +56,6 @@ public class PatternName
                                final String name)
     {
         return siteswapType + ":" + name;
-    }
-
-    public void setUsages(int usages)
-    {
-        this.usages = usages;
     }
 
     @Override

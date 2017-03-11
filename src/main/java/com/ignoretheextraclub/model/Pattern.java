@@ -8,10 +8,13 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.util.Assert;
 
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -22,19 +25,25 @@ public class Pattern
 {
     public static final String NAMES_FIELD = "pattern_names";
 
-    private final                     String            id;
-    private final @Transient          AbstractSiteswap  siteswap;
-    private final                     String            siteswapConstructor;
-    private final                     String            siteswapTypeSimpleName;
-    private final @Field(NAMES_FIELD) List<PatternName> names;
-    private final @CreatedDate        Instant           createdDate;
+    private final                     String           id;
+    private final @Transient          AbstractSiteswap siteswap;
+    private final                     String           siteswapConstructor;
+    private final                     String           siteswapTypeSimpleName;
+    private final @Field(NAMES_FIELD) TreeSet<PatternName> names;
+    private final @CreatedDate        Instant          createdDate;
 
-    public Pattern(AbstractSiteswap siteswap)
+    public Pattern(final AbstractSiteswap siteswap, final PatternName... names)
     {
+       this(siteswap, asSet(names));
+    }
+
+    public Pattern(final AbstractSiteswap siteswap, final TreeSet<PatternName> names)
+    {
+        Assert.notEmpty(names, "Must have at least one name.");
         this.siteswap = siteswap;
-        this.names = new ArrayList<>();
         this.id = null;
         this.createdDate = Instant.now();
+        this.names = names;
 
         if (siteswap.getClass() == FourHandedSiteswap.class)
         {
@@ -52,7 +61,7 @@ public class Pattern
     Pattern(String id,
             String siteswapConstructor,
             String siteswapTypeSimpleName,
-            List<PatternName> names,
+            TreeSet<PatternName> names,
             Instant createdDate)
             throws
             InvalidSiteswapException
@@ -96,8 +105,41 @@ public class Pattern
                     .collect(Collectors.toList());
     }
 
+    public Optional<PatternName> getName(final String name)
+    {
+        return names.stream().filter(patternName -> patternName.getName().equals(name)).findFirst();
+    }
+
     public void setName(final PatternName patternName)
     {
         this.names.add(patternName);
+    }
+
+    private static TreeSet<PatternName> asSet(final PatternName... names)
+    {
+        return Arrays.stream(names).collect(Collectors.toCollection(() -> new TreeSet<PatternName>(PatternName.sorter())));
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        Pattern pattern = (Pattern) o;
+
+        return siteswap.equals(pattern.siteswap);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return siteswap.hashCode();
     }
 }
