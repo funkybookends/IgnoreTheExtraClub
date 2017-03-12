@@ -81,4 +81,11 @@ public class PatternServiceImpl implements PatternService
     {
         return patternRepository.save(pattern);
     }
+
+    @Override
+    public Page<Pattern> newest(int page, int size)
+    {
+        Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.DESC, "createdDate"));
+        return patternRepository.findAll(pageable);
+    }
 }

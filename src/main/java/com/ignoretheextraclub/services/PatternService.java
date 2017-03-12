@@ -17,4 +17,6 @@ public interface PatternService
     Pattern getOrCreate(String name) throws InvalidSiteswapException;
 
     Pattern save(Pattern pattern);
+
+    Page<Pattern> newest(int page, int size);
 }

@@ -5,6 +5,8 @@ import com.ignoretheextraclub.model.PatternName;
 import com.ignoretheextraclub.persistence.repository.PatternRepository;
 import com.ignoretheextraclub.services.PatternService;
 import com.ignoretheextraclub.services.patternconstructors.PatternConstructor;
+import com.ignoretheextraclub.services.patternconstructors.impl.FourHandedSiteswapPatternConstructor;
+import com.ignoretheextraclub.services.patternconstructors.impl.TwoHandedSiteswapPatternConstructor;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,12 +14,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -40,8 +48,8 @@ public class PatternServiceImplTest
     @Before
     public void setUp() throws Exception
     {
-        pc1 = mock(PatternConstructor.class);
-        pc2 = mock(PatternConstructor.class);
+        pc1 = spy(new FourHandedSiteswapPatternConstructor());
+        pc2 = spy(new TwoHandedSiteswapPatternConstructor());
 
         patternService = new PatternServiceImpl(patternRepository, Arrays.asList(pc1, pc2));
         patternRepository.deleteAll();
@@ -66,20 +74,13 @@ public class PatternServiceImplTest
     @Test
     public void GIVEN_pc1CantConstruct_EXPECT_pc2IsCalled_AND_patternIsSaved() throws Exception
     {
-        final String name = "Holy Grail";
-        final String naturalName = "975";
-        final Pattern expectedPattern = new Pattern(FourHandedSiteswap.create("975"),
-                                                  new PatternName(name, 0));
+        String name = "345";
+        final Pattern actual = patternService.getOrCreate(name);
 
-        when(pc1.getNaturalName(name)).thenReturn(Optional.empty());
-        when(pc2.getNaturalName(name)).thenReturn(Optional.of(naturalName));
-        when(pc2.createPattern(name)).thenReturn(expectedPattern);
-
-        Pattern actual = patternService.getOrCreate(name);
-
-        Assert.assertEquals(expectedPattern, actual);
-        Optional<Pattern> byName = patternRepository.findByName(name);
-        Assert.assertTrue(byName.isPresent());
+        verify(pc1, times(1)).getNaturalName(name);
+        verify(pc1, times(0)).createPattern(name);
+        verify(pc2, times(1)).getNaturalName(name);
+        verify(pc2, times(1)).createPattern(name);
     }
 
     @Test
@@ -94,5 +95,30 @@ public class PatternServiceImplTest
 
         Assert.assertTrue(patternRepository.findByName("name").isPresent());
         Assert.assertTrue(patternService.get("name").isPresent());
+    }
+
+    @Test
+    public void GIVEN_newerPatterns_EXPECT_pagesCorrectly() throws Exception
+    {
+        final String[] siteswaps = {"975", "678", "9A8", "756", "78686", "7868686"};
+
+        for (String siteswap : siteswaps)
+        {
+            patternService.getOrCreate(siteswap);
+        }
+
+        Page<Pattern> newest = patternService.newest(1, 2);
+
+        long totalElements = newest.getTotalElements();
+        Assert.assertEquals(siteswaps.length, totalElements);
+
+        Assert.assertEquals(3,newest.getTotalPages());
+
+        ArrayList<Pattern> patterns = new ArrayList<>();
+        newest.forEach(patterns::add);
+
+        Assert.assertEquals(2, patterns.size());
+        Assert.assertEquals("756", patterns.get(0).getSiteswap().toString());
+        Assert.assertEquals("9A8", patterns.get(1).getSiteswap().toString());
     }
 }

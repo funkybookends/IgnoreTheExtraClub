@@ -3,6 +3,7 @@ package com.ignoretheextraclub.model;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
+import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.TwoHandedSiteswap;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
@@ -45,9 +46,9 @@ public class Pattern
         this.createdDate = Instant.now();
         this.names = names;
 
-        if (siteswap.getClass() == FourHandedSiteswap.class)
+        if (siteswap.getClass() == FourHandedSiteswap.class || siteswap.getClass() == TwoHandedSiteswap.class)
         {
-            this.siteswapTypeSimpleName = FourHandedSiteswap.class.getSimpleName();
+            this.siteswapTypeSimpleName = siteswap.getClass().getSimpleName();
             this.siteswapConstructor = siteswap.toString();
         }
         else
@@ -72,10 +73,13 @@ public class Pattern
         this.names = names;
         this.createdDate = createdDate;
 
-        if (siteswapTypeSimpleName.equals(
-                FourHandedSiteswap.class.getSimpleName()))
+        if (siteswapTypeSimpleName.equals(FourHandedSiteswap.class.getSimpleName()))
         {
             this.siteswap = FourHandedSiteswap.create(this.siteswapConstructor);
+        }
+        else if (siteswapTypeSimpleName.equals(TwoHandedSiteswap.class.getSimpleName()))
+        {
+            this.siteswap = TwoHandedSiteswap.create(this.siteswapConstructor);
         }
         else
         {

@@ -54,9 +54,9 @@ public abstract class SimplePatternConstructor
 
     }
 
-    protected String getNaturalName(final AbstractSiteswap fourHandedSiteswap)
+    private String getNaturalName(final AbstractSiteswap siteswap)
     {
-        return fourHandedSiteswap.toString();
+        return siteswap.toString();
     }
 
     protected abstract AbstractSiteswap construct(String name) throws InvalidSiteswapException;
