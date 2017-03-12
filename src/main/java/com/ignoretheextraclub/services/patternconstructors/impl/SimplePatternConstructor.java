@@ -38,9 +38,7 @@ public abstract class SimplePatternConstructor
         try
         {
             final AbstractSiteswap fourHandedSiteswap = construct(name);
-            final Pattern pattern = new Pattern(fourHandedSiteswap);
-
-            pattern.setName(new PatternName(getNaturalName(fourHandedSiteswap),1));
+            final Pattern pattern = new Pattern(fourHandedSiteswap, new PatternName(getNaturalName(fourHandedSiteswap),1));
 
             if (!name.equals(getNaturalName(fourHandedSiteswap)))
             {

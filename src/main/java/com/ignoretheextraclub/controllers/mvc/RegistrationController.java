@@ -20,14 +20,14 @@ import javax.validation.Valid;
  * Created by caspar on 11/03/17.
  */
 @Controller
-public class Register
+public class RegistrationController
 {
     private @Autowired UsersService usersService;
 
     @PostMapping("/register")
-    public String register(@Valid RegistrationRequest registrationRequest,
-                           BindingResult bindingResult,
-                           Model model)
+    public String register(final @Valid RegistrationRequest registrationRequest,
+                           final BindingResult bindingResult,
+                           final Model model)
     {
         if (!registrationRequest.getPassword().equals(registrationRequest.getMatchingPassword()))
         {
@@ -55,7 +55,7 @@ public class Register
     }
 
     @GetMapping("/username-available/{username}")
-    public ResponseEntity<?> isUserNameAvailable(@PathVariable("username") final String username)
+    public ResponseEntity<?> isUserNameAvailable(final @PathVariable("username") String username)
     {
         if (usersService.usernameAvailable(username))
         {

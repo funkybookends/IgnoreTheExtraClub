@@ -2,6 +2,8 @@ package com.ignoretheextraclub.services;
 
 import com.ignoretheextraclub.model.Pattern;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
