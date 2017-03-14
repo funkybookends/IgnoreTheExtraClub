@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example </title>
+    <title>Pattern FHS</title>
 </head>
 <body>
 
-<h1>FHS</h1>
+<div th:replace="home :: header" class="header">
+    <h1>Ignore the Extra Club</h1>
+    <h2>Test header - replaced by home</h2>
+</div>
+
+<div th:class="main-menu" th:replace="home :: main-menu">
+    <ul class="main-menu">
+        <li th:text="#{menu.home}"><a href="/">Home</a></li>
+        <li th:text="#{menu.about}"><a href="about.html" th:href="@{/about}">About</a></li>
+        <li th:text="#{menu.loginreg}"><a href="login.html" th:href="@{/login}">Log In/Register</a></li>
+    </ul>
+    <p>Test menu - replaced by home</p>
+</div>
+
+<div class="content">
+    <div class="pattern" th:object="${pattern}">
+        <div class="pattern-title">
+            <h2 class="pattern-title" th:text="${pattern.names[0].name}">Holy Grail</h2>
+        </div>
+        <div class="pattern-stats">
+            <dl>
+                <dt>Clubs</dt><dd>7</dd>
+                <dt>FHS</dt><dd>975</dd>
+                <dt>Prechac</dt><dd>4.5p 2.5p 3.5p</dd>
+                <dt>Prime</dt><dd>true</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="footer" th:replace="home :: footer">
+    <h5>Made by Caspar Nonclercq.</h5>
+    <p>Test footer - replaced by home</p>
+</div>
 </body>
 </html>

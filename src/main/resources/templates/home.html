@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Spring Security Example</title>
+    <title>Ignore the Extra Club - Homepage</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../static/main.css">
 </head>
 <body>
-<h1>Welcome!</h1>
+<div th:fragment="header" class="header">
+    <h1>Ignore the Extra Club</h1>
+</div>
 
-<p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
+<div th:class="main-menu" th:fragment="main-menu">
+    <ul class="main-menu">
+        <li th:text="#{menu.home}"><a href="/">Home</a></li>
+        <li th:text="#{menu.about}"><a href="about.html" th:href="@{/about}">About</a></li>
+        <li th:text="#{menu.loginreg}"><a href="login.html" th:href="@{/login}">Log In/Register</a></li>
+    </ul>
+</div>
+
+<div class="content">
+    <div class="post">
+        <div class="post-header">
+            <h1>Welcome!</h1>
+        </div>
+        <div class="post-subtitle"></div>
+        <div class="post-body">
+            <p>Thanks for visiting ItEC! Progress coming soon.</p>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="footer" th:fragment="footer">
+    <h5>Made by Caspar Nonclercq.</h5>
+</div>
 </body>
 </html>

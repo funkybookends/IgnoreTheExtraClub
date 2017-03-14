@@ -5,6 +5,11 @@
     <title>Hello World!</title>
 </head>
 <body>
+<div th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
+    <h1>Ignore The Extra Club Helo</h1>
+</div>
+
+
 <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 <form th:action="@{/logout}" method="post">
     <input type="submit" value="Sign Out"/>
