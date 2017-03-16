@@ -27,15 +27,17 @@ public class User implements UserDetails
     private     boolean           enabled;
     private     List<Permissions> permissions;
 
-    public User(String username,
-            String encodedPassword)
+    public User(final String username,
+                final String encodedPassword)
     {
-        this(username, encodedPassword, PermissionsConfiguration.DEFAULT_PERMISSIONS);
+        this(username,
+             encodedPassword,
+             PermissionsConfiguration.DEFAULT_PERMISSIONS);
     }
 
-    public User(String username,
-                String encodedPassword,
-                List<Permissions> permissions)
+    public User(final String username,
+                final String encodedPassword,
+                final List<Permissions> permissions)
     {
         this(username,
              encodedPassword,
@@ -46,13 +48,13 @@ public class User implements UserDetails
              permissions);
     }
 
-    public User(String username,
-                String encodedPassword,
-                boolean accountExpired,
-                boolean accountLocked,
-                boolean credentialsExpired,
-                boolean enabled,
-                List<Permissions> permissions)
+    public User(final String username,
+                final String encodedPassword,
+                final boolean accountExpired,
+                final boolean accountLocked,
+                final boolean credentialsExpired,
+                final boolean enabled,
+                final List<Permissions> permissions)
     {
         this.username = username;
         this.encodedPassword = encodedPassword;
