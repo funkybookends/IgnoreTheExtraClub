@@ -20,20 +20,26 @@
 </div>
 
 <div class="content">
-    <div class="pattern" th:object="${pattern}">
-        <div class="pattern-title">
-            <h2 class="pattern-title" th:text="${pattern.names[0].name}">Holy Grail</h2>
+    <div class="page" th:object="${page}">
+        <div class="page-title">
+            <h2 class="page-title" th:text="*{pageTitle}">Holy Grail</h2>
         </div>
-        <div class="pattern-stats">
-            <dl>
-                <dt>Clubs</dt><dd>7</dd>
-                <dt>FHS</dt><dd>975</dd>
-                <dt>Prechac</dt><dd>4.5p 2.5p 3.5p</dd>
-                <dt>Prime</dt><dd>true</dd>
+        <!-- TODO use created date -->
+        <div class="page-subtitle" th:if="*{hasPageSubtitle()}">
+            <h3 class="page-subtitle" th:text="*{pageSubtitle}">An awesome subtitle</h3>
+        </div>
+        <div class="page-stats" th:if="*{hasDetails()}">
+            <dl th:each="detail : ${details}">
+                <dt th:text="*{name}">Clubs</dt><dd th:text="*{value}">7</dd>
             </dl>
+        </div>
+        <div class="page-body" th:text="*{body}">
+            An interesting page body!
         </div>
     </div>
 </div>
+
+<!-- TODO add side bars -->
 
 <div class="footer" th:replace="home :: footer">
     <h5>Made by Caspar Nonclercq.</h5>

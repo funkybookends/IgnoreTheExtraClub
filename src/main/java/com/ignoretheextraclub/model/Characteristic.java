@@ -8,10 +8,10 @@ public class Characteristic
     private final String name;
     private final String value;
 
-    public Characteristic(final String name, final String value)
+    public Characteristic(final String name, final Object value)
     {
         this.name = name;
-        this.value = value;
+        this.value = String.valueOf(value);
     }
 
     public String getName()

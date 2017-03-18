@@ -9,6 +9,9 @@ import java.util.List;
  */
 public interface PageViewable
 {
+    String ATTRIBUTE_NAME = "page";
+    String VIEW = "detailspage";
+
     String getPageTitle();
     Instant getCreatedDate();
     boolean hasAlternativeNames(); // mostly for patterns

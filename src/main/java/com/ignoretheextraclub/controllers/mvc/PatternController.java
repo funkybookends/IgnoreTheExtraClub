@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.controllers.mvc;
 
+import com.ignoretheextraclub.model.PageViewable;
 import com.ignoretheextraclub.model.Pattern;
 import com.ignoretheextraclub.services.PatternService;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PatternController
 {
     private static final String NAME = "name";
+
     private @Autowired PatternService patternService;
 
     @GetMapping(value = "/p/{" + NAME + "}")
@@ -24,12 +26,8 @@ public class PatternController
     {
         final Pattern pattern = patternService.getOrCreate(requestName);
 
-        model.addAttribute("pattern", pattern);
+        model.addAttribute(PageViewable.ATTRIBUTE_NAME, pattern);
 
-        final String type = pattern.getSiteswap()
-                                   .getClass()
-                                   .getSimpleName();
-
-        return "pattern/" + type;
+        return PageViewable.VIEW;
     }
 }
