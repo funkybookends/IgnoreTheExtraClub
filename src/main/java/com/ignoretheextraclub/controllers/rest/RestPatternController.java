@@ -1,7 +1,7 @@
 package com.ignoretheextraclub.controllers.rest;
 
 import com.ignoretheextraclub.exceptions.UnknownPatternException;
-import com.ignoretheextraclub.model.Pattern;
+import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.services.PatternService;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import org.springframework.beans.factory.annotation.Autowired;

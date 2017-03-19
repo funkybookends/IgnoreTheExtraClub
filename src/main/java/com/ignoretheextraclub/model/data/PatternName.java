@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.model;
+package com.ignoretheextraclub.model.data;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.index.Indexed;

@@ -1,7 +1,7 @@
 package com.ignoretheextraclub.controllers.mvc;
 
 import com.ignoretheextraclub.exceptions.UsernameTakenException;
-import com.ignoretheextraclub.model.RegistrationRequest;
+import com.ignoretheextraclub.model.data.RegistrationRequest;
 import com.ignoretheextraclub.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.model;
+package com.ignoretheextraclub.model.data;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

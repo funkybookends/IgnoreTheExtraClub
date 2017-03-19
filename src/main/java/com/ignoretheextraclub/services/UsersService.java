@@ -1,8 +1,8 @@
 package com.ignoretheextraclub.services;
 
 import com.ignoretheextraclub.exceptions.UsernameTakenException;
-import com.ignoretheextraclub.model.RegistrationRequest;
-import com.ignoretheextraclub.model.User;
+import com.ignoretheextraclub.model.data.RegistrationRequest;
+import com.ignoretheextraclub.model.data.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;

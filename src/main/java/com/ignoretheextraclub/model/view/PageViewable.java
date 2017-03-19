@@ -1,4 +1,6 @@
-package com.ignoretheextraclub.model;
+package com.ignoretheextraclub.model.view;
+
+import com.ignoretheextraclub.model.data.Characteristic;
 
 import java.time.Instant;
 import java.util.List;

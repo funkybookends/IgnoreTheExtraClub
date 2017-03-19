@@ -1,10 +1,12 @@
-package com.ignoretheextraclub.model;
+package com.ignoretheextraclub.model.data;
 
+import com.ignoretheextraclub.model.view.MicroViewable;
+import com.ignoretheextraclub.model.view.MiniViewable;
+import com.ignoretheextraclub.model.view.PageViewable;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.TwoHandedSiteswap;
-import com.ignoretheextraclub.siteswapfactory.thros.FourHandedSiteswapThrow;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;

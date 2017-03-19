@@ -1,6 +1,6 @@
 package com.ignoretheextraclub.services.patternconstructors;
 
-import com.ignoretheextraclub.model.Pattern;
+import com.ignoretheextraclub.model.data.Pattern;
 
 import java.util.Optional;
 

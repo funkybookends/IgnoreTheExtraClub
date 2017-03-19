@@ -1,7 +1,7 @@
 package com.ignoretheextraclub.services.impl;
 
-import com.ignoretheextraclub.model.Pattern;
-import com.ignoretheextraclub.model.PatternName;
+import com.ignoretheextraclub.model.data.Pattern;
+import com.ignoretheextraclub.model.data.PatternName;
 import com.ignoretheextraclub.persistence.repository.PatternRepository;
 import com.ignoretheextraclub.services.PatternService;
 import com.ignoretheextraclub.services.patternconstructors.PatternConstructor;
@@ -23,6 +23,8 @@ import java.util.Optional;
 @Service
 public class PatternServiceImpl implements PatternService
 {
+    public static final int DEFAULT_SIDE_BAR_SIZE = 10;
+
     private final PatternRepository        patternRepository;
     private final List<PatternConstructor> constructorList;
 
@@ -87,5 +89,11 @@ public class PatternServiceImpl implements PatternService
     {
         Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.DESC, "createdDate"));
         return patternRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Pattern> newest(int page)
+    {
+        return newest(page, DEFAULT_SIDE_BAR_SIZE);
     }
 }

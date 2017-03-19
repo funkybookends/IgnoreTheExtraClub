@@ -1,8 +1,8 @@
 package com.ignoretheextraclub.services.impl;
 
 import com.ignoretheextraclub.exceptions.UsernameTakenException;
-import com.ignoretheextraclub.model.RegistrationRequest;
-import com.ignoretheextraclub.model.User;
+import com.ignoretheextraclub.model.data.RegistrationRequest;
+import com.ignoretheextraclub.model.data.User;
 import com.ignoretheextraclub.persistence.repository.UsersRepository;
 import com.ignoretheextraclub.services.UsersService;
 import org.springframework.security.core.userdetails.UserDetailsService;

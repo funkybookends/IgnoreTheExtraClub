@@ -1,9 +1,8 @@
 package com.ignoretheextraclub.services;
 
-import com.ignoretheextraclub.model.Pattern;
+import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -19,4 +18,6 @@ public interface PatternService
     Pattern save(Pattern pattern);
 
     Page<Pattern> newest(int page, int size);
+
+    Page<Pattern> newest(int page);
 }

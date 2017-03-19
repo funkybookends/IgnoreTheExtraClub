@@ -1,12 +1,12 @@
 package com.ignoretheextraclub.persistence.repository;
 
-import com.ignoretheextraclub.model.Pattern;
+import com.ignoretheextraclub.model.data.Pattern;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.Optional;
 
-import static com.ignoretheextraclub.model.Pattern.NAMES_FIELD;
+import static com.ignoretheextraclub.model.data.Pattern.NAMES_FIELD;
 
 /**
  * Created by caspar on 04/03/17.

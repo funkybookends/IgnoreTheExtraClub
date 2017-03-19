@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.model;
+package com.ignoretheextraclub.model.view;
 
 /**
  * Created by caspar on 15/03/17.

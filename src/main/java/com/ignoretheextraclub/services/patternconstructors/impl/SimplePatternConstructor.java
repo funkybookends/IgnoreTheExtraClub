@@ -1,7 +1,7 @@
 package com.ignoretheextraclub.services.patternconstructors.impl;
 
-import com.ignoretheextraclub.model.Pattern;
-import com.ignoretheextraclub.model.PatternName;
+import com.ignoretheextraclub.model.data.Pattern;
+import com.ignoretheextraclub.model.data.PatternName;
 import com.ignoretheextraclub.services.patternconstructors.PatternConstructor;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;

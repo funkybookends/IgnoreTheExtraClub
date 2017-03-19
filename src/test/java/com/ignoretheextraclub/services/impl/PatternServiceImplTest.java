@@ -1,7 +1,7 @@
 package com.ignoretheextraclub.services.impl;
 
-import com.ignoretheextraclub.model.Pattern;
-import com.ignoretheextraclub.model.PatternName;
+import com.ignoretheextraclub.model.data.Pattern;
+import com.ignoretheextraclub.model.data.PatternName;
 import com.ignoretheextraclub.persistence.repository.PatternRepository;
 import com.ignoretheextraclub.services.PatternService;
 import com.ignoretheextraclub.services.patternconstructors.PatternConstructor;
@@ -19,14 +19,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by caspar on 08/03/17.
