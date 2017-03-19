@@ -34,7 +34,9 @@
         <h4>Newest Patterns</h4>
     </div>
     <div class="sidebar-section newest-patterns" th:each="item : ${newestPatterns}">
-        <div class="sidebar-item-header" th:text="${item.microTitle}">Micro Title</div>
+        <div class="sidebar-item-header" th:text="${item.microTitle}">
+            <a href="detailspage.html" th:href="@{/p/${microTitle}}">Micro Title</a>
+        </div>
         <div class="sidebar-item-body" th:text="${item.microDescription}">Micro Description</div>
     </div>
 </div>

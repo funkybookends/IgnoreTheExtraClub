@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.logging.Logger;
 
 /**
  * Created by caspar on 11/03/17.
@@ -22,6 +23,8 @@ import javax.validation.Valid;
 @Controller
 public class RegistrationController
 {
+    private static final Logger LOG = Logger.getLogger(RegistrationController.class.getCanonicalName());
+
     private @Autowired UsersService usersService;
 
     @PostMapping("/register")
@@ -29,6 +32,7 @@ public class RegistrationController
                            final BindingResult bindingResult,
                            final Model model)
     {
+        LOG.info("attempting to register " + registrationRequest.toString());
         if (!registrationRequest.getPassword().equals(registrationRequest.getMatchingPassword()))
         {
             bindingResult.addError(new ObjectError("rawMatchingPassword", "Passwords do not match."));
@@ -38,19 +42,22 @@ public class RegistrationController
             try
             {
                 usersService.register(registrationRequest);
-                return "home";
+                LOG.info("new user registered");
+                return "hello";
             }
             catch (final UsernameTakenException usernameTakenException)
             {
                 bindingResult.addError(new ObjectError("username", usernameTakenException.getMessage()));
             }
         }
+        LOG.info("could not register user");
         return "register";
     }
 
     @GetMapping("/register")
     public String register(final RegistrationRequest registrationRequest)
     {
+        LOG.info("starting registration");
         return "register";
     }
 

@@ -2,6 +2,7 @@ package com.ignoretheextraclub.model.data;
 
 import com.ignoretheextraclub.configuration.PermissionsConfiguration;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,6 +48,7 @@ public class User implements UserDetails
              permissions);
     }
 
+    @PersistenceConstructor
     public User(final String username,
                 final String encodedPassword,
                 final boolean accountExpired,
@@ -106,5 +108,18 @@ public class User implements UserDetails
     public boolean isEnabled()
     {
         return !enabled;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", accountExpired=" + accountExpired +
+                ", accountLocked=" + accountLocked +
+                ", credentialsExpired=" + credentialsExpired +
+                ", enabled=" + enabled +
+                ", permissions=" + permissions +
+                '}';
     }
 }
