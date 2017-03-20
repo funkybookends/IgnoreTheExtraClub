@@ -2,7 +2,9 @@ package com.ignoretheextraclub.controllers.mvc;
 
 import com.ignoretheextraclub.exceptions.UsernameTakenException;
 import com.ignoretheextraclub.model.data.RegistrationRequest;
-import com.ignoretheextraclub.services.UsersService;
+import com.ignoretheextraclub.service.user.UsersService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.logging.Logger;
 
 /**
  * Created by caspar on 11/03/17.
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 @Controller
 public class RegistrationController
 {
-    private static final Logger LOG = Logger.getLogger(RegistrationController.class.getCanonicalName());
+    private static final Logger LOG = LoggerFactory.getLogger(RegistrationController.class);
 
     private @Autowired UsersService usersService;
 
@@ -32,7 +33,7 @@ public class RegistrationController
                            final BindingResult bindingResult,
                            final Model model)
     {
-        LOG.info("attempting to register " + registrationRequest.toString());
+        LOG.info("Registration Request: {}", registrationRequest);
         if (!registrationRequest.getPassword().equals(registrationRequest.getMatchingPassword()))
         {
             bindingResult.addError(new ObjectError("rawMatchingPassword", "Passwords do not match."));
@@ -42,7 +43,6 @@ public class RegistrationController
             try
             {
                 usersService.register(registrationRequest);
-                LOG.info("new user registered");
                 return "hello";
             }
             catch (final UsernameTakenException usernameTakenException)
@@ -50,14 +50,13 @@ public class RegistrationController
                 bindingResult.addError(new ObjectError("username", usernameTakenException.getMessage()));
             }
         }
-        LOG.info("could not register user");
         return "register";
     }
 
     @GetMapping("/register")
     public String register(final RegistrationRequest registrationRequest)
     {
-        LOG.info("starting registration");
+        LOG.info("Starting registration.");
         return "register";
     }
 

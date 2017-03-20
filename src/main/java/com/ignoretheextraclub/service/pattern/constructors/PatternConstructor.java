@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.services.patternconstructors;
+package com.ignoretheextraclub.service.pattern.constructors;
 
 import com.ignoretheextraclub.model.data.Pattern;
 

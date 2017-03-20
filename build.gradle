@@ -31,6 +31,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.thymeleaf.extras:thymeleaf-extras-java8time'
     compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'io.dropwizard.metrics:metrics-graphite:3.2.1'
+    compile 'io.dropwizard.metrics:metrics-core:3.2.1'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.springframework.boot:spring-boot-starter-test'

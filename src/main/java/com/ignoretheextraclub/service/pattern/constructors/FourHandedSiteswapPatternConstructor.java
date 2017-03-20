@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.services.patternconstructors.impl;
+package com.ignoretheextraclub.service.pattern.constructors;
 
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;

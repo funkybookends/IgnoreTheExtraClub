@@ -2,6 +2,7 @@ package com.ignoretheextraclub.persistence.repository;
 
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.model.data.PatternName;
+import com.ignoretheextraclub.persistence.PatternRepository;
 import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
 import org.junit.Assert;

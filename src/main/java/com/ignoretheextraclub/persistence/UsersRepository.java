@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.persistence.repository;
+package com.ignoretheextraclub.persistence;
 
 import com.ignoretheextraclub.model.data.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

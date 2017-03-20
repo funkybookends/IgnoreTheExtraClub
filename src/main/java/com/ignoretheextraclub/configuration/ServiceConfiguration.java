@@ -1,17 +1,16 @@
 package com.ignoretheextraclub.configuration;
 
-import com.ignoretheextraclub.persistence.repository.PatternRepository;
-import com.ignoretheextraclub.services.PatternService;
-import com.ignoretheextraclub.services.impl.PatternServiceImpl;
-import com.ignoretheextraclub.services.impl.UsersServiceImpl;
-import com.ignoretheextraclub.services.patternconstructors.impl.FourHandedSiteswapPatternConstructor;
-import com.ignoretheextraclub.services.patternconstructors.impl.TwoHandedSiteswapPatternConstructor;
+import com.ignoretheextraclub.persistence.PatternRepository;
+import com.ignoretheextraclub.service.pattern.PatternService;
+import com.ignoretheextraclub.service.pattern.PatternServiceImpl;
+import com.ignoretheextraclub.service.pattern.constructors.FourHandedSiteswapPatternConstructor;
+import com.ignoretheextraclub.service.pattern.constructors.TwoHandedSiteswapPatternConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 
@@ -30,8 +29,5 @@ public class ServiceConfiguration
         return new PatternServiceImpl(patternRepository, Arrays.asList(fhspc, thspc));
     }
 
-    public @Bean BCryptPasswordEncoder passwordEncoder()
-    {
-        return new BCryptPasswordEncoder();
-    }
+
 }

@@ -1,10 +1,11 @@
-package com.ignoretheextraclub.services.impl;
+package com.ignoretheextraclub.service.user;
 
 import com.ignoretheextraclub.exceptions.UsernameTakenException;
 import com.ignoretheextraclub.model.data.RegistrationRequest;
 import com.ignoretheextraclub.model.data.User;
-import com.ignoretheextraclub.persistence.repository.UsersRepository;
-import com.ignoretheextraclub.services.UsersService;
+import com.ignoretheextraclub.persistence.UsersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,8 @@ import java.util.Optional;
 @Service
 public class UsersServiceImpl implements UsersService, UserDetailsService
 {
+    private static final Logger LOG = LoggerFactory.getLogger(UsersServiceImpl.class);
+
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -46,7 +49,9 @@ public class UsersServiceImpl implements UsersService, UserDetailsService
         }
         else
         {
-            return usersRepository.save(convert(signUp));
+            final User newUser = convert(signUp);
+            LOG.info("New user: {}", newUser);
+            return usersRepository.save(newUser);
         }
     }
 

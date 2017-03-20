@@ -1,11 +1,12 @@
-package com.ignoretheextraclub.services.impl;
+package com.ignoretheextraclub.service.pattern;
 
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.model.data.PatternName;
-import com.ignoretheextraclub.persistence.repository.PatternRepository;
-import com.ignoretheextraclub.services.PatternService;
-import com.ignoretheextraclub.services.patternconstructors.PatternConstructor;
+import com.ignoretheextraclub.persistence.PatternRepository;
+import com.ignoretheextraclub.service.pattern.constructors.PatternConstructor;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by caspar on 05/03/17.
@@ -23,7 +25,8 @@ import java.util.Optional;
 @Service
 public class PatternServiceImpl implements PatternService
 {
-    public static final int DEFAULT_SIDE_BAR_SIZE = 10;
+    private static final Logger LOG                   = LoggerFactory.getLogger(PatternServiceImpl.class);
+    public static final  int    DEFAULT_SIDE_BAR_SIZE = 10;
 
     private final PatternRepository        patternRepository;
     private final List<PatternConstructor> constructorList;
@@ -34,6 +37,10 @@ public class PatternServiceImpl implements PatternService
     {
         this.patternRepository = patternRepository;
         this.constructorList = constructorList;
+        LOG.info("ConstructorList: {}",
+                 constructorList.stream()
+                                .map(pc -> pc.getClass().getSimpleName())
+                                .collect(Collectors.joining(", ")));
     }
 
     @Override
@@ -53,22 +60,37 @@ public class PatternServiceImpl implements PatternService
         }
         else
         {
+            LOG.info("Cannot find pattern [{}], attempting to create.", name);
             for (PatternConstructor patternConstructor : constructorList)
             {
                 Optional<String> naturalName = patternConstructor.getNaturalName(name);
 
                 if (naturalName.isPresent())
                 {
+                    LOG.info("PatternConstructor [{}] converted [{}] into [{}]",
+                             patternByName.getClass().getSimpleName(),
+                             name,
+                             naturalName.get());
+
                     Optional<Pattern> patternByNaturalName = get(naturalName.get());
 
                     if (patternByNaturalName.isPresent())
                     {
                         Pattern pattern = patternByNaturalName.get();
                         pattern.setName(new PatternName(name, 0));
+
+                        LOG.debug("Adding new name [{}] to pattern [{}]",
+                                  name,
+                                  naturalName.get());
+
                         return patternRepository.save(pattern);
                     }
                     else
                     {
+                        LOG.info("PatternConstructor [{}] constructing new pattern for [{}]",
+                                 patternConstructor.getClass().getSimpleName(),
+                                 naturalName.get());
+
                         return patternRepository.save(patternConstructor.createPattern(name));
                     }
                 }

@@ -1,12 +1,13 @@
-package com.ignoretheextraclub.services.impl;
+package com.ignoretheextraclub.service.impl;
 
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.model.data.PatternName;
-import com.ignoretheextraclub.persistence.repository.PatternRepository;
-import com.ignoretheextraclub.services.PatternService;
-import com.ignoretheextraclub.services.patternconstructors.PatternConstructor;
-import com.ignoretheextraclub.services.patternconstructors.impl.FourHandedSiteswapPatternConstructor;
-import com.ignoretheextraclub.services.patternconstructors.impl.TwoHandedSiteswapPatternConstructor;
+import com.ignoretheextraclub.persistence.PatternRepository;
+import com.ignoretheextraclub.service.pattern.PatternService;
+import com.ignoretheextraclub.service.pattern.PatternServiceImpl;
+import com.ignoretheextraclub.service.pattern.constructors.PatternConstructor;
+import com.ignoretheextraclub.service.pattern.constructors.FourHandedSiteswapPatternConstructor;
+import com.ignoretheextraclub.service.pattern.constructors.TwoHandedSiteswapPatternConstructor;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
 import org.junit.Assert;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.services;
+package com.ignoretheextraclub.service.pattern;
 
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;

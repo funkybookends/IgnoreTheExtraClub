@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.services;
+package com.ignoretheextraclub.service.user;
 
 import com.ignoretheextraclub.exceptions.UsernameTakenException;
 import com.ignoretheextraclub.model.data.RegistrationRequest;

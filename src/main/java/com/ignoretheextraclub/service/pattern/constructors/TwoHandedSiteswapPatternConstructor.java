@@ -1,7 +1,6 @@
-package com.ignoretheextraclub.services.patternconstructors.impl;
+package com.ignoretheextraclub.service.pattern.constructors;
 
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
-import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.TwoHandedSiteswap;
 import org.springframework.stereotype.Service;
 

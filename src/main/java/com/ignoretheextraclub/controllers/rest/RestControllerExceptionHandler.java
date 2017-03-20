@@ -2,6 +2,8 @@ package com.ignoretheextraclub.controllers.rest;
 
 import com.ignoretheextraclub.exceptions.UnknownPatternException;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class RestControllerExceptionHandler
 {
+    private static final Logger LOG = LoggerFactory.getLogger(RestControllerExceptionHandler.class);
+
     @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED, reason =
             "Could not find a pattern with that name or construct a siteswap with it.")
     @ExceptionHandler(InvalidSiteswapException.class)
