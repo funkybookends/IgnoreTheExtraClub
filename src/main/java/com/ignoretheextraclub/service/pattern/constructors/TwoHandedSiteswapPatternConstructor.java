@@ -17,4 +17,10 @@ public class TwoHandedSiteswapPatternConstructor
     {
         return TwoHandedSiteswap.create(name);
     }
+
+    @Override
+    public int getPriority()
+    {
+        return 10;
+    }
 }

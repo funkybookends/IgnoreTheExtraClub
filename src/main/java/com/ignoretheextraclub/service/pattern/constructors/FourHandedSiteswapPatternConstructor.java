@@ -18,5 +18,11 @@ public class FourHandedSiteswapPatternConstructor
     {
         return FourHandedSiteswap.create(name);
     }
+
+    @Override
+    public int getPriority()
+    {
+        return 1;
+    }
 }
 

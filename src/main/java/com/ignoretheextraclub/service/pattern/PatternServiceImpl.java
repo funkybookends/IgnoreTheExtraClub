@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,7 +37,9 @@ public class PatternServiceImpl implements PatternService
                               final List<PatternConstructor> constructorList)
     {
         this.patternRepository = patternRepository;
+        constructorList.sort(Comparator.comparing(PatternConstructor::getPriority));
         this.constructorList = constructorList;
+
         LOG.info("ConstructorList: {}",
                  constructorList.stream()
                                 .map(pc -> pc.getClass().getSimpleName())
