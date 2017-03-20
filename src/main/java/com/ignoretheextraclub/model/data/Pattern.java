@@ -32,19 +32,20 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
     private static final Class<?> FOUR_HANDED_SITESWAP = FourHandedSiteswap.class;
     private static final Class<?> TWO_HANDED_SITESWAP = TwoHandedSiteswap.class;
 
-    private final                     String           id;
-    private final @Transient          AbstractSiteswap siteswap;
-    private final                     String           siteswapConstructor;
-    private final                     String           siteswapTypeSimpleName;
+    private final String id;
+    private final @Transient AbstractSiteswap siteswap;
+    private final String siteswapConstructor;
+    private final String siteswapTypeSimpleName;
     private final @Field(NAMES_FIELD) TreeSet<PatternName> names;
-    private final @CreatedDate        Instant          createdDate;
+    private final @CreatedDate Instant createdDate;
 
     public Pattern(final AbstractSiteswap siteswap, final PatternName... names)
     {
-       this(siteswap, asSet(names));
+        this(siteswap, asSet(names));
     }
 
-    public Pattern(final AbstractSiteswap siteswap, final TreeSet<PatternName> names)
+    public Pattern(final AbstractSiteswap siteswap,
+                   final TreeSet<PatternName> names)
     {
         Assert.notEmpty(names, "Must have at least one name.");
         this.siteswap = siteswap;
@@ -54,7 +55,8 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
 
         if (siteswap.getClass() == FOUR_HANDED_SITESWAP || siteswap.getClass() == TWO_HANDED_SITESWAP)
         {
-            this.siteswapTypeSimpleName = siteswap.getClass().getSimpleName();
+            this.siteswapTypeSimpleName = siteswap.getClass()
+                                                  .getSimpleName();
             this.siteswapConstructor = siteswap.toString();
         }
         else
@@ -112,7 +114,10 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
 
     public Optional<PatternName> getName(final String name)
     {
-        return names.stream().filter(patternName -> patternName.getName().equals(name)).findFirst();
+        return names.stream()
+                    .filter(patternName -> patternName.getName()
+                                                      .equals(name))
+                    .findFirst();
     }
 
     public void setName(final PatternName patternName)
@@ -122,13 +127,17 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
 
     private static TreeSet<PatternName> asSet(final PatternName... names)
     {
-        return Arrays.stream(names).collect(Collectors.toCollection(() -> new TreeSet<PatternName>(PatternName.sorter())));
+        return Arrays.stream(names)
+                     .collect(Collectors.toCollection(() -> new TreeSet<PatternName>(
+                             PatternName.sorter())));
     }
 
     @Override
     public String getPageTitle()
     {
-        return names.iterator().next().getName(); // Returns the first name
+        return names.iterator()
+                    .next()
+                    .getName(); // Returns the first name
     }
 
     public Instant getCreatedDate()
@@ -145,7 +154,9 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
     @Override
     public List<String> getAlternativeNames()
     {
-        return names.stream().map(PatternName::getName).collect(Collectors.toList());
+        return names.stream()
+                    .map(PatternName::getName)
+                    .collect(Collectors.toList());
     }
 
     @Override
@@ -173,21 +184,28 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
         final List<Characteristic> characteristics = new ArrayList<>();
 
         characteristics.add(new Characteristic("Period", siteswap.getPeriod()));
-        characteristics.add(new Characteristic("Objects", siteswap.getNumObjects()));
-        characteristics.add(new Characteristic("Grounded", siteswap.isGrounded()));
+        characteristics.add(new Characteristic("Objects",
+                                               siteswap.getNumObjects()));
+        characteristics.add(new Characteristic("Grounded",
+                                               siteswap.isGrounded()));
 
         if (siteswap.getClass() == FOUR_HANDED_SITESWAP)
         {
             FourHandedSiteswap fhs = (FourHandedSiteswap) this.siteswap;
-            characteristics.add(new Characteristic("Siteswap", fhs.getStringSiteswap()));
-            characteristics.add(new Characteristic("Leader Clubs", fhs.getLeaderStartingFirstHandObjects() + " + " + fhs.getLeaderStartingSecondHandObjects()));
-            characteristics.add(new Characteristic("Follower Clubs", fhs.getFollowerStartingFirstHandObjects() + " + " + fhs.getFollowerStartingSecondHandObjects()));
+            characteristics.add(new Characteristic("Siteswap",
+                                                   fhs.getStringSiteswap()));
+            characteristics.add(new Characteristic("Leader Clubs",
+                                                   fhs.getLeaderStartingFirstHandObjects() + " + " + fhs.getLeaderStartingSecondHandObjects()));
+            characteristics.add(new Characteristic("Follower Clubs",
+                                                   fhs.getFollowerStartingFirstHandObjects() + " + " + fhs.getFollowerStartingSecondHandObjects()));
         }
         else if (siteswap.getClass() == TWO_HANDED_SITESWAP)
         {
             TwoHandedSiteswap ths = (TwoHandedSiteswap) this.siteswap;
-            characteristics.add(new Characteristic("Siteswap", ths.getStringSiteswap()));
-            characteristics.add(new Characteristic("Hands", ths.getFirstStartingHandObjects() + " + " + ths.getSecondStartingHandObjects()));
+            characteristics.add(new Characteristic("Siteswap",
+                                                   ths.getStringSiteswap()));
+            characteristics.add(new Characteristic("Hands",
+                                                   ths.getFirstStartingHandObjects() + " + " + ths.getSecondStartingHandObjects()));
         }
 
         return characteristics;
