@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Created by caspar on 12/02/17.
  */
-@ConfigurationProperties
+@ConfigurationProperties // Not currently being used because spring magic
 public class MongoProperties
 {
     private String dbName;
