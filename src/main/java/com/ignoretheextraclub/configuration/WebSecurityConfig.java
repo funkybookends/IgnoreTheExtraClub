@@ -26,22 +26,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     {
         http.authorizeRequests()
 
-            .antMatchers("/",
-                         "/home",
-                         "/p/**",
-                         "/register").permitAll()
-                .anyRequest().authenticated().and()
-            .formLogin().loginPage("/login").permitAll().and()
-            .logout().permitAll()
-        .and()
-        .rememberMe().useSecureCookie(true);
+                .antMatchers("/",
+                        "/home",
+//                        DefaultErrorController.ERROR_PATH,
+                        "/p/**",
+                        "/register")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .rememberMe()
+                .useSecureCookie(true);
     }
 
     @Autowired
     public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception
     {
         auth.userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder);
+                .passwordEncoder(passwordEncoder);
     }
 
     @Bean

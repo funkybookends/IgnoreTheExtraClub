@@ -8,6 +8,7 @@ import com.ignoretheextraclub.service.user.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.BasicErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,9 +28,10 @@ import static com.ignoretheextraclub.configuration.MetricsConfiguration.SUCCESS;
  * Created by caspar on 11/03/17.
  */
 @Controller
-public class RegistrationController
+public class LoginAndRegistrationController
 {
-    private static final Logger LOG = LoggerFactory.getLogger(RegistrationController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginAndRegistrationController.class);
+
     private static final String REGISTRATION = "registration";
     private static final String BEGIN = "begin";
 
@@ -37,7 +39,7 @@ public class RegistrationController
     private final MetricRegistry metricRegistry;
 
     @Autowired
-    public RegistrationController(final UsersService usersService,
+    public LoginAndRegistrationController(final UsersService usersService,
             final MetricRegistry metricRegistry)
     {
         this.usersService = usersService;
@@ -95,5 +97,11 @@ public class RegistrationController
         {
             return new ResponseEntity<>(HttpStatus.IM_USED);
         }
+    }
+
+    @GetMapping("/login")
+    public String login()
+    {
+        return "login";
     }
 }
