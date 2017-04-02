@@ -1,15 +1,22 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.6'
     }
 }
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+import com.bmuschko.gradle.docker.tasks.container.*
+import com.bmuschko.gradle.docker.tasks.image.*
+
 group = 'com.ignoretheextraclub'
 version = '0.1.0'
 
@@ -17,6 +24,12 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url 'https://jitpack.io' }
+}
+
+ext {
+    mongo = "mongo"
+    graphite = "graphite"
+    dockerHub = "dockerHub"
 }
 
 dependencies {
@@ -48,3 +61,33 @@ jar {
     baseName = 'ignoretheextraclub'
     version =  '0.1.0'
 }
+
+task startMongo(type: DockerStartContainer) {
+    containerId = mongo
+}
+
+task restartMongo(type: DockerRestartContainer) {
+    containerId = mongo
+}
+
+task stopMong(type: DockerStopContainer) {
+    containerId = mongo
+}
+
+task getMongo(type: DockerPullImage) {
+    repository = mongo
+}
+
+task startGraphite(type: DockerStartContainer) {
+    containerId = graphite
+}
+
+task restartGraphite(type: DockerRestartContainer) {
+    containerId = graphite
+}
+
+task getGraphite(type: DockerPullImage) {
+    repository = graphite
+}
+
+task v(type: DockerListImages) {}
