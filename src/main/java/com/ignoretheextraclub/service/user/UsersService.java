@@ -12,10 +12,28 @@ import java.util.Optional;
  */
 public interface UsersService
 {
+    /**
+     * Returns a user if a user is found, other wise an empty optional.
+     * @param username
+     * @return
+     */
     Optional<User> getUser(String username);
 
+    /**
+     * Attempts to register a user. Use {@link #usernameAvailable(String)}} to
+     * determine if the username is available.
+     *
+     * @param registrationRequest
+     * @return The registered user.
+     * @throws UsernameTakenException if the username is not available
+     */
     @Transactional
     User register(RegistrationRequest registrationRequest) throws UsernameTakenException;
 
+    /**
+     * Returns if the user name is present
+     * @param username
+     * @return true if available, false if not
+     */
     boolean usernameAvailable(String username);
 }

@@ -1,6 +1,7 @@
 package com.ignoretheextraclub.model.data;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.time.Instant;
@@ -16,6 +17,7 @@ public class PatternName
     private @Indexed(unique = true)     String  name;
     private              int     weight; // Used to override the usages, if admin prefers
     private @CreatedDate Instant createdDate;
+    private @Transient long usages;
 
     public PatternName(final String name,
                        final int weight)
@@ -38,6 +40,16 @@ public class PatternName
     public Instant getCreatedDate()
     {
         return createdDate;
+    }
+
+    public long getUsages()
+    {
+        return usages;
+    }
+
+    public void setUsages(long usages)
+    {
+        this.usages = usages;
     }
 
     public static Comparator<PatternName> sorter()
