@@ -46,7 +46,7 @@ public class PageViewController
         final Pattern pattern = patternService.getOrCreate(requestName);
 
         model.addAttribute(PageViewable.ATTRIBUTE_NAME, pattern);
-        model.addAttribute(GeneralController.SIDEBAR_NEWEST, patternService.newest(0));
+        model.addAttribute(HomePageController.SIDEBAR_NEWEST_PATTERNS, patternService.newest(0));
 
         return PageViewable.VIEW;
     }

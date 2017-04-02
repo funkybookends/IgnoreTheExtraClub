@@ -3,28 +3,22 @@ package com.ignoretheextraclub.service.impl;
 import com.codahale.metrics.MetricRegistry;
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.model.data.PatternName;
+import com.ignoretheextraclub.model.data.Post;
 import com.ignoretheextraclub.persistence.PatternRepository;
+import com.ignoretheextraclub.persistence.PostRepository;
 import com.ignoretheextraclub.service.pattern.PatternService;
 import com.ignoretheextraclub.service.pattern.PatternServiceImpl;
 import com.ignoretheextraclub.service.pattern.constructors.PatternConstructor;
 import com.ignoretheextraclub.service.pattern.constructors.FourHandedSiteswapPatternConstructor;
 import com.ignoretheextraclub.service.pattern.constructors.TwoHandedSiteswapPatternConstructor;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -51,6 +45,7 @@ public class PatternServiceImplTest
     // Spys
     private PatternConstructor pc1;
     private PatternConstructor pc2;
+    private PostRepository postRepository;
 
     @Before
     public void setUp() throws Exception
@@ -59,9 +54,12 @@ public class PatternServiceImplTest
         pc2 = spy(new TwoHandedSiteswapPatternConstructor());
 
         patternRepository = mock(PatternRepository.class);
+        postRepository = mock(PostRepository.class);
         MetricRegistry metricRegistry = new MetricRegistry();
 
-        patternService = new PatternServiceImpl(patternRepository, Arrays.asList(pc1, pc2), metricRegistry);
+        patternService = new PatternServiceImpl(patternRepository,
+                postRepository,
+                Arrays.asList(pc1, pc2), metricRegistry);
         patternRepository.deleteAll();
     }
 
@@ -100,6 +98,7 @@ public class PatternServiceImplTest
         verify(pc2, times(1)).createPattern(name);
 
         verify(patternRepository, times(1)).save(actual);
+        verify(postRepository, times(1)).save(any(Post.class));
     }
 
     @Test

@@ -18,19 +18,22 @@ public class Post implements PageViewable
     private String id;
     private User author;
     private @CreatedDate Instant createdDate;
+    private List<String> tags;
     private String title;
     private String subtitle;
     private String mediaWikiBody;
 
     public Post(final User author,
-        final Instant createdDate,
-        final String title,
-        final String subtitle,
-        final String mediaWikiBody)
+            final Instant createdDate,
+            final String title,
+            final String subtitle,
+            final String mediaWikiBody,
+            final List<String> tags)
     {
         this(null,
                 author,
                 createdDate,
+                tags,
                 title,
                 subtitle,
                 mediaWikiBody);
@@ -39,6 +42,7 @@ public class Post implements PageViewable
     public Post(final String id,
             final User author,
             final Instant createdDate,
+            final List<String> tags,
             final String title,
             final String subtitle,
             final String mediaWikiBody)
@@ -46,6 +50,7 @@ public class Post implements PageViewable
         this.id = id;
         this.author = author;
         this.createdDate = createdDate;
+        this.tags = tags;
         this.title = title;
         this.subtitle = subtitle;
         this.mediaWikiBody = mediaWikiBody;
