@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class PatternServiceImpl implements PatternService
 {
     private static final Logger LOG                   = LoggerFactory.getLogger(PatternServiceImpl.class);
-    public static final  int    DEFAULT_SIDE_BAR_SIZE = 10;
+
 
     private final PatternRepository        patternRepository;
     private final List<PatternConstructor> constructorList;
@@ -119,6 +119,6 @@ public class PatternServiceImpl implements PatternService
     @Override
     public Page<Pattern> newest(int page)
     {
-        return newest(page, DEFAULT_SIDE_BAR_SIZE);
+        return newest(page, DEFAULT_PAGE_SIZE);
     }
 }

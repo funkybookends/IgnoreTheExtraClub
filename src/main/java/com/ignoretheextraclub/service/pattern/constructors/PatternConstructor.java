@@ -11,8 +11,9 @@ public interface PatternConstructor
 {
     /**
      * Returns the name that it would always give the pattern if it were to construct it.
+     *
      * @param name
-     * @return
+     * @return A string name
      */
     Optional<String> getNaturalName(String name);
 
@@ -20,8 +21,9 @@ public interface PatternConstructor
      * Constructs a new pattern and gives it names. If a PatternConstructor returns
      * a non empty optional for {@link #getNaturalName(String)} then it must return a Pattern.
      * If used incorrectly it may return null.
+     *
      * @param name
-     * @return
+     * @return The pattern for the name or null
      */
     Pattern createPattern(String name);
 
@@ -29,7 +31,7 @@ public interface PatternConstructor
      * Returns the priority with which this pattern constructor should be used.
      *
      * Lower means it should be used first.
-     * @return
+     * @return its priority
      */
     int getPriority();
 }
