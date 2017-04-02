@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.service.impl;
 
+import com.codahale.metrics.MetricRegistry;
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.model.data.PatternName;
 import com.ignoretheextraclub.persistence.PatternRepository;
@@ -39,17 +40,15 @@ import static org.mockito.Mockito.when;
 /**
  * Created by caspar on 08/03/17.
  */
-
-@SpringBootTest
-@RunWith(SpringRunner.class)
 public class PatternServiceImplTest
 {
     // Service under test
     private PatternService patternService;
 
-    private @MockBean PatternRepository patternRepository;
-
     // Mocks
+    private PatternRepository patternRepository;
+
+    // Spys
     private PatternConstructor pc1;
     private PatternConstructor pc2;
 
@@ -59,7 +58,10 @@ public class PatternServiceImplTest
         pc1 = spy(new FourHandedSiteswapPatternConstructor());
         pc2 = spy(new TwoHandedSiteswapPatternConstructor());
 
-        patternService = new PatternServiceImpl(patternRepository, Arrays.asList(pc1, pc2));
+        patternRepository = mock(PatternRepository.class);
+        MetricRegistry metricRegistry = new MetricRegistry();
+
+        patternService = new PatternServiceImpl(patternRepository, Arrays.asList(pc1, pc2), metricRegistry);
         patternRepository.deleteAll();
     }
 

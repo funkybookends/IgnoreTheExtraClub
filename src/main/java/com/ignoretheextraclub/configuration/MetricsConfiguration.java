@@ -22,6 +22,13 @@ public class MetricsConfiguration
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetricsConfiguration.class);
 
+    public static final String SUCCESS = "success";
+    public static final String FAILURE = "failure";
+    public static final String FIND = "find";
+    public static final String CREATE = "create";
+    public static final String PATTERN = "pattern";
+    public static final String VIEW = "view";
+
     @Bean
     public MetricRegistry metricRegistry()
     {
