@@ -25,7 +25,7 @@ public class MetricsConfiguration
         return new MetricRegistry();
     }
 
-    @Autowired
+    @Autowired(required = false)
     private void configureGraphiteReporter(final MetricRegistry metricRegistry)
     {
         // TODO get all these props in configuration file and log them out
