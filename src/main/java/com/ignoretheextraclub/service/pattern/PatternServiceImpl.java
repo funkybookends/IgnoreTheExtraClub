@@ -1,11 +1,11 @@
 package com.ignoretheextraclub.service.pattern;
 
 import com.codahale.metrics.MetricRegistry;
+import com.ignoretheextraclub.model.data.Activity;
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.model.data.PatternName;
-import com.ignoretheextraclub.model.data.Post;
 import com.ignoretheextraclub.persistence.PatternRepository;
-import com.ignoretheextraclub.persistence.PostRepository;
+import com.ignoretheextraclub.service.activity.ActivityService;
 import com.ignoretheextraclub.service.pattern.constructors.PatternConstructor;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import org.slf4j.Logger;
@@ -18,8 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,18 +40,18 @@ public class PatternServiceImpl implements PatternService
     private static final Logger LOG = LoggerFactory.getLogger(PatternServiceImpl.class);
 
     private final PatternRepository patternRepository;
-    private final PostRepository postRepository;
+    private final ActivityService activityService;
     private final MetricRegistry metricRegistry;
     private final List<PatternConstructor> constructorList;
 
     @Autowired
     public PatternServiceImpl(final PatternRepository patternRepository,
-            PostRepository postRepository,
+            ActivityService activityService,
             final List<PatternConstructor> constructorList,
             final MetricRegistry metricRegistry)
     {
         this.patternRepository = patternRepository;
-        this.postRepository = postRepository;
+        this.activityService = activityService;
         this.metricRegistry = metricRegistry;
 
         constructorList.sort(Comparator.comparing(PatternConstructor::getPriority));
@@ -132,7 +130,7 @@ public class PatternServiceImpl implements PatternService
 
                         metricRegistry.meter(MetricRegistry.name(PATTERN, CREATE)).mark();
 
-                        createPostForNewPattern(pattern);
+                        activityService.recordNewPattern(pattern);
 
                         return pattern;
                     }
@@ -178,22 +176,5 @@ public class PatternServiceImpl implements PatternService
                 .getCount();
 
         patternName.setUsages(count);
-    }
-
-    /**
-     * Creates a post for a new pattern
-     * @param pattern
-     * @return
-     */
-    private Post createPostForNewPattern(final Pattern pattern)
-    {
-        final Post post = new Post(null,
-                pattern.getCreatedDate(),
-                pattern.getMiniTitle(),
-                pattern.getMiniSubtitle(),
-                "New Pattern",
-                Collections.singletonList("new-pattern"));
-
-        return postRepository.save(post);
     }
 }

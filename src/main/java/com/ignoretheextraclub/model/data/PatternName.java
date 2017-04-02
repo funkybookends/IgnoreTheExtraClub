@@ -11,16 +11,15 @@ import java.util.Comparator;
  * Created by caspar on 06/02/17.
  */
 
-public class PatternName
-        implements Comparable
+public class PatternName implements Comparable
 {
-    private @Indexed(unique = true)     String  name;
-    private              int     weight; // Used to override the usages, if admin prefers
+    private @Indexed(unique = true) String name;
+    private int weight; // Used to override the usages, if admin prefers
     private @CreatedDate Instant createdDate;
     private @Transient long usages;
 
     public PatternName(final String name,
-                       final int weight)
+            final int weight)
     {
         this.name = name;
         this.weight = weight;
@@ -65,7 +64,7 @@ public class PatternName
     }
 
     public static String getId(final String siteswapType,
-                               final String name)
+            final String name)
     {
         return siteswapType + ":" + name;
     }

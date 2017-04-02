@@ -4,7 +4,7 @@ import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.ignoretheextraclub.model.data.User;
 import com.ignoretheextraclub.service.pattern.PatternService;
-import com.ignoretheextraclub.service.post.PostService;
+import com.ignoretheextraclub.service.activity.ActivityService;
 import com.ignoretheextraclub.service.user.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class HomePageController
     private static final String POSTS = "posts";
 
     private final PatternService patternService;
-    private final PostService postService;
+    private final ActivityService activityService;
     private final UsersService   usersService;
 
     private final Meter          HOME_PAGE;
@@ -36,12 +36,12 @@ public class HomePageController
     @Autowired
     public HomePageController(final PatternService patternService,
             final UsersService usersService,
-            final PostService postService,
+            final ActivityService activityService,
             final MetricRegistry metricRegistry)
     {
         this.patternService = patternService;
         this.usersService = usersService;
-        this.postService = postService;
+        this.activityService = activityService;
 
         this.HOME_PAGE = metricRegistry.meter(MetricRegistry.name("page-views", "/"));
         this.HELLO_PAGE = metricRegistry.meter(MetricRegistry.name("page-views", "/hello"));
@@ -53,7 +53,7 @@ public class HomePageController
     {
         HOME_PAGE.mark();
 
-        model.addAttribute(POSTS, postService.newest(0));
+        model.addAttribute(POSTS, activityService.newest(0));
 
         model.addAttribute(SIDEBAR_NEWEST_PATTERNS, patternService.newest(0));
 

@@ -1,10 +1,10 @@
 package com.ignoretheextraclub.model.data;
 
-import com.ignoretheextraclub.model.view.PageViewable;
 import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
 import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
 import org.eclipse.mylyn.wikitext.mediawiki.core.MediaWikiLanguage;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.StringWriter;
 import java.time.Instant;
@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * Created by caspar on 23/03/17.
  */
-public class Post implements PageViewable
+@Document(collection = "activity")
+public class Activity
 {
     private String id;
     private User author;
@@ -23,7 +24,7 @@ public class Post implements PageViewable
     private String subtitle;
     private String mediaWikiBody;
 
-    public Post(final User author,
+    public Activity(final User author,
             final Instant createdDate,
             final String title,
             final String subtitle,
@@ -39,7 +40,7 @@ public class Post implements PageViewable
                 mediaWikiBody);
     }
 
-    public Post(final String id,
+    public Activity(final String id,
             final User author,
             final Instant createdDate,
             final List<String> tags,
@@ -76,7 +77,6 @@ public class Post implements PageViewable
         this.author = author;
     }
 
-    @Override
     public String getPageTitle()
     {
         return getTitle();
@@ -87,43 +87,36 @@ public class Post implements PageViewable
         return createdDate;
     }
 
-    @Override
     public boolean hasAlternativeNames()
     {
         return false;
     }
 
-    @Override
     public List<String> getAlternativeNames()
     {
         return null;
     }
 
-    @Override
     public boolean hasPageSubtitle()
     {
         return true;
     }
 
-    @Override
     public String getPageSubtitle()
     {
         return getSubtitle();
     }
 
-    @Override
     public boolean hasDetails()
     {
         return false;
     }
 
-    @Override
     public List<Characteristic> getDetails()
     {
         return null;
     }
 
-    @Override
     public String getBody()
     {
         return getBodyHtml();
@@ -177,5 +170,17 @@ public class Post implements PageViewable
         parser.parse(mediaWikiBody);
 
         return writer.toString();
+    }
+
+    private String getPageLink()
+    {
+        if (tags.contains("new-pattern"))
+        {
+            return "/p/" + getTitle();
+        }
+        else
+        {
+            return "/" + getTitle();
+        }
     }
 }

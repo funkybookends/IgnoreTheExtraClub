@@ -3,9 +3,9 @@ package com.ignoretheextraclub.service.impl;
 import com.codahale.metrics.MetricRegistry;
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.model.data.PatternName;
-import com.ignoretheextraclub.model.data.Post;
+import com.ignoretheextraclub.model.data.Activity;
 import com.ignoretheextraclub.persistence.PatternRepository;
-import com.ignoretheextraclub.persistence.PostRepository;
+import com.ignoretheextraclub.service.activity.ActivityService;
 import com.ignoretheextraclub.service.pattern.PatternService;
 import com.ignoretheextraclub.service.pattern.PatternServiceImpl;
 import com.ignoretheextraclub.service.pattern.constructors.PatternConstructor;
@@ -45,7 +45,7 @@ public class PatternServiceImplTest
     // Spys
     private PatternConstructor pc1;
     private PatternConstructor pc2;
-    private PostRepository postRepository;
+    private ActivityService activityService;
 
     @Before
     public void setUp() throws Exception
@@ -54,11 +54,11 @@ public class PatternServiceImplTest
         pc2 = spy(new TwoHandedSiteswapPatternConstructor());
 
         patternRepository = mock(PatternRepository.class);
-        postRepository = mock(PostRepository.class);
+        activityService = mock(ActivityService.class);
         MetricRegistry metricRegistry = new MetricRegistry();
 
         patternService = new PatternServiceImpl(patternRepository,
-                postRepository,
+                activityService,
                 Arrays.asList(pc1, pc2), metricRegistry);
         patternRepository.deleteAll();
     }
@@ -98,7 +98,7 @@ public class PatternServiceImplTest
         verify(pc2, times(1)).createPattern(name);
 
         verify(patternRepository, times(1)).save(actual);
-        verify(postRepository, times(1)).save(any(Post.class));
+        verify(activityService, times(1)).recordNewPattern(actual);
     }
 
     @Test
@@ -115,6 +115,7 @@ public class PatternServiceImplTest
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void GIVEN_newerPatterns_EXPECT_pagesCorrectly() throws Exception
     {
         final Page mockPage = mock(Page.class);

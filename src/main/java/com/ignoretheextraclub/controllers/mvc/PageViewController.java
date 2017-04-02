@@ -1,7 +1,6 @@
 package com.ignoretheextraclub.controllers.mvc;
 
 import com.codahale.metrics.MetricRegistry;
-import com.ignoretheextraclub.model.view.PageViewable;
 import com.ignoretheextraclub.model.data.Pattern;
 import com.ignoretheextraclub.service.pattern.PatternService;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
@@ -45,9 +44,9 @@ public class PageViewController
 
         final Pattern pattern = patternService.getOrCreate(requestName);
 
-        model.addAttribute(PageViewable.ATTRIBUTE_NAME, pattern);
+        model.addAttribute("item", pattern);
         model.addAttribute(HomePageController.SIDEBAR_NEWEST_PATTERNS, patternService.newest(0));
 
-        return PageViewable.VIEW;
+        return "detailspage";
     }
 }
