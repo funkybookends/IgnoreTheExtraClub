@@ -1,8 +1,5 @@
 package com.ignoretheextraclub.model.data;
 
-import com.ignoretheextraclub.model.view.MicroViewable;
-import com.ignoretheextraclub.model.view.MiniViewable;
-import com.ignoretheextraclub.model.view.PageViewable;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
@@ -26,7 +23,7 @@ import java.util.stream.Collectors;
  * Created by caspar on 06/02/17.
  */
 @Document(collection = "patterns")
-public class Pattern implements PageViewable, MicroViewable, MiniViewable
+public class Pattern
 {
     public static final String NAMES_FIELD = "pattern_names";
     private static final Class<?> FOUR_HANDED_SITESWAP = FourHandedSiteswap.class;
@@ -132,7 +129,6 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
                              PatternName.sorter())));
     }
 
-    @Override
     public String getPageTitle()
     {
         return names.iterator()
@@ -145,13 +141,11 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
         return createdDate;
     }
 
-    @Override
     public boolean hasAlternativeNames()
     {
         return names.size() > 1;
     }
 
-    @Override
     public List<String> getAlternativeNames()
     {
         return names.stream()
@@ -159,25 +153,21 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
                     .collect(Collectors.toList());
     }
 
-    @Override
     public boolean hasPageSubtitle()
     {
         return false;
     }
 
-    @Override
     public String getPageSubtitle()
     {
         return null;
     }
 
-    @Override
     public boolean hasDetails()
     {
         return true;
     }
 
-    @Override
     public List<Characteristic> getDetails()
     {
         // TODO refactor into something cleverer
@@ -211,19 +201,16 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
         return characteristics;
     }
 
-    @Override
     public String getBody()
     {
         return "I'm a description";
     }
 
-    @Override
     public String getMiniTitle()
     {
         return getPageTitle();
     }
 
-    @Override
     public String getMiniSubtitle()
     {
         if (siteswap.getClass() == FourHandedSiteswap.class)
@@ -236,7 +223,6 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
         }
     }
 
-    @Override
     public String getMiniDescription()
     {
         if (siteswap.getClass() == FOUR_HANDED_SITESWAP)
@@ -253,25 +239,21 @@ public class Pattern implements PageViewable, MicroViewable, MiniViewable
         return "";
     }
 
-    @Override
     public String getMicroTitle()
     {
         return getPageTitle();
     }
 
-    @Override
     public String getMicroDescription()
     {
         return getMiniDescription();
     }
 
-    @Override
     public int hashCode()
     {
         return siteswap.hashCode();
     }
 
-    @Override
     public boolean equals(Object o)
     {
         if (this == o)
