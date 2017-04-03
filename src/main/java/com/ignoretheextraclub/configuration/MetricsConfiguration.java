@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 @EnableConfigurationProperties(GraphiteProperties.class)
+@Import(MetricReigstryConfiguration.class)
 public class MetricsConfiguration
 {
     private static final Logger LOG = LoggerFactory.getLogger(MetricsConfiguration.class);
@@ -28,12 +30,6 @@ public class MetricsConfiguration
     public static final String CREATE = "create";
     public static final String PATTERN = "pattern";
     public static final String VIEW = "view";
-
-    @Bean
-    public MetricRegistry metricRegistry()
-    {
-        return new MetricRegistry();
-    }
 
     @Autowired
     private void configureGraphiteReporter(final MetricRegistry metricRegistry,
