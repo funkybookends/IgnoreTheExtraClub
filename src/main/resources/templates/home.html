@@ -1,48 +1,57 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
 <head>
-    <title>Ignore the Extra Club - Homepage</title>
-    <link rel="stylesheet" type="text/css" media="all" href="../static/main.css" />
+    <meta charset="utf-8" />
+    <title>Ignore the Extra Club &ndash; Homepage</title>
+    <link rel="stylesheet" type="text/css" media="all" href="/dist/css/small-screens/small-screens.css" />
 </head>
 <body>
-<div th:fragment="header" class="header">
-    <h1>Ignore the Extra Club</h1>
-</div>
+    <div class="container">
+        <header th:fragment="header" class="global-header">
+            <a href="/">
+                <img src="/img/logo.svg" alt="" />
+                Ignore The Extra Club
+            </a>
+            <button>
+                <span>Show menu</span>
+                <span>Hide menu</span>
+            </button>
+            <nav th:class="main-menu" th:fragment="main-menu">
+                <ul class="main-menu">
+                    <li th:text="#{menu.home}"><a href="/">Home</a></li>
+                    <li th:text="#{menu.about}"><a href="about.html" th:href="@{/about}">About</a></li>
+                    <li th:text="#{menu.loginreg}"><a href="login.html" th:href="@{/login}">Log In/Register</a></li>
+                </ul>
+            </nav>
+        </header>
 
-<div th:class="main-menu" th:fragment="main-menu">
-    <ul class="main-menu">
-        <li th:text="#{menu.home}"><a href="/">Home</a></li>
-        <li th:text="#{menu.about}"><a href="about.html" th:href="@{/about}">About</a></li>
-        <li th:text="#{menu.loginreg}"><a href="login.html" th:href="@{/login}">Log In/Register</a></li>
-    </ul>
-</div>
+        <main class="content">
+            <div class="post">
+                <div class="post-header">
+                    <h1>Welcome!</h1>
+                </div>
+                <div class="post-subtitle"></div>
+                <div class="post-body">
+                    <p>Thanks for visiting ItEC! Progress coming soon.</p>
+                </div>
+            </div>
+        </main>
 
-<div class="content">
-    <div class="post">
-        <div class="post-header">
-            <h1>Welcome!</h1>
-        </div>
-        <div class="post-subtitle"></div>
-        <div class="post-body">
-            <p>Thanks for visiting ItEC! Progress coming soon.</p>
-        </div>
+        <aside class="sidebar newest-patterns" th:if="${newestPatterns}" th:fragment="newest-sidebar">
+            <div class="sidebar-section-header newest-patterns">
+                <h4>Newest Patterns</h4>
+            </div>
+            <div class="sidebar-section newest-patterns" th:each="item : ${newestPatterns}">
+                <div class="sidebar-item-header" th:text="${item.microTitle}">
+                    <a href="detailspage.html" th:href="@{/p/${microTitle}}">Micro Title</a>
+                </div>
+                <div class="sidebar-item-body" th:text="${item.microDescription}">Micro Description</div>
+            </div>
+        </aside>
+
+        <footer class="global-footer" th:fragment="footer">
+            <h5>Made by Caspar Nonclercq.</h5>
+        </footer>
     </div>
-</div>
-
-<div class="sidebar newest-patterns" th:if="${newestPatterns}" th:fragment="newest-sidebar">
-    <div class="sidebar-section-header newest-patterns">
-        <h4>Newest Patterns</h4>
-    </div>
-    <div class="sidebar-section newest-patterns" th:each="item : ${newestPatterns}">
-        <div class="sidebar-item-header" th:text="${item.microTitle}">
-            <a href="detailspage.html" th:href="@{/p/${microTitle}}">Micro Title</a>
-        </div>
-        <div class="sidebar-item-body" th:text="${item.microDescription}">Micro Description</div>
-    </div>
-</div>
-
-<div class="footer" th:fragment="footer">
-    <h5>Made by Caspar Nonclercq.</h5>
-</div>
 </body>
 </html>
