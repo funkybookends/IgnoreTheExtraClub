@@ -33,3 +33,7 @@ gradle/
 
 */classes/*
 classes/*
+
+
+# Node
+node_modules/
