@@ -49,7 +49,7 @@ gulp.task('sass', function() {
 		.pipe(
 			sass({
 	            includePaths: [
-	                'node_modules/reset-css'
+	            	'node_modules/purecss/build'
 	            ]
 	        }
         ).on('error', sass.logError))
