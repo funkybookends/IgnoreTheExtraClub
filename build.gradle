@@ -28,8 +28,9 @@ repositories {
 
 ext {
     mongo = "mongo"
-    graphite = "graphite"
+    graphite = "kamon/grafana_graphite"
     dockerHub = "dockerHub"
+    url = "unix:///var/run/docker.sock"
 }
 
 dependencies {
