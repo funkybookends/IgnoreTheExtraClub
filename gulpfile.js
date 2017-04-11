@@ -25,7 +25,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var filePaths = {
 	allFilesInAllFolders: '**/*',
 	css: {
-		src: 'src/css/',
+		src: 'src/main/css/',
 		dist: 'dist/css/'
 	}
 };
