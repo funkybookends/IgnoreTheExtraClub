@@ -17,8 +17,14 @@ var gulp = require('gulp');
 // CSS
 var sass = require('gulp-sass');
 
+// Processing
+var browserify = require('browserify');
+
 // Utilities
 var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 
 /* Variables ---------------------------------------------------------------- */
 
@@ -56,3 +62,22 @@ gulp.task('sass', function() {
 		.pipe(sourcemaps.write())
 		.pipe(gulp.dest('./' + filePaths.css.dist));
 });
+
+/******************************************************************************/
+
+/* SCRIPTS */
+
+/**
+ * Task to compile ES2015+ code into ES5
+ */
+gulp.task('js', function() {
+	return browserify('./src/main/js/app.js')
+		.transform('babelify')
+		.bundle()
+		.pipe(source('app.js'))
+		.pipe(buffer())
+		.pipe(uglify())
+		.pipe(gulp.dest('./dist/js'));
+});
+
+/******************************************************************************/
