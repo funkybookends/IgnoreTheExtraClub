@@ -26,6 +26,9 @@ var uglify = require('gulp-uglify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 
+// Testing
+var karmaServer = require('karma').Server;
+
 /* Variables ---------------------------------------------------------------- */
 
 var filePaths = {
@@ -78,6 +81,23 @@ gulp.task('js', function() {
 		.pipe(buffer())
 		.pipe(uglify())
 		.pipe(gulp.dest('./dist/js'));
+});
+
+/******************************************************************************/
+
+/* TESTING */
+
+/**
+ * Task to fire up Karma Testing Server and run unit tests
+ */
+gulp.task('run-unit-tests', function(done) {
+	return new karmaServer({
+		basePath: '../../../',
+		configFile: require('path').resolve('src/test/js/karma.conf.js'),
+		singleRun: true
+	}, function() {
+		done(); // console stacktrace if not in anon func
+	}).start();
 });
 
 /******************************************************************************/
