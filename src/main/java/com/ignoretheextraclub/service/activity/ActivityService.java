@@ -1,7 +1,7 @@
 package com.ignoretheextraclub.service.activity;
 
-import com.ignoretheextraclub.model.data.Activity;
-import com.ignoretheextraclub.model.data.Pattern;
+import com.ignoretheextraclub.model.Activity;
+import com.ignoretheextraclub.model.juggling.Pattern;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 

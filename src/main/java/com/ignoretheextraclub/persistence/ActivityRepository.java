@@ -1,9 +1,7 @@
 package com.ignoretheextraclub.persistence;
 
-import com.ignoretheextraclub.model.data.Activity;
+import com.ignoretheextraclub.model.Activity;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import java.util.Optional;
 
 /**
  * Created by caspar on 02/04/17.

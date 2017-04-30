@@ -1,5 +1,6 @@
 package com.ignoretheextraclub.model.data;
 
+import com.ignoretheextraclub.model.Activity;
 import org.junit.Test;
 
 import java.util.Collections;

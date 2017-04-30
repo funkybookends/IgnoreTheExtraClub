@@ -1,5 +1,6 @@
-package com.ignoretheextraclub.model.data;
+package com.ignoretheextraclub.model.juggling;
 
+import com.ignoretheextraclub.model.user.Comment;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.siteswap.AbstractSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswap;
@@ -30,13 +31,15 @@ public class Pattern
     private static final Class<?> TWO_HANDED_SITESWAP = TwoHandedSiteswap.class;
 
     private final String id;
-    private final @Transient AbstractSiteswap siteswap;
+    private @Transient final AbstractSiteswap siteswap;
     private final String siteswapConstructor;
     private final String siteswapTypeSimpleName;
-    private final @Field(NAMES_FIELD) TreeSet<PatternName> names;
-    private final @CreatedDate Instant createdDate;
+    private @Field(NAMES_FIELD) final TreeSet<PatternName> names;
+    private @CreatedDate final Instant createdDate;
+    private final List<Comment> comments;
 
-    public Pattern(final AbstractSiteswap siteswap, final PatternName... names)
+    public Pattern(final AbstractSiteswap siteswap,
+                   final PatternName... names)
     {
         this(siteswap, asSet(names));
     }
@@ -49,6 +52,7 @@ public class Pattern
         this.id = null;
         this.createdDate = Instant.now();
         this.names = names;
+        this.comments = new ArrayList<>();
 
         if (siteswap.getClass() == FOUR_HANDED_SITESWAP || siteswap.getClass() == TWO_HANDED_SITESWAP)
         {
@@ -63,20 +67,26 @@ public class Pattern
         }
     }
 
+    private static TreeSet<PatternName> asSet(final PatternName... names)
+    {
+        return Arrays.stream(names)
+                     .collect(Collectors.toCollection(() -> new TreeSet<>(PatternName.sorter())));
+    }
+
     @PersistenceConstructor
-    Pattern(String id,
-            String siteswapConstructor,
-            String siteswapTypeSimpleName,
-            TreeSet<PatternName> names,
-            Instant createdDate)
-            throws
-            InvalidSiteswapException
+    public Pattern(final String id,
+                   final String siteswapConstructor,
+                   final String siteswapTypeSimpleName,
+                   final TreeSet<PatternName> names,
+                   final Instant createdDate,
+                   final List<Comment> comments) throws InvalidSiteswapException
     {
         this.id = id;
         this.siteswapConstructor = siteswapConstructor;
         this.siteswapTypeSimpleName = siteswapTypeSimpleName;
         this.names = names;
         this.createdDate = createdDate;
+        this.comments = comments;
 
         if (siteswapTypeSimpleName.equals(FourHandedSiteswap.class.getSimpleName()))
         {
@@ -88,8 +98,7 @@ public class Pattern
         }
         else
         {
-            throw new UnsupportedOperationException(
-                    "Could not reconstruct siteswap.");
+            throw new UnsupportedOperationException("Could not reconstruct siteswap.");
         }
     }
 
@@ -112,28 +121,13 @@ public class Pattern
     public Optional<PatternName> getName(final String name)
     {
         return names.stream()
-                    .filter(patternName -> patternName.getName()
-                                                      .equals(name))
+                    .filter(patternName -> patternName.getName().equals(name))
                     .findFirst();
     }
 
     public void setName(final PatternName patternName)
     {
         this.names.add(patternName);
-    }
-
-    private static TreeSet<PatternName> asSet(final PatternName... names)
-    {
-        return Arrays.stream(names)
-                     .collect(Collectors.toCollection(() -> new TreeSet<PatternName>(
-                             PatternName.sorter())));
-    }
-
-    public String getPageTitle()
-    {
-        return names.iterator()
-                    .next()
-                    .getName(); // Returns the first name
     }
 
     public Instant getCreatedDate()
@@ -174,28 +168,24 @@ public class Pattern
         final List<Characteristic> characteristics = new ArrayList<>();
 
         characteristics.add(new Characteristic("Period", siteswap.getPeriod()));
-        characteristics.add(new Characteristic("Objects",
-                                               siteswap.getNumObjects()));
-        characteristics.add(new Characteristic("Grounded",
-                                               siteswap.isGrounded()));
+        characteristics.add(new Characteristic("Objects", siteswap.getNumObjects()));
+        characteristics.add(new Characteristic("Grounded", siteswap.isGrounded()));
 
         if (siteswap.getClass() == FOUR_HANDED_SITESWAP)
         {
             FourHandedSiteswap fhs = (FourHandedSiteswap) this.siteswap;
-            characteristics.add(new Characteristic("Siteswap",
-                                                   fhs.getStringSiteswap()));
+            characteristics.add(new Characteristic("Siteswap", fhs.getStringSiteswap()));
             characteristics.add(new Characteristic("Leader Clubs",
-                                                   fhs.getLeaderStartingFirstHandObjects() + " + " + fhs.getLeaderStartingSecondHandObjects()));
+                    fhs.getLeaderStartingFirstHandObjects() + " + " + fhs.getLeaderStartingSecondHandObjects()));
             characteristics.add(new Characteristic("Follower Clubs",
-                                                   fhs.getFollowerStartingFirstHandObjects() + " + " + fhs.getFollowerStartingSecondHandObjects()));
+                    fhs.getFollowerStartingFirstHandObjects() + " + " + fhs.getFollowerStartingSecondHandObjects()));
         }
         else if (siteswap.getClass() == TWO_HANDED_SITESWAP)
         {
             TwoHandedSiteswap ths = (TwoHandedSiteswap) this.siteswap;
-            characteristics.add(new Characteristic("Siteswap",
-                                                   ths.getStringSiteswap()));
+            characteristics.add(new Characteristic("Siteswap", ths.getStringSiteswap()));
             characteristics.add(new Characteristic("Hands",
-                                                   ths.getFirstStartingHandObjects() + " + " + ths.getSecondStartingHandObjects()));
+                    ths.getFirstStartingHandObjects() + " + " + ths.getSecondStartingHandObjects()));
         }
 
         return characteristics;
@@ -211,6 +201,13 @@ public class Pattern
         return getPageTitle();
     }
 
+    public String getPageTitle()
+    {
+        return names.iterator()
+                    .next()
+                    .getName(); // Returns the first name
+    }
+
     public String getMiniSubtitle()
     {
         if (siteswap.getClass() == FourHandedSiteswap.class)
@@ -221,6 +218,16 @@ public class Pattern
         {
             return siteswap.toString(); // TODO improve
         }
+    }
+
+    public String getMicroTitle()
+    {
+        return getPageTitle();
+    }
+
+    public String getMicroDescription()
+    {
+        return getMiniDescription();
     }
 
     public String getMiniDescription()
@@ -239,14 +246,14 @@ public class Pattern
         return "";
     }
 
-    public String getMicroTitle()
+    public List<Comment> getComments()
     {
-        return getPageTitle();
+        return comments;
     }
 
-    public String getMicroDescription()
+    public boolean addComment(final Comment comment)
     {
-        return getMiniDescription();
+        return this.comments.add(comment);
     }
 
     public int hashCode()

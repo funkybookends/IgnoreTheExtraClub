@@ -1,11 +1,11 @@
-package com.ignoretheextraclub.service.pattern;
+package com.ignoretheextraclub.service.pattern.impl;
 
 import com.codahale.metrics.MetricRegistry;
-import com.ignoretheextraclub.model.data.Activity;
-import com.ignoretheextraclub.model.data.Pattern;
-import com.ignoretheextraclub.model.data.PatternName;
+import com.ignoretheextraclub.model.juggling.Pattern;
+import com.ignoretheextraclub.model.juggling.PatternName;
 import com.ignoretheextraclub.persistence.PatternRepository;
 import com.ignoretheextraclub.service.activity.ActivityService;
+import com.ignoretheextraclub.service.pattern.PatternService;
 import com.ignoretheextraclub.service.pattern.constructors.PatternConstructor;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -46,22 +45,27 @@ public class PatternServiceImpl implements PatternService
 
     @Autowired
     public PatternServiceImpl(final PatternRepository patternRepository,
-            ActivityService activityService,
-            final List<PatternConstructor> constructorList,
-            final MetricRegistry metricRegistry)
+                              ActivityService activityService,
+                              final List<PatternConstructor> constructorList,
+                              final MetricRegistry metricRegistry)
     {
         this.patternRepository = patternRepository;
         this.activityService = activityService;
         this.metricRegistry = metricRegistry;
 
-        constructorList.sort(Comparator.comparing(PatternConstructor::getPriority));
+        constructorList.sort(Comparator.comparing(PatternConstructor::getOrder)); // TODO check if line is redundant thanks to PriorityOrder
+
         this.constructorList = constructorList;
 
-        LOG.info("ConstructorList: {}",
+        LOG.info("Constructor List: {}",
                 constructorList.stream()
-                        .map(pc -> pc.getClass()
-                                .getSimpleName())
-                        .collect(Collectors.joining(", ")));
+                               .map(pc -> pc.getClass().getSimpleName())
+                               .collect(Collectors.joining(", ")));
+    }
+
+    private void populateMetrics(final Pattern pattern)
+    {
+        pattern.getNames().forEach(this::populateMetrics);
     }
 
     @Override
@@ -70,12 +74,16 @@ public class PatternServiceImpl implements PatternService
         final Optional<Pattern> patternOptional = patternRepository.findByName(
                 name);
 
-        metricRegistry.meter(MetricRegistry.name(PATTERN, FIND,
-                patternOptional.isPresent() ? SUCCESS : FAILURE,
-                name))
-                .mark();
+        metricRegistry.meter(MetricRegistry.name(PATTERN, FIND, patternOptional.isPresent() ? SUCCESS : FAILURE, name)).mark();
 
         return patternOptional;
+    }
+
+    private void populateMetrics(final PatternName patternName)
+    {
+        final long count = metricRegistry.meter(MetricRegistry.name(PATTERN, VIEW, patternName.getName())).getCount();
+
+        patternName.setUsages(count);
     }
 
     @Transactional
@@ -92,16 +100,11 @@ public class PatternServiceImpl implements PatternService
             LOG.info("Cannot find pattern [{}], attempting to create.", name);
             for (PatternConstructor patternConstructor : constructorList)
             {
-                Optional<String> naturalName = patternConstructor.getNaturalName(
-                        name);
+                Optional<String> naturalName = patternConstructor.getNaturalName(name);
 
                 if (naturalName.isPresent())
                 {
-                    LOG.info("PatternConstructor [{}] converted [{}] into [{}]",
-                            patternByName.getClass()
-                                    .getSimpleName(),
-                            name,
-                            naturalName.get());
+                    LOG.info("PatternConstructor [{}] converted [{}] into [{}]", patternByName.getClass().getSimpleName(), name, naturalName.get());
 
                     Optional<Pattern> patternByNaturalName = get(naturalName.get());
 
@@ -110,23 +113,15 @@ public class PatternServiceImpl implements PatternService
                         Pattern pattern = patternByNaturalName.get();
                         pattern.setName(new PatternName(name, 0));
 
-                        LOG.debug("Adding new name [{}] to pattern [{}]",
-                                name,
-                                naturalName.get());
+                        LOG.debug("Adding new name [{}] to pattern [{}]", name, naturalName.get());
 
                         return patternRepository.save(pattern);
                     }
                     else
                     {
-                        LOG.info(
-                                "PatternConstructor [{}] constructing new pattern for [{}]",
-                                patternConstructor.getClass()
-                                        .getSimpleName(),
-                                naturalName.get());
+                        LOG.info("PatternConstructor [{}] constructing new pattern for [{}]", patternConstructor.getClass().getSimpleName(), naturalName.get());
 
-                        final Pattern pattern = patternRepository.save(
-                                patternConstructor.createPattern(
-                                        name));
+                        final Pattern pattern = patternRepository.save(patternConstructor.createPattern(name));
 
                         metricRegistry.meter(MetricRegistry.name(PATTERN, CREATE)).mark();
 
@@ -137,8 +132,7 @@ public class PatternServiceImpl implements PatternService
                 }
             }
 
-            throw new InvalidSiteswapException(
-                    "Not valid siteswap of any known kind");
+            throw new InvalidSiteswapException("Not valid siteswap of any known kind");
         }
     }
 
@@ -151,9 +145,8 @@ public class PatternServiceImpl implements PatternService
     @Override
     public Page<Pattern> newest(int page, int size)
     {
-        Pageable pageable = new PageRequest(page,
-                size,
-                new Sort(Sort.Direction.DESC, "createdDate"));
+        final Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.DESC, "createdDate"));
+
         return patternRepository.findAll(pageable);
     }
 
@@ -163,18 +156,9 @@ public class PatternServiceImpl implements PatternService
         return newest(page, DEFAULT_PAGE_SIZE);
     }
 
-    private void populateMetrics(final Pattern pattern)
+    @Override
+    public Optional<Pattern> getById(String patternId)
     {
-        pattern.getNames().forEach(this::populateMetrics);
-    }
-
-    private void populateMetrics(final PatternName patternName)
-    {
-        final long count = metricRegistry.meter(MetricRegistry.name(PATTERN,
-                VIEW,
-                patternName.getName()))
-                .getCount();
-
-        patternName.setUsages(count);
+        return Optional.ofNullable(patternRepository.findOne(patternId));
     }
 }

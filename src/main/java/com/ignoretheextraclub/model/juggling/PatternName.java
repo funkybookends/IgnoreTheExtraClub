@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.model.data;
+package com.ignoretheextraclub.model.juggling;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Transient;
@@ -19,11 +19,17 @@ public class PatternName implements Comparable
     private @Transient long usages;
 
     public PatternName(final String name,
-            final int weight)
+                       final int weight)
     {
         this.name = name;
         this.weight = weight;
         this.createdDate = Instant.now();
+    }
+
+    public static String getId(final String siteswapType,
+                               final String name)
+    {
+        return siteswapType + ":" + name;
     }
 
     public String getName()
@@ -51,6 +57,12 @@ public class PatternName implements Comparable
         this.usages = usages;
     }
 
+    @Override
+    public int compareTo(Object o)
+    {
+        return sorter().compare(this, (PatternName) o);
+    }
+
     public static Comparator<PatternName> sorter()
     {
         return (first, second) ->
@@ -61,17 +73,5 @@ public class PatternName implements Comparable
             }
             return first.name.compareTo(second.name);
         };
-    }
-
-    public static String getId(final String siteswapType,
-            final String name)
-    {
-        return siteswapType + ":" + name;
-    }
-
-    @Override
-    public int compareTo(Object o)
-    {
-        return sorter().compare(this, (PatternName) o);
     }
 }

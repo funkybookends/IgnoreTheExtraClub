@@ -1,4 +1,4 @@
-package com.ignoretheextraclub.model.data;
+package com.ignoretheextraclub.model.request;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,13 +11,17 @@ public class RegistrationRequest
 {
     private static final int MIN_PASSWORD_LENGTH = 8;
 
-    private @NotEmpty                          String username;
-    private @Size(min = MIN_PASSWORD_LENGTH)   String password;
-    private @Size(min = MIN_PASSWORD_LENGTH) String   matchingPassword;
-
+    private @NotEmpty String username;
+    private @Size(min = MIN_PASSWORD_LENGTH) String password;
+    private @Size(min = MIN_PASSWORD_LENGTH) String matchingPassword;
 
     public RegistrationRequest()
     {
+    }
+
+    public static int getMinPasswordLength()
+    {
+        return MIN_PASSWORD_LENGTH;
     }
 
     public String getUsername()
@@ -48,10 +52,5 @@ public class RegistrationRequest
     public void setMatchingPassword(String matchingPassword)
     {
         this.matchingPassword = matchingPassword;
-    }
-
-    public static int getMinPasswordLength()
-    {
-        return MIN_PASSWORD_LENGTH;
     }
 }

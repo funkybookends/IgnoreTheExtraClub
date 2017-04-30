@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+>
 <head>
     <title>Spring Security Example </title>
 </head>
@@ -8,7 +8,7 @@
 
 <form th:action="@{/register}" th:object="${registrationRequest}" method="post">
     <div>
-        <label> User Name : <input type="text" th:field="*{username}" /> </label>
+        <label> User Name : <input type="text" th:field="*{username}"/> </label>
         <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
             Invalid username.
         </div>

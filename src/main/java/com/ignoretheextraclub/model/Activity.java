@@ -1,5 +1,7 @@
-package com.ignoretheextraclub.model.data;
+package com.ignoretheextraclub.model;
 
+import com.ignoretheextraclub.model.juggling.Characteristic;
+import com.ignoretheextraclub.model.user.User;
 import org.eclipse.mylyn.wikitext.core.parser.MarkupParser;
 import org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder;
 import org.eclipse.mylyn.wikitext.mediawiki.core.MediaWikiLanguage;
@@ -25,11 +27,11 @@ public class Activity
     private String mediaWikiBody;
 
     public Activity(final User author,
-            final Instant createdDate,
-            final String title,
-            final String subtitle,
-            final String mediaWikiBody,
-            final List<String> tags)
+                    final Instant createdDate,
+                    final String title,
+                    final String subtitle,
+                    final String mediaWikiBody,
+                    final List<String> tags)
     {
         this(null,
                 author,
@@ -41,12 +43,12 @@ public class Activity
     }
 
     public Activity(final String id,
-            final User author,
-            final Instant createdDate,
-            final List<String> tags,
-            final String title,
-            final String subtitle,
-            final String mediaWikiBody)
+                    final User author,
+                    final Instant createdDate,
+                    final List<String> tags,
+                    final String title,
+                    final String subtitle,
+                    final String mediaWikiBody)
     {
         this.id = id;
         this.author = author;
@@ -82,9 +84,24 @@ public class Activity
         return getTitle();
     }
 
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(final String title)
+    {
+        this.title = title;
+    }
+
     public Instant getCreatedDate()
     {
         return createdDate;
+    }
+
+    public void setCreatedDate(final Instant createdDate)
+    {
+        this.createdDate = createdDate;
     }
 
     public boolean hasAlternativeNames()
@@ -107,6 +124,16 @@ public class Activity
         return getSubtitle();
     }
 
+    public String getSubtitle()
+    {
+        return subtitle;
+    }
+
+    public void setSubtitle(final String subtitle)
+    {
+        this.subtitle = subtitle;
+    }
+
     public boolean hasDetails()
     {
         return false;
@@ -122,41 +149,6 @@ public class Activity
         return getBodyHtml();
     }
 
-    public void setCreatedDate(final Instant createdDate)
-    {
-        this.createdDate = createdDate;
-    }
-
-    public String getTitle()
-    {
-        return title;
-    }
-
-    public void setTitle(final String title)
-    {
-        this.title = title;
-    }
-
-    public String getSubtitle()
-    {
-        return subtitle;
-    }
-
-    public void setSubtitle(final String subtitle)
-    {
-        this.subtitle = subtitle;
-    }
-
-    public String getMediaWikiBody()
-    {
-        return mediaWikiBody;
-    }
-
-    public void setMediaWikiBody(final String mediaWikiBody)
-    {
-        this.mediaWikiBody = mediaWikiBody;
-    }
-
     // http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.mylyn.wikitext.help.ui%2Fhelp%2Fdevguide%2FWikiText+Developer+Guide.html
     public String getBodyHtml()
     {
@@ -170,6 +162,16 @@ public class Activity
         parser.parse(mediaWikiBody);
 
         return writer.toString();
+    }
+
+    public String getMediaWikiBody()
+    {
+        return mediaWikiBody;
+    }
+
+    public void setMediaWikiBody(final String mediaWikiBody)
+    {
+        this.mediaWikiBody = mediaWikiBody;
     }
 
     private String getPageLink()

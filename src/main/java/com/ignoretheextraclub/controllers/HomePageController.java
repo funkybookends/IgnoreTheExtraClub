@@ -1,19 +1,23 @@
-package com.ignoretheextraclub.controllers.mvc;
+package com.ignoretheextraclub.controllers;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.ignoretheextraclub.model.data.User;
-import com.ignoretheextraclub.service.pattern.PatternService;
+import com.ignoretheextraclub.model.user.User;
 import com.ignoretheextraclub.service.activity.ActivityService;
+import com.ignoretheextraclub.service.pattern.PatternService;
 import com.ignoretheextraclub.service.user.UsersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Created by caspar on 19/03/17.
@@ -21,53 +25,68 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomePageController
 {
-    private static final Logger LOG = LoggerFactory.getLogger(HomePageController.class);
-
     public static final String SIDEBAR_NEWEST_PATTERNS = "newestPatterns";
+    private static final Logger LOG = LoggerFactory.getLogger(HomePageController.class);
     private static final String POSTS = "posts";
 
     private final PatternService patternService;
     private final ActivityService activityService;
-    private final UsersService   usersService;
+    private final UsersService usersService;
 
-    private final Meter          HOME_PAGE;
-    private final Meter HELLO_PAGE;
+    private Meter homePage;
+    private Meter helloPage;
 
     @Autowired
     public HomePageController(final PatternService patternService,
-            final UsersService usersService,
-            final ActivityService activityService,
-            final MetricRegistry metricRegistry)
+                              final UsersService usersService,
+                              final ActivityService activityService)
     {
         this.patternService = patternService;
         this.usersService = usersService;
         this.activityService = activityService;
-
-        this.HOME_PAGE = metricRegistry.meter(MetricRegistry.name("page-views", "/"));
-        this.HELLO_PAGE = metricRegistry.meter(MetricRegistry.name("page-views", "/hello"));
     }
 
-    @GetMapping(value = "/")
+    @Autowired
+    private void configureMeters(final MetricRegistry metricRegistry)
+    {
+        this.homePage = metricRegistry.meter(MetricRegistry.name("page-views", "/"));
+        this.helloPage = metricRegistry.meter(MetricRegistry.name("page-views", "/hello"));
+    }
+    
+    @RequestMapping(
+            path = "/",
+            method = RequestMethod.GET,
+            produces = MediaType.TEXT_HTML_VALUE
+    )
     public String homePage(final Model model,
                            final @AuthenticationPrincipal User user)
     {
-        HOME_PAGE.mark();
+        homePage.mark();
 
         model.addAttribute(POSTS, activityService.newest(0));
-
         model.addAttribute(SIDEBAR_NEWEST_PATTERNS, patternService.newest(0));
 
         return "home";
     }
 
-    @GetMapping(value = "/hello")
+    /**
+     * Method for testing // TODO remove
+     * @param model
+     * @param user
+     * @return
+     */
+    @RequestMapping(
+            path = "/hello",
+            method = RequestMethod.GET,
+            produces = MediaType.TEXT_HTML_VALUE
+    )
     public String hello(final Model model,
                         final @AuthenticationPrincipal User user)
     {
-        HELLO_PAGE.mark();
+        helloPage.mark();
 
-        LOG.info("User: " + user.toString());
         model.addAttribute("user", user);
+
         return "hello";
     }
 }

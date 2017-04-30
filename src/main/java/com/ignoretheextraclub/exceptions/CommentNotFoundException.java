@@ -1,31 +1,31 @@
 package com.ignoretheextraclub.exceptions;
 
 /**
- * Created by caspar on 12/03/17.
+ * Created by caspar on 29/04/17.
  */
-public class UnknownPatternException extends Exception
+public class CommentNotFoundException extends Exception
 {
-    public UnknownPatternException()
+    public CommentNotFoundException()
     {
     }
 
-    public UnknownPatternException(final String patternName)
+    public CommentNotFoundException(final String commentId)
     {
-        super("Could not find pattern [" + patternName + "].");
+        super("Could not find comment with commentId [" + commentId + "].");
     }
 
-    public UnknownPatternException(final String message,
+    public CommentNotFoundException(final String message,
                                    final Throwable cause)
     {
         super(message, cause);
     }
 
-    public UnknownPatternException(final Throwable cause)
+    public CommentNotFoundException(final Throwable cause)
     {
         super(cause);
     }
 
-    public UnknownPatternException(final String message,
+    public CommentNotFoundException(final String message,
                                    final Throwable cause,
                                    final boolean enableSuppression,
                                    final boolean writableStackTrace)

@@ -1,13 +1,12 @@
 package com.ignoretheextraclub.service.impl;
 
 import com.codahale.metrics.MetricRegistry;
-import com.ignoretheextraclub.model.data.Pattern;
-import com.ignoretheextraclub.model.data.PatternName;
-import com.ignoretheextraclub.model.data.Activity;
+import com.ignoretheextraclub.model.juggling.Pattern;
+import com.ignoretheextraclub.model.juggling.PatternName;
 import com.ignoretheextraclub.persistence.PatternRepository;
 import com.ignoretheextraclub.service.activity.ActivityService;
 import com.ignoretheextraclub.service.pattern.PatternService;
-import com.ignoretheextraclub.service.pattern.PatternServiceImpl;
+import com.ignoretheextraclub.service.pattern.impl.PatternServiceImpl;
 import com.ignoretheextraclub.service.pattern.constructors.PatternConstructor;
 import com.ignoretheextraclub.service.pattern.constructors.FourHandedSiteswapPatternConstructor;
 import com.ignoretheextraclub.service.pattern.constructors.TwoHandedSiteswapPatternConstructor;
@@ -55,11 +54,10 @@ public class PatternServiceImplTest
 
         patternRepository = mock(PatternRepository.class);
         activityService = mock(ActivityService.class);
+
         MetricRegistry metricRegistry = new MetricRegistry();
 
-        patternService = new PatternServiceImpl(patternRepository,
-                activityService,
-                Arrays.asList(pc1, pc2), metricRegistry);
+        patternService = new PatternServiceImpl(patternRepository, activityService, Arrays.asList(pc1, pc2), metricRegistry);
         patternRepository.deleteAll();
     }
 

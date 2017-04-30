@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by caspar on 03/04/17.
  */
 @Configuration
-public class MetricReigstryConfiguration
+public class MetricRegistryConfiguration
 {
     @Bean
     public MetricRegistry metricRegistry()

@@ -13,15 +13,16 @@ public class UsernameTakenException extends Exception
 
     public UsernameTakenException()
     {
-        this(DEFAULT_MESSAGE);
+        super(DEFAULT_MESSAGE);
     }
 
-    public UsernameTakenException(String message)
+    public UsernameTakenException(final String username)
     {
-        super(message);
+        super("The username [" + username + "] is not available");
     }
 
-    public UsernameTakenException(String message, Throwable cause)
+    public UsernameTakenException(final String message,
+                                  final Throwable cause)
     {
         super(message, cause);
     }
@@ -31,10 +32,10 @@ public class UsernameTakenException extends Exception
         super(cause);
     }
 
-    public UsernameTakenException(String message,
-                                  Throwable cause,
-                                  boolean enableSuppression,
-                                  boolean writableStackTrace)
+    public UsernameTakenException(final String message,
+                                  final Throwable cause,
+                                  final boolean enableSuppression,
+                                  final boolean writableStackTrace)
     {
         super(message, cause, enableSuppression, writableStackTrace);
     }

@@ -19,10 +19,10 @@ public class GraphiteProperties
     }
 
     public GraphiteProperties(final boolean enabled,
-            final String hostname,
-            final int port,
-            final String prefix,
-            final int periodSeconds)
+                              final String hostname,
+                              final int port,
+                              final String prefix,
+                              final int periodSeconds)
     {
         this.enabled = enabled;
         this.hostname = hostname;

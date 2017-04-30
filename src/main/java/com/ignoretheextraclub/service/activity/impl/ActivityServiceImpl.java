@@ -1,9 +1,10 @@
-package com.ignoretheextraclub.service.activity;
+package com.ignoretheextraclub.service.activity.impl;
 
 import com.codahale.metrics.MetricRegistry;
-import com.ignoretheextraclub.model.data.Activity;
-import com.ignoretheextraclub.model.data.Pattern;
+import com.ignoretheextraclub.model.Activity;
+import com.ignoretheextraclub.model.juggling.Pattern;
 import com.ignoretheextraclub.persistence.ActivityRepository;
+import com.ignoretheextraclub.service.activity.ActivityService;
 import com.ignoretheextraclub.service.pattern.PatternService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public class ActivityServiceImpl implements ActivityService
 
     @Autowired
     public ActivityServiceImpl(final ActivityRepository activityRepository,
-            final MetricRegistry metricRegistry)
+                               final MetricRegistry metricRegistry)
     {
         this.activityRepository = activityRepository;
         this.metricRegistry = metricRegistry;
@@ -39,18 +40,17 @@ public class ActivityServiceImpl implements ActivityService
     }
 
     @Override
-    public Page newest(final int page, final int size)
-    {
-        Pageable pageable = new PageRequest(page,
-                size,
-                new Sort(Sort.Direction.DESC, "createdDate"));
-        return activityRepository.findAll(pageable);
-    }
-
-    @Override
     public Page newest(int page)
     {
         return newest(page, PatternService.DEFAULT_PAGE_SIZE);
+    }
+
+    @Override
+    public Page newest(final int page,
+                       final int size)
+    {
+        Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.DESC, "createdDate"));
+        return activityRepository.findAll(pageable);
     }
 
     @Override
