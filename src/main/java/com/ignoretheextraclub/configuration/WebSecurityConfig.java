@@ -32,7 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                         "/home",
 //                        DefaultErrorController.ERROR_PATH,
                         "/p/**",
-                        "/register")
+                        "/register",
+                        "/css/**",
+                        "/img/**",
+                        "/js/**"
+                        )
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -15,5 +15,4 @@ public class StaticContentConfiguration extends WebMvcConfigurerAdapter
     {
         // No static content as of yet.
     }
-
 }
