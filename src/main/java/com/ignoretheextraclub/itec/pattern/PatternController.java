@@ -1,14 +1,10 @@
 package com.ignoretheextraclub.itec.pattern;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ignoretheextraclub.itec.exception.UnknownPatternTypeException;
-import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 
 @RestController
 public class PatternController
@@ -80,11 +76,5 @@ public class PatternController
 	public Pattern getPattern(@PathVariable(NAME) final String name)
 	{
 		return patternService.getPattern(name);
-	}
-
-	@ExceptionHandler(InvalidSiteswapException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid siteswap")
-	public void invalidSiteswapExceptionMessage()
-	{
 	}
 }

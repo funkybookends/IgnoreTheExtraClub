@@ -101,7 +101,8 @@ public class Pattern
 	public static class Links
 	{
 		/**
-		 * A link to the Causal Diagram SVG for this pattern.
+		 * A link to the Causal Diagram SVG for this pattern. Note that the
+		 * header <b>"Accept: image/svg+xml"</b> must be sent.
 		 */
 		String causalDiagramSvg;
 	}

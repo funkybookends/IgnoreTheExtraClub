@@ -37,7 +37,7 @@ public class SiteswapFactoriesConfiguration
 			"ths", "TwoHandedSiteswap", "Two Handed Siteswap");
 
 		putValueWithKeys(map, PassingSiteswapFactory.getDefault(),
-			"passing");
+			"passing", "Synchronous Passing Siteswap");
 
 		return map;
 	}
