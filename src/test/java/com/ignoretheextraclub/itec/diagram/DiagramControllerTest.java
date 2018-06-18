@@ -14,13 +14,10 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ignoretheextraclub.itec.RestDocsConfiguration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
-
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DiagramControllerTest
@@ -45,7 +42,7 @@ public class DiagramControllerTest
 	@Test
 	public void test975() throws Exception
 	{
-		api.perform(get("/p/Four Handed Siteswap/975")
+		api.perform(get("/p/Four Handed Siteswap/975/causal-diagram")
 			.accept(DiagramController.IMAGE_SVG_XML))
 			.andDo(print())
 			.andExpect(status().isOk());
@@ -54,7 +51,7 @@ public class DiagramControllerTest
 	@Test
 	public void testfhs975() throws Exception
 	{
-		api.perform(get("/p/fhs/975")
+		api.perform(get("/p/fhs/975/causal-diagram")
 			.accept(DiagramController.IMAGE_SVG_XML))
 			.andDo(print())
 			.andExpect(status().isOk());
@@ -63,7 +60,7 @@ public class DiagramControllerTest
 	@Test
 	public void testSixClubTwoCount() throws Exception
 	{
-		api.perform(get("/p/Synchronous Passing Siteswap/<3p|3p><3|3>")
+		api.perform(get("/p/Synchronous Passing Siteswap/<3p|3p><3|3>/causal-diagram")
 			.accept(DiagramController.IMAGE_SVG_XML))
 			.andDo(print())
 			.andExpect(status().isOk());

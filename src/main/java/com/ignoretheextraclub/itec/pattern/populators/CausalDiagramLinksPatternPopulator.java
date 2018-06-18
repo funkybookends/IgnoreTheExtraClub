@@ -14,6 +14,6 @@ public class CausalDiagramLinksPatternPopulator implements LinksPatternPopulator
 	@Override
 	public void populate(final Pattern.Links.LinksBuilder builder, final Siteswap siteswap)
 	{
-		builder.causalDiagramSvg("/p/" + siteswap.getType() + "/" + siteswap.toString());
+		builder.causalDiagramSvg("/p/" + siteswap.getType() + "/" + siteswap.toString() + "/causal-diagram");
 	}
 }

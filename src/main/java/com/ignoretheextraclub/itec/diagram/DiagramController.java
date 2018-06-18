@@ -35,8 +35,9 @@ public class DiagramController
 	 *
 	 * @throws UnknownPatternTypeException        If the type is not known
 	 * @throws CausalDiagramNotAvailableException If a causal diagram cannot be produced
-	 */
-	@GetMapping(value = "/p/{type}/{name}", produces = IMAGE_SVG_XML)
+	 * @see com.ignoretheextraclub.itec.pattern.populators.CausalDiagramLinksPatternPopulator
+	 * */
+	@GetMapping(value = "/p/{type}/{name}/causal-diagram", produces = IMAGE_SVG_XML)
 	@ResponseBody
 	public String getPatternCausalDiagram(@PathVariable("type") final String type,
 	                                      @PathVariable("name") final String name)
