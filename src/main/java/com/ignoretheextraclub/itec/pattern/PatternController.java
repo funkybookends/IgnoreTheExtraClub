@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ignoretheextraclub.itec.exception.UnknownPatternTypeException;
+import com.ignoretheextraclub.itec.siteswap.SiteswapType;
 
 @RestController
 public class PatternController
@@ -49,7 +50,7 @@ public class PatternController
 	                                @PathVariable(NAME) final String name)
 		throws UnknownPatternTypeException
 	{
-		return patternService.getPattern(type, name);
+		return patternService.getPattern(SiteswapType.resolveType(type), name);
 	}
 
 	/**

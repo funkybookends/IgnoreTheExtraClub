@@ -1,6 +1,7 @@
 package com.ignoretheextraclub.itec.pattern;
 
 import com.ignoretheextraclub.itec.exception.UnknownPatternTypeException;
+import com.ignoretheextraclub.itec.siteswap.SiteswapType;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 
 public interface PatternService
@@ -17,7 +18,7 @@ public interface PatternService
 	 * @throws InvalidSiteswapException If no pattern could be found or created
 	 *                                  for this name and this type.
 	 */
-	Pattern getPattern(String type, String name) throws InvalidSiteswapException, UnknownPatternTypeException;
+	Pattern getPattern(SiteswapType type, String name) throws InvalidSiteswapException, UnknownPatternTypeException;
 
 	/**
 	 * Finds a specific pattern for the name of any type.

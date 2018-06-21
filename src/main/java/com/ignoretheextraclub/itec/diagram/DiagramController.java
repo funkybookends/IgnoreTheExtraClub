@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ignoretheextraclub.itec.exception.CausalDiagramNotAvailableException;
 import com.ignoretheextraclub.itec.exception.UnknownPatternTypeException;
 import com.ignoretheextraclub.itec.siteswap.SiteswapService;
+import com.ignoretheextraclub.itec.siteswap.SiteswapType;
 import com.ignoretheextraclub.siteswapfactory.siteswap.Siteswap;
 
 @Controller
@@ -43,7 +44,7 @@ public class DiagramController
 	                                      @PathVariable("name") final String name)
 		throws UnknownPatternTypeException, CausalDiagramNotAvailableException
 	{
-		final Siteswap siteswap = siteswapService.getSiteswap(type, name);
+		final Siteswap siteswap = siteswapService.getSiteswap(SiteswapType.resolveType(type), name);
 		return causalDiagramService.getCausalDiagramSvg(siteswap);
 	}
 }

@@ -18,7 +18,7 @@ public interface SiteswapService
 	 * @throws InvalidSiteswapException If no pattern could be found or created
 	 *                                  for this name and this type.
 	 */
-	Siteswap getSiteswap(String type, String name) throws InvalidSiteswapException, UnknownPatternTypeException;
+	Siteswap getSiteswap(SiteswapType type, String name) throws InvalidSiteswapException, UnknownPatternTypeException;
 
 	/**
 	 * Finds a specific pattern for the name of any type.

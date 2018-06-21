@@ -3,13 +3,14 @@ package com.ignoretheextraclub.itec.pattern.populators;
 import org.springframework.stereotype.Component;
 
 import com.ignoretheextraclub.itec.pattern.Pattern;
+import com.ignoretheextraclub.itec.pattern.PatternPopulator;
 import com.ignoretheextraclub.siteswapfactory.siteswap.Siteswap;
 
 @Component
-public class IsGroundedSiteswapDetailsPatternPopulator implements SiteswapDetailsPatternPopulator
+public class IsGroundedSiteswapDetailsPatternPopulator implements PatternPopulator
 {
 	@Override
-	public void populate(final Pattern.SiteswapDetails.SiteswapDetailsBuilder builder, final Siteswap siteswap)
+	public void populate(final Pattern.PatternBuilder builder, final Siteswap siteswap)
 	{
 		builder.grounded(siteswap.isGrounded());
 	}

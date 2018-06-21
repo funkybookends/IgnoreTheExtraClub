@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.ignoretheextraclub.itec.exception.CausalDiagramNotAvailableException;
+import com.ignoretheextraclub.itec.siteswap.SiteswapType;
 import com.ignoretheextraclub.siteswapfactory.diagram.causal.CausalDiagram;
 import com.ignoretheextraclub.siteswapfactory.diagram.causal.converter.CausalDiagramDrawer;
 import com.ignoretheextraclub.siteswapfactory.siteswap.Siteswap;
@@ -18,10 +19,10 @@ public class CausalDiagramServiceImpl implements CausalDiagramService
 	private static final CausalDiagramDrawer.GraphicsSupplier<SVGGraphics2D> SVG_GRAPHICS_SUPPLIER = point2D -> new SVGGraphics2D((int) point2D.getX(), (int) point2D.getY());
 
 	private final CausalDiagramDrawer causalDiagramDrawer;
-	private final Map<String, Function<Siteswap, CausalDiagram>> mappers;
+	private final Map<SiteswapType, Function<Siteswap, CausalDiagram>> mappers;
 
 	public CausalDiagramServiceImpl(final CausalDiagramDrawer svgCausalDiagramDrawer,
-	                                @Qualifier("siteswapTypeToCausalDiagramMapper") final Map<String, Function<Siteswap, CausalDiagram>> mappers)
+	                                @Qualifier("siteswapTypeToCausalDiagramMapper") final Map<SiteswapType, Function<Siteswap, CausalDiagram>> mappers)
 	{
 		this.causalDiagramDrawer = svgCausalDiagramDrawer;
 		this.mappers = mappers;
@@ -30,13 +31,16 @@ public class CausalDiagramServiceImpl implements CausalDiagramService
 	@Override
 	public String getCausalDiagramSvg(final Siteswap siteswap) throws CausalDiagramNotAvailableException
 	{
-		final Function<Siteswap, CausalDiagram> drawer = mappers.get(siteswap.getType());
+		final Function<Siteswap, CausalDiagram> drawer = mappers.get(SiteswapType.getType(siteswap));
+
 		if (drawer == null)
 		{
 			throw new CausalDiagramNotAvailableException();
 		}
+
 		final CausalDiagram causalDiagram = drawer.apply(siteswap);
-		final SVGGraphics2D apply = causalDiagramDrawer.apply(causalDiagram, SVG_GRAPHICS_SUPPLIER);
-		return apply.getSVGDocument();
+		final SVGGraphics2D diagram = causalDiagramDrawer.apply(causalDiagram, SVG_GRAPHICS_SUPPLIER);
+
+		return diagram.getSVGDocument();
 	}
 }

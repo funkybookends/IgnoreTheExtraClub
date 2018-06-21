@@ -7,6 +7,7 @@ import java.util.function.Function;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.ignoretheextraclub.itec.siteswap.SiteswapType;
 import com.ignoretheextraclub.siteswapfactory.diagram.causal.CausalDiagram;
 import com.ignoretheextraclub.siteswapfactory.diagram.causal.converter.CausalDiagramDrawer;
 import com.ignoretheextraclub.siteswapfactory.diagram.causal.converter.CausalDiagramToSvg;
@@ -33,15 +34,15 @@ public class DiagramConfiguration
 	}
 
 	@Bean
-	public Map<String, Function<Siteswap, CausalDiagram>> siteswapTypeToCausalDiagramMapper(final CausalDiagramProperties causalDiagramProperties)
+	public Map<SiteswapType, Function<Siteswap, CausalDiagram>> siteswapTypeToCausalDiagramMapper(final CausalDiagramProperties causalDiagramProperties)
 	{
 		final FhsToCausalDiagram fhsToCausalDiagram = new FhsToCausalDiagram(causalDiagramProperties);
 		final PassingSiteswapToCausalDiagram passingSiteswapToCausalDiagram = new PassingSiteswapToCausalDiagram(causalDiagramProperties);
 
-		final Map<String, Function<Siteswap, CausalDiagram>> map = new HashMap<>();
+		final Map<SiteswapType, Function<Siteswap, CausalDiagram>> map = new HashMap<>();
 
-		map.put("Four Handed Siteswap", (siteswap -> fhsToCausalDiagram.apply((FourHandedSiteswap) siteswap)));
-		map.put("Synchronous Passing Siteswap", (siteswap -> passingSiteswapToCausalDiagram.apply((PassingSiteswap) siteswap)));
+		map.put(SiteswapType.FOUR_HANDED_SITESWAP, (siteswap -> fhsToCausalDiagram.apply((FourHandedSiteswap) siteswap)));
+		map.put(SiteswapType.PASSING_SITESWAP, (siteswap -> passingSiteswapToCausalDiagram.apply((PassingSiteswap) siteswap)));
 
 		return map;
 	}

@@ -15,11 +15,11 @@ import com.ignoretheextraclub.siteswapfactory.siteswap.Siteswap;
 @Component
 public class SiteswapServiceImpl implements SiteswapService
 {
-	private final Map<String, SiteswapFactory> typedConstructors;
+	private final Map<SiteswapType, SiteswapFactory> typedConstructors;
 	private final SiteswapFactory defaultConstructor;
 	private final SiteswapRequestBuilder siteswapRequestBuilder;
 
-	public SiteswapServiceImpl(@Qualifier("typedConstructors") final Map<String, SiteswapFactory> typedConstructors,
+	public SiteswapServiceImpl(@Qualifier("typedConstructors") final Map<SiteswapType, SiteswapFactory> typedConstructors,
 	                           @Qualifier("defaultSiteswapFactory") final SiteswapFactory defaultSiteswapFactory,
 	                           final SiteswapRequestBuilder siteswapRequestBuilder)
 	{
@@ -29,7 +29,7 @@ public class SiteswapServiceImpl implements SiteswapService
 	}
 
 	@Override
-	public Siteswap getSiteswap(final String type, final String name) throws InvalidSiteswapException, UnknownPatternTypeException
+	public Siteswap getSiteswap(final SiteswapType type, final String name) throws InvalidSiteswapException, UnknownPatternTypeException
 	{
 		return Optional.ofNullable(typedConstructors.get(type))
 			.orElseThrow(UnknownPatternTypeException::new)

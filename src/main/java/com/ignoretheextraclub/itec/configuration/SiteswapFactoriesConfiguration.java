@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.ignoretheextraclub.itec.siteswap.SiteswapType;
 import com.ignoretheextraclub.siteswapfactory.factory.SiteswapConstructor;
 import com.ignoretheextraclub.siteswapfactory.factory.SiteswapFactory;
 import com.ignoretheextraclub.siteswapfactory.factory.SiteswapRequestBuilder;
@@ -26,18 +27,17 @@ import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.constructors.Stri
 public class SiteswapFactoriesConfiguration
 {
 	@Bean
-	public Map<String, SiteswapFactory> typedConstructors()
+	public Map<SiteswapType, SiteswapFactory> typedConstructors()
 	{
-		final HashMap<String, SiteswapFactory> map = new HashMap<>();
+		final Map<SiteswapType, SiteswapFactory> map = new HashMap<>();
 
-		putValueWithKeys(map, FourHandedSiteswapFactory.getDefault(),
-			"fhs", "FourHandedSiteswap", "Four Handed Siteswap");
+		final FourHandedSiteswapFactory fhs = FourHandedSiteswapFactory.getDefault();
+		final TwoHandedVanillaSiteswapFactory ths = TwoHandedVanillaSiteswapFactory.getDefault();
+		final PassingSiteswapFactory passing = PassingSiteswapFactory.getDefault();
 
-		putValueWithKeys(map, TwoHandedVanillaSiteswapFactory.getDefault(),
-			"ths", "TwoHandedSiteswap", "Two Handed Siteswap");
-
-		putValueWithKeys(map, PassingSiteswapFactory.getDefault(),
-			"passing", "Synchronous Passing Siteswap");
+		map.put(SiteswapType.FOUR_HANDED_SITESWAP, fhs);
+		map.put(SiteswapType.TWO_HANDED_SITESWAP, ths);
+		map.put(SiteswapType.PASSING_SITESWAP, passing);
 
 		return map;
 	}
