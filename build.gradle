@@ -40,12 +40,13 @@ repositories {
 
 configurations {
 	jsondoclet
-	all*.exclude module : 'spring-boot-starter-logging'
 }
 
 dependencies {
 	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.1.RELEASE'
-	compile('com.github.funkybookends:SiteswapFactory:0.2.1')
+	compile('com.github.funkybookends:SiteswapFactory:0.2.1') {
+		exclude module : 'slf4j-log4j12'
+	}
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')

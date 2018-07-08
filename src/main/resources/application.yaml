@@ -1,3 +1,9 @@
 spring.jackson:
   serialization.indent_output: true
   default-property-inclusion: non_empty
+
+server:
+  port: 8080
+
+debug: true
+
