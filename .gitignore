@@ -24,13 +24,5 @@ dist/
 nbdist/
 .nb-gradle/
 
-### GRADLE ###
-
-.gradle/
-gradlew
-gradlew.bat
-gradle/
-
-
 */classes/*
 classes/*
