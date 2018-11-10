@@ -1,0 +1,23 @@
+plugins {
+	id 'io.franzbecker.gradle-lombok' version '1.14'
+	id 'java'
+	id 'groovy'
+}
+
+group = 'com.ignoretheextraclub'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
+	jcenter()
+}
+
+dependencies {
+	compile('com.github.funkybookends:SiteswapFactory:0.2.1') 
+	compileOnly('org.projectlombok:lombok')
+	compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.0'
+	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.2-groovy-2.5'
+
+}
