@@ -34,4 +34,17 @@ class PatternHandlerIntegrationTest extends Specification {
 		"Four Handed Siteswap" | _
 		"FourHandedSiteswap" | _
 	}
+
+
+	def "should handle no type specified"() {
+
+	}
+
+	def "should handle invalid siteswap"() {
+
+	}
+
+	def "should handle invalid type"() {
+
+	}
 }

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.ignoretheextraclub'
-version = '0.0.1-SNAPSHOT'
+version = 'latest'
 sourceCompatibility = 1.8
 
 repositories {
@@ -19,5 +19,15 @@ dependencies {
 	compileOnly('org.projectlombok:lombok')
 	compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.0'
 	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.2-groovy-2.5'
-
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.7'
 }
+
+task buildZip(type: Zip) {
+	from compileJava
+	from processResources
+	into('lib') {
+		from configurations.compileClasspath
+	}
+}
+
+build.dependsOn buildZip

@@ -12,7 +12,6 @@ target/
 ### IntelliJ IDEA ###
 .idea
 *.iws
-*.iml
 *.ipr
 
 ### NetBeans ###
@@ -24,8 +23,6 @@ dist/
 nbdist/
 .nb-gradle/
 
-*/classes/*
 classes/*
 /gradle
-.gradle/*
-*/.gradle/*
+*.gradle*

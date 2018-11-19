@@ -1,0 +1,49 @@
+{
+    "ChangeSetName": "add-security",
+    "ChangeSetId": "arn:aws:cloudformation:us-west-2:682111966329:changeSet/add-security/9008afa2-2728-4675-bbef-054c420ab98c",
+    "StackId": "arn:aws:cloudformation:us-west-2:682111966329:stack/itec-stack/5aa59b60-eb6f-11e8-85ba-50a686fc37d2",
+    "StackName": "itec-stack",
+    "CreationTime": "2018-11-19T08:11:52.077Z",
+    "ExecutionStatus": "AVAILABLE",
+    "Status": "CREATE_COMPLETE",
+    "NotificationARNs": [],
+    "RollbackConfiguration": {},
+    "Capabilities": [
+        "CAPABILITY_NAMED_IAM"
+    ],
+    "Changes": [
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "patternLambdaMethod",
+                "PhysicalResourceId": "itec-patte-ZE5E75WI6UAH",
+                "ResourceType": "AWS::ApiGateway::Method",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Integration",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    },
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "ApiKeyRequired",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    }
+                ]
+            }
+        }
+    ]
+}

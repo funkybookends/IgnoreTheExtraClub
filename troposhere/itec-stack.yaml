@@ -1,0 +1,124 @@
+Outputs:
+  ApiEndpoint:
+    Description: Endpoint for this stage of the api
+    Value: !Join
+      - ''
+      - - https://
+        - !Ref 'ITECApi'
+        - .execute-api.us-west-2.amazonaws.com/
+        - v1
+  ApiKey:
+    Description: API key
+    Value: !Ref 'CasparsApiKey'
+Resources:
+  CasparsApiKey:
+    Properties:
+      Name: CasparsApiKey
+      StageKeys:
+        - RestApiId: !Ref 'ITECApi'
+          StageName: !Ref 'v1Stage'
+    Type: AWS::ApiGateway::ApiKey
+  ITECApi:
+    Properties:
+      Name: ITECApi
+    Type: AWS::ApiGateway::RestApi
+  LambdaExecutionRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - apigateway.amazonaws.com
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - logs:*
+                Effect: Allow
+                Resource: arn:aws:logs:*:*:*
+              - Action:
+                  - lambda:*
+                Effect: Allow
+                Resource: '*'
+            Version: '2012-10-17'
+          PolicyName: root
+    Type: AWS::IAM::Role
+  XLUsagePlan:
+    Properties:
+      ApiStages:
+        - ApiId: !Ref 'ITECApi'
+          Stage: !Ref 'v1Stage'
+      Description: A large plan that should suit anyone
+      Quota:
+        Limit: 50000
+        Period: MONTH
+      Throttle:
+        BurstLimit: 500
+        RateLimit: 5000
+      UsagePlanName: XLUsagePlan
+    Type: AWS::ApiGateway::UsagePlan
+  XLUsagePlanKey:
+    Properties:
+      KeyId: !Ref 'CasparsApiKey'
+      KeyType: API_KEY
+      UsagePlanId: !Ref 'XLUsagePlan'
+    Type: AWS::ApiGateway::UsagePlanKey
+  patternFunction:
+    Properties:
+      Code:
+        S3Bucket: itec-lambda-function-artifacts
+        S3Key: pattern-latest.zip
+      Handler: com.ignoretheextraclub.itec.ui.PatternHandler::handleRequest
+      Role: !GetAtt 'LambdaExecutionRole.Arn'
+      Runtime: java8
+    Type: AWS::Lambda::Function
+  patternLambdaMethod:
+    DependsOn: patternFunction
+    Properties:
+      ApiKeyRequired: true
+      AuthorizationType: NONE
+      HttpMethod: POST
+      Integration:
+        Credentials: !GetAtt 'LambdaExecutionRole.Arn'
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - StatusCode: '200'
+          - SelectionPattern: '"statusCode":"400"'
+            StatusCode: '400'
+          - SelectionPattern: '"statusCode":"500"'
+            StatusCode: '500'
+        Type: AWS
+        Uri: !Join
+          - ''
+          - - arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/
+            - !GetAtt 'patternFunction.Arn'
+            - /invocations
+      MethodResponses:
+        - StatusCode: '200'
+      ResourceId: !Ref 'patternResource'
+      RestApiId: !Ref 'ITECApi'
+    Type: AWS::ApiGateway::Method
+  patternResource:
+    Properties:
+      ParentId: !GetAtt 'ITECApi.RootResourceId'
+      PathPart: pattern
+      RestApiId: !Ref 'ITECApi'
+    Type: AWS::ApiGateway::Resource
+  v1Deployment:
+    DependsOn: patternLambdaMethod
+    Properties:
+      RestApiId: !Ref 'ITECApi'
+    Type: AWS::ApiGateway::Deployment
+  v1Stage:
+    Properties:
+      DeploymentId: !Ref 'v1Deployment'
+      RestApiId: !Ref 'ITECApi'
+      StageName: v1
+    Type: AWS::ApiGateway::Stage
+
