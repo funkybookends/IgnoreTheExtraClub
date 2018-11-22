@@ -15,6 +15,7 @@ import com.ignoretheextraclub.itec.description.DescriptionService;
 import com.ignoretheextraclub.itec.description.impl.DescriptionServiceImpl;
 import com.ignoretheextraclub.itec.pattern.PatternPopulator;
 import com.ignoretheextraclub.itec.pattern.PatternService;
+import com.ignoretheextraclub.itec.pattern.impl.CausalDiagramLinksPatternPopulator;
 import com.ignoretheextraclub.itec.pattern.impl.DescriptionPatternPopulator;
 import com.ignoretheextraclub.itec.pattern.impl.IsGroundedSiteswapDetailsPatternPopulator;
 import com.ignoretheextraclub.itec.pattern.impl.IsPrimeSiteswapDetailsPatternPopulator;
@@ -113,7 +114,7 @@ public class PatternModuleConfiguration
 	public List<PatternPopulator> patternPopulators(final DescriptionService descriptionService)
 	{
 		return Arrays.asList(
-			// new CausalDiagramLinksPatternPopulator(),
+			new CausalDiagramLinksPatternPopulator(),
 			new DescriptionPatternPopulator(descriptionService),
 			new IsGroundedSiteswapDetailsPatternPopulator(),
 			new IsPrimeSiteswapDetailsPatternPopulator(),
