@@ -1,41 +1,51 @@
 package com.ignoretheextraclub.itec.siteswap.impl;
 
-import java.util.Map;
 import java.util.Optional;
 
-import com.ignoretheextraclub.itec.exception.UnknownPatternTypeException;
+import javax.inject.Inject;
+
+import com.ignoretheextraclub.itec.ui.Form;
+import com.ignoretheextraclub.itec.ui.SortType;
 import com.ignoretheextraclub.itec.siteswap.SiteswapService;
+import com.ignoretheextraclub.itec.ui.PatternRequest;
+import com.ignoretheextraclub.siteswapfactory.converter.vanilla.semantic.Reducer;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 import com.ignoretheextraclub.siteswapfactory.factory.SiteswapFactory;
+import com.ignoretheextraclub.siteswapfactory.factory.SiteswapRequest;
 import com.ignoretheextraclub.siteswapfactory.factory.SiteswapRequestBuilder;
 import com.ignoretheextraclub.siteswapfactory.siteswap.Siteswap;
+import com.ignoretheextraclub.siteswapfactory.sorters.StartingStrategy;
 
 public class SiteswapServiceImpl implements SiteswapService
 {
-	private final Map<SiteswapType, SiteswapFactory> typedConstructors;
-	private final SiteswapFactory defaultConstructor;
-	private final SiteswapRequestBuilder siteswapRequestBuilder;
+	private final SiteswapFactory defaultSiteswapFactory;
 
-	public SiteswapServiceImpl(final Map<SiteswapType, SiteswapFactory> typedConstructors,
-	                           final SiteswapFactory defaultSiteswapFactory,
-	                           final SiteswapRequestBuilder siteswapRequestBuilder)
+	@Inject
+	public SiteswapServiceImpl(final SiteswapFactory defaultSiteswapFactory)
 	{
-		this.typedConstructors = typedConstructors;
-		this.defaultConstructor = defaultSiteswapFactory;
-		this.siteswapRequestBuilder = siteswapRequestBuilder;
+		this.defaultSiteswapFactory = defaultSiteswapFactory;
 	}
 
 	@Override
-	public Siteswap getSiteswap(final SiteswapType type, final String name) throws InvalidSiteswapException, UnknownPatternTypeException
+	public Siteswap getSiteswap(final PatternRequest patternRequest) throws InvalidSiteswapException
 	{
-		return Optional.ofNullable(typedConstructors.get(type))
-			.orElseThrow(UnknownPatternTypeException::new)
-			.apply(siteswapRequestBuilder.createSiteswapRequest(name));
-	}
+		final Reducer reducer = Optional.ofNullable(patternRequest.getForm())
+			.orElse(Form.REDUCED)
+			.getReducer();
 
-	@Override
-	public Siteswap getSiteswap(final String name) throws InvalidSiteswapException
-	{
-		return defaultConstructor.apply(siteswapRequestBuilder.createSiteswapRequest(name));
+		final StartingStrategy startingStrategy = Optional.ofNullable(patternRequest.getSort())
+			.orElse(SortType.HIGHEST_THROW_FIRST)
+			.getStartingStrategy();
+
+		final SiteswapFactory siteswapFactory = Optional.ofNullable(patternRequest.getType())
+			.map(SiteswapType::getSiteswapFactory)
+			.orElse(defaultSiteswapFactory);
+
+		final SiteswapRequest siteswapRequest = new SiteswapRequestBuilder()
+			.withReducer(reducer)
+			.withStartingStrategy(startingStrategy)
+			.createSiteswapRequest(patternRequest.getSiteswap());
+
+		return siteswapFactory.apply(siteswapRequest);
 	}
 }

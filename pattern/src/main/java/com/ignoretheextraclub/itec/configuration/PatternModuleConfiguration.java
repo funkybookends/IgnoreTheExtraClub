@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Supplier;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import com.ignoretheextraclub.itec.description.DescriptionService;
 import com.ignoretheextraclub.itec.description.impl.DescriptionServiceImpl;
 import com.ignoretheextraclub.itec.pattern.PatternPopulator;
 import com.ignoretheextraclub.itec.pattern.PatternService;
-import com.ignoretheextraclub.itec.pattern.impl.CausalDiagramLinksPatternPopulator;
 import com.ignoretheextraclub.itec.pattern.impl.DescriptionPatternPopulator;
 import com.ignoretheextraclub.itec.pattern.impl.IsGroundedSiteswapDetailsPatternPopulator;
 import com.ignoretheextraclub.itec.pattern.impl.IsPrimeSiteswapDetailsPatternPopulator;
@@ -45,36 +47,46 @@ import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.constructors.Stri
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.constructors.StringToPassingSiteswapConstructor;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.constructors.StringToTwoHandedSiteswapConstructor;
 
-public class Configuration
+import dagger.Module;
+import dagger.Provides;
+
+@Module
+public class PatternModuleConfiguration
 {
-	private static final SingletonProvider<DescriptionContributor> TO_STRING_CONTRIBUTOR = new SingletonProvider<>
-		(ToStringSiteswapDescriptionContributor::new);
-
-	private static final SingletonProvider<SiteswapDescriber> FOUR_HANDED_SITESWAP_DESCRIBER = new SingletonProvider<>(() ->
-		new LocaleIntersectioningDelegatingDescriber(Arrays.asList(TO_STRING_CONTRIBUTOR.get(), new SimpleFourHandedSiteswapDescriber())));
-
-	private static final SingletonProvider<SiteswapDescriber> PASSING_DESCRIBER = new SingletonProvider<>(() ->
-		new LocaleIntersectioningDelegatingDescriber(Arrays.asList(TO_STRING_CONTRIBUTOR.get(), new SimplePassingSiteswapDescriber())));
-
-	private static final SingletonProvider<SiteswapDescriber> DEFAULT_DESCRIBER = new SingletonProvider<>(() ->
-		new DelegatingDescriber(Collections.singletonList(TO_STRING_CONTRIBUTOR.get()), Arrays.asList(Locale.getAvailableLocales())));
-
-	private static final SingletonProvider<Map<SiteswapType, SiteswapFactory>> TYPED_CONSTRUCTORS = new SingletonProvider<>(() ->
+	@Provides
+	@Singleton
+	public DescriptionContributor toStringSiteswapDescriptionContributor()
 	{
-		final Map<SiteswapType, SiteswapFactory> map = new HashMap<>();
+		return new ToStringSiteswapDescriptionContributor();
+	}
 
-		final FourHandedSiteswapFactory fhs = FourHandedSiteswapFactory.getDefault();
-		final TwoHandedVanillaSiteswapFactory ths = TwoHandedVanillaSiteswapFactory.getDefault();
-		final PassingSiteswapFactory passing = PassingSiteswapFactory.getDefault();
+	@Provides
+	@Singleton
+	@Named("fourHandedSiteswapDescriber")
+	public SiteswapDescriber fourHandedSiteswapDescriber(final DescriptionContributor toStringSiteswapDescriptionContributor)
+	{
+		return new LocaleIntersectioningDelegatingDescriber(Arrays.asList(toStringSiteswapDescriptionContributor, new SimpleFourHandedSiteswapDescriber()));
+	}
 
-		map.put(SiteswapType.FOUR_HANDED_SITESWAP, fhs);
-		map.put(SiteswapType.TWO_HANDED_SITESWAP, ths);
-		map.put(SiteswapType.PASSING_SITESWAP, passing);
+	@Provides
+	@Singleton
+	@Named("passingDescriber")
+	public SiteswapDescriber passingDescriber(final DescriptionContributor toStringSiteswapDescriptionContributor)
+	{
+		return new LocaleIntersectioningDelegatingDescriber(Arrays.asList(toStringSiteswapDescriptionContributor, new SimplePassingSiteswapDescriber()));
+	}
 
-		return map;
-	});
+	@Provides
+	@Singleton
+	@Named("defaultDescriber")
+	public SiteswapDescriber defaultDescriber(final DescriptionContributor toStringSiteswapDescriptionContributor)
+	{
+		return new DelegatingDescriber(Collections.singletonList(toStringSiteswapDescriptionContributor), Arrays.asList(Locale.getAvailableLocales()));
+	}
 
-	private static final SingletonProvider<SiteswapFactory> DEFAULT_SITESWAP_FACTORY = new SingletonProvider<>(() ->
+	@Provides
+	@Singleton
+	public SiteswapFactory defaultSiteswapFactory()
 	{
 		final List<SiteswapConstructor<? extends Siteswap>> siteswapConstructors = Arrays.asList(
 			StringToTwoHandedSiteswapConstructor.get(),
@@ -84,19 +96,25 @@ public class Configuration
 		);
 
 		return new SiteswapFactoryImpl(siteswapConstructors);
-	});
+	}
 
-	private static final SingletonProvider<SiteswapRequestBuilder> SITESWAP_REQUEST_BUILDER = new SingletonProvider<>
-		(SiteswapRequestBuilder::new);
+	@Provides
+	@Singleton
+	public DescriptionService descriptionService(@Named("fourHandedSiteswapDescriber") final SiteswapDescriber fourHandedSiteswapDescriber,
+	                                             @Named("passingDescriber") final SiteswapDescriber passingDescriber,
+	                                             @Named("defaultDescriber") final SiteswapDescriber defaultDescriber)
+	{
+		return new DescriptionServiceImpl(fourHandedSiteswapDescriber, passingDescriber, defaultDescriber);
+	}
 
-
-	private static final SingletonProvider<DescriptionService> DESCRIPTION_SERVICE = new SingletonProvider<>(() ->
-		new DescriptionServiceImpl(FOUR_HANDED_SITESWAP_DESCRIBER.get(), PASSING_DESCRIBER.get(), DEFAULT_DESCRIBER.get()));
-
-	private static final SingletonProvider<List<PatternPopulator>> PATTERN_POPULATORS = new SingletonProvider<>(() ->
-		Arrays.asList(
+	@Provides
+	@Singleton
+	@Inject
+	public List<PatternPopulator> patternPopulators(final DescriptionService descriptionService)
+	{
+		return Arrays.asList(
 			// new CausalDiagramLinksPatternPopulator(),
-			new DescriptionPatternPopulator(DESCRIPTION_SERVICE.get()),
+			new DescriptionPatternPopulator(descriptionService),
 			new IsGroundedSiteswapDetailsPatternPopulator(),
 			new IsPrimeSiteswapDetailsPatternPopulator(),
 			new NumHandsSiteswapDetailsPatternPopulator(),
@@ -104,31 +122,20 @@ public class Configuration
 			new NumObjectsSiteswapDetailsPatternPopulator(),
 			new SiteswapSiteswapDetailsPatternPopulator(),
 			new TypePatternPopulator()
-		));
+		);
+	}
 
-	private static final SingletonProvider<SiteswapService> SITESWAP_SERVICE = new SingletonProvider<>(() ->
-		new SiteswapServiceImpl(TYPED_CONSTRUCTORS.get(), DEFAULT_SITESWAP_FACTORY.get(), SITESWAP_REQUEST_BUILDER.get()));
-
-	public static final SingletonProvider<PatternService> PATTERN_SERVICE = new SingletonProvider<>(() ->
-		new PatternServiceImpl(SITESWAP_SERVICE.get(), PATTERN_POPULATORS.get()));
-
-	public static class SingletonProvider<T>
+	@Provides
+	@Singleton
+	public SiteswapService siteswapService(final SiteswapFactory defaultSiteswapFactory)
 	{
+		return new SiteswapServiceImpl(defaultSiteswapFactory);
+	}
 
-		private T singleton;
-		private final Supplier<T> supplier;
-
-		private SingletonProvider(final Supplier<T> supplier)
-		{
-			this.supplier = supplier;
-		}
-
-		public T get()
-		{
-			if (singleton == null) {
-				singleton = supplier.get();
-			}
-			return singleton;
-		}
+	@Provides
+	@Singleton
+	public PatternService PATTERN_SERVICE(final SiteswapService siteswapService, final List<PatternPopulator> patternPopulators)
+	{
+		return new PatternServiceImpl(siteswapService, patternPopulators);
 	}
 }

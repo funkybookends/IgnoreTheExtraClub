@@ -1,84 +1,41 @@
 package com.ignoretheextraclub.itec.siteswap.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import com.ignoretheextraclub.itec.exception.UnknownPatternTypeException;
-import com.ignoretheextraclub.siteswapfactory.siteswap.Siteswap;
+import com.ignoretheextraclub.siteswapfactory.factory.SiteswapFactory;
+import com.ignoretheextraclub.siteswapfactory.factory.impl.FourHandedSiteswapFactory;
+import com.ignoretheextraclub.siteswapfactory.factory.impl.PassingSiteswapFactory;
+import com.ignoretheextraclub.siteswapfactory.factory.impl.SiteswapFactoryImpl;
+import com.ignoretheextraclub.siteswapfactory.siteswap.sync.constructors.StringToTwoHandedSyncSiteswapConstructor;
+import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.constructors.StringToTwoHandedSiteswapConstructor;
 
 public enum SiteswapType
 {
-	FOUR_HANDED_SITESWAP(Names.FOUR_HANDED_SITESWAP_NAME, "fhs", "FourHandedSiteswap", "Four Handed Siteswap", "FHS"),
-	TWO_HANDED_SITESWAP(Names.TWO_HANDED_VANILLA_SITESWAP_NAME, "ths", "Two Handed Siteswap", "TwoHandedVanillaSiteswap", "TwoHandedSiteswap"),
-	PASSING_SITESWAP(Names.PASSING_NAME, "passing")
-	;
+	FOUR_HANDED_SITESWAP
+		(
+			FourHandedSiteswapFactory.getDefault()
+		),
+	TWO_HANDED_SITESWAP
+		(
+			new SiteswapFactoryImpl(Arrays.asList(
+				StringToTwoHandedSiteswapConstructor.get(),
+				StringToTwoHandedSyncSiteswapConstructor.get())
+			)
+		),
+	PASSING_SITESWAP
+		(
+			PassingSiteswapFactory.getDefault()
+		);
 
-	private static final Map<String, SiteswapType> NAMES_TO_TYPE_MAP = buildConstantsMap();
+	private final SiteswapFactory siteswapFactory;
 
-	private static Map<String, SiteswapType> buildConstantsMap()
+	SiteswapType(final SiteswapFactory siteswapFactory)
 	{
-		final Map<String, SiteswapType> map = new HashMap<>();
-
-		Arrays.stream(values()).forEach(siteswapType -> siteswapType.getAllNames().forEach(name -> map.put(name, siteswapType)));
-
-		return map;
+		this.siteswapFactory = siteswapFactory;
 	}
 
-	private final String fullName;
-	private final String localeName;
-	private final List<String> otherNames;
-
-	SiteswapType(final String fullName, final String localeName, final String... otherNames)
+	public SiteswapFactory getSiteswapFactory()
 	{
-		this.fullName = fullName;
-		this.localeName = localeName;
-		this.otherNames = Arrays.asList(otherNames);
-	}
-
-	public String getSiteswapName()
-	{
-		return fullName;
-	}
-
-	public String getLocaleName()
-	{
-		return localeName;
-	}
-
-	public List<String> getOtherNames()
-	{
-		return otherNames;
-	}
-
-	public static SiteswapType resolveType(final String type) throws UnknownPatternTypeException
-	{
-		return Optional.ofNullable(NAMES_TO_TYPE_MAP.get(type)).orElseThrow(UnknownPatternTypeException::new);
-	}
-
-	public static SiteswapType getType(final Siteswap siteswap) throws UnknownPatternTypeException
-	{
-		return resolveType(siteswap.getType());
-	}
-
-	public List<String> getAllNames()
-	{
-		final ArrayList<String> names = new ArrayList<>();
-
-		names.add(fullName);
-		names.add(localeName);
-		names.addAll(otherNames);
-
-		return names;
-	}
-
-	private static class Names
-	{
-		public static final String FOUR_HANDED_SITESWAP_NAME = "Four Handed Siteswap";
-		public static final String TWO_HANDED_VANILLA_SITESWAP_NAME = "Two Handed Vanilla Siteswap";
-		public static final String PASSING_NAME = "Synchronous Passing Siteswap";
+		return siteswapFactory;
 	}
 }

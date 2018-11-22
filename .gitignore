@@ -25,4 +25,5 @@ nbdist/
 
 classes/*
 /gradle
-*.gradle*
+.gradle/*
+*/.gradle/*

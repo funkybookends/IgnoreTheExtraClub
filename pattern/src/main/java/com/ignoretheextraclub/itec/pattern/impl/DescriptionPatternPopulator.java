@@ -3,6 +3,8 @@ package com.ignoretheextraclub.itec.pattern.impl;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.ignoretheextraclub.itec.description.DescriptionService;
@@ -18,6 +20,7 @@ public class DescriptionPatternPopulator implements PatternPopulator
 {
 	private final DescriptionService descriptionService;
 
+	@Inject
 	public DescriptionPatternPopulator(final DescriptionService descriptionService)
 	{
 		this.descriptionService = descriptionService;
