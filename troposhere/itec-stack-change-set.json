@@ -1,9 +1,9 @@
 {
-    "ChangeSetName": "add-security",
-    "ChangeSetId": "arn:aws:cloudformation:us-west-2:682111966329:changeSet/add-security/9008afa2-2728-4675-bbef-054c420ab98c",
+    "ChangeSetName": "set-mapping-to-json",
+    "ChangeSetId": "arn:aws:cloudformation:us-west-2:682111966329:changeSet/set-mapping-to-json/f31d3ded-4578-4371-8199-d3d576f5a16f",
     "StackId": "arn:aws:cloudformation:us-west-2:682111966329:stack/itec-stack/5aa59b60-eb6f-11e8-85ba-50a686fc37d2",
     "StackName": "itec-stack",
-    "CreationTime": "2018-11-19T08:11:52.077Z",
+    "CreationTime": "2018-11-23T22:41:46.760Z",
     "ExecutionStatus": "AVAILABLE",
     "Status": "CREATE_COMPLETE",
     "NotificationARNs": [],
@@ -28,15 +28,6 @@
                         "Target": {
                             "Attribute": "Properties",
                             "Name": "Integration",
-                            "RequiresRecreation": "Never"
-                        },
-                        "Evaluation": "Static",
-                        "ChangeSource": "DirectModification"
-                    },
-                    {
-                        "Target": {
-                            "Attribute": "Properties",
-                            "Name": "ApiKeyRequired",
                             "RequiresRecreation": "Never"
                         },
                         "Evaluation": "Static",

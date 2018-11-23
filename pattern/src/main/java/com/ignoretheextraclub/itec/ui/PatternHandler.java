@@ -8,7 +8,7 @@ import com.ignoretheextraclub.itec.configuration.DaggerPatternComponent;
 import com.ignoretheextraclub.itec.pattern.PatternService;
 import com.ignoretheextraclub.siteswapfactory.exceptions.InvalidSiteswapException;
 
-public class PatternHandler implements RequestHandler<PatternRequest, PatternResponse>
+public class PatternHandler implements RequestHandler<LambdaRequest, PatternResponse>
 {
 	private static final String SITESWAP_MISSING_ERROR = "siteswap must be provided";
 
@@ -28,9 +28,11 @@ public class PatternHandler implements RequestHandler<PatternRequest, PatternRes
 	}
 
 	@Override
-	public PatternResponse handleRequest(final PatternRequest patternRequest,
+	public PatternResponse handleRequest(final LambdaRequest lambdaRequest,
 	                                     final Context context)
 	{
+		final PatternRequest patternRequest = lambdaRequest.getBody();
+
 		final PatternResponse.PatternResponseBuilder builder = PatternResponse.builder()
 			.request(patternRequest);
 

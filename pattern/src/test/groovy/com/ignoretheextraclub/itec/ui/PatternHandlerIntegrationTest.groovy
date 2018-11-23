@@ -16,11 +16,9 @@ class PatternHandlerIntegrationTest extends Specification {
 				Form.REDUCED)
 
 		when:
-		def response = handler.handleRequest(request, null)
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).header("key", "value").build(), null)
 
 		then:
-		response.getErrorMessages().isEmpty()
-
 		with(response) {
 			statusCode == 200
 			errorMessages.isEmpty()
@@ -45,7 +43,7 @@ class PatternHandlerIntegrationTest extends Specification {
 		def request = new PatternRequest()
 
 		when:
-		def response = handler.handleRequest(request, null);
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).build(), null);
 
 		then:
 		with(response) {
@@ -61,7 +59,7 @@ class PatternHandlerIntegrationTest extends Specification {
 				.build()
 
 		when:
-		def response = handler.handleRequest(request, null)
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).build(), null)
 
 		then:
 		with(response) {
@@ -89,7 +87,7 @@ class PatternHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		def response = handler.handleRequest(request, null)
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).build(), null)
 
 		then:
 		with(response) {
@@ -106,7 +104,7 @@ class PatternHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		def response = handler.handleRequest(request, null)
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).build(), null)
 
 		then:
 		with(response) {
@@ -135,7 +133,7 @@ class PatternHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		def response = handler.handleRequest(request, null)
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).build(), null)
 
 		then:
 		with(response) {
@@ -165,7 +163,7 @@ class PatternHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		def response = handler.handleRequest(request, null)
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).build(), null)
 
 		then:
 		with(response) {
@@ -191,7 +189,7 @@ class PatternHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		def response = handler.handleRequest(request, null)
+		def response = handler.handleRequest(LambdaRequest.builder().body(request).build(), null)
 
 		then:
 		with(response) {

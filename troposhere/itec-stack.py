@@ -92,12 +92,21 @@ def create_frm(stack, prefix, handler):
                     IntegrationResponse(
                         StatusCode = '400',
                         SelectionPattern = '"statusCode":"400"'
-                        ),
-                    IntegrationResponse(
-                        StatusCode = '500',
-                        SelectionPattern = '"statusCode":"500"'
                         )
                     ],
+            RequestTemplates = {
+                    "application/json" : """
+                        {
+                          "body" : $input.json('$'),
+                          "headers": {
+                            #foreach($param in $input.params().header.keySet())
+                            "$param": "$util.escapeJavaScript($input.params().header.get($param))" #if($foreach.hasNext),#end
+                            
+                            #end  
+                          }
+                        }
+                    """
+                    },
             Uri = Join("", [
                     "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/",
                     GetAtt(function_name, "Arn"),

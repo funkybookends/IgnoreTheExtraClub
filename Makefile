@@ -18,4 +18,12 @@ deploy-api:
 	--rest-api-id jluasn7qrb \
 	--stage-name v1
 
-.PHONY: deploy-pattern-lambda deploy-api
+test-pattern-api:
+	curl "https://jluasn7qrb.execute-api.us-west-2.amazonaws.com/v1/pattern/" \
+	-H "Content-Type: application/json" \
+	-H "x-api-key: $(AWS_API_SECRET)" \
+	-X POST \
+	-d '{"siteswap":"6789A", "type":"FOUR_HANDED_SITESWAP", "sort":"FOUR_HANDED_PASSING"}' \
+	| jq
+
+.PHONY: deploy-pattern-lambda deploy-api test-pattern-api

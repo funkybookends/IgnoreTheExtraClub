@@ -91,8 +91,14 @@ Resources:
           - StatusCode: '200'
           - SelectionPattern: '"statusCode":"400"'
             StatusCode: '400'
-          - SelectionPattern: '"statusCode":"500"'
-            StatusCode: '500'
+        RequestTemplates:
+          application/json: "\n                        {\n                       \
+            \   \"body\" : $input.json('$'),\n                          \"headers\"\
+            : {\n                            #foreach($param in $input.params().header.keySet())\n\
+            \                            \"$param\": \"$util.escapeJavaScript($input.params().header.get($param))\"\
+            \ #if($foreach.hasNext),#end\n                            \n         \
+            \                   #end  \n                          }\n            \
+            \            }\n                    "
         Type: AWS
         Uri: !Join
           - ''
