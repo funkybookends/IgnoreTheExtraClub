@@ -15,7 +15,7 @@ class CausalDiagramHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		ErrorResponse actual = handler.handleRequest(request, null);
+		ErrorResponse actual = handler.handleRequest(LambdaRequest.builder().body(request).build(), null);
 
 		then:
 		with(actual) {
@@ -31,7 +31,7 @@ class CausalDiagramHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		ErrorResponse actual = handler.handleRequest(request, null);
+		ErrorResponse actual = handler.handleRequest(LambdaRequest.builder().body(request).build(), null);
 
 		then:
 		with(actual) {
@@ -49,7 +49,7 @@ class CausalDiagramHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		String actual = handler.handleRequest(request, null);
+		String actual = handler.handleRequest(LambdaRequest.builder().body(request).build(), null);
 
 		then:
 		actual != null
@@ -63,7 +63,7 @@ class CausalDiagramHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		ErrorResponse actual = handler.handleRequest(request, null);
+		ErrorResponse actual = handler.handleRequest(LambdaRequest.builder().body(request).build(), null);
 
 		then:
 		with(actual) {
@@ -80,7 +80,7 @@ class CausalDiagramHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		String actual = handler.handleRequest(request, null);
+		String actual = handler.handleRequest(LambdaRequest.builder().body(request).build(), null);
 
 		then:
 		actual != null
@@ -95,7 +95,7 @@ class CausalDiagramHandlerIntegrationTest extends Specification {
 				.build();
 
 		when:
-		ErrorResponse actual = handler.handleRequest(request, null)
+		ErrorResponse actual = handler.handleRequest(LambdaRequest.builder().body(request).build(), null)
 
 		then:
 		with(actual) {
