@@ -1,3 +1,13 @@
+deploy-causaldiagram-lambda:
+	./gradlew clean build
+
+	aws s3 cp ./causaldiagram/build/distributions/causaldiagram-latest.zip s3://itec-lambda-function-artifacts/
+
+	aws lambda update-function-code \
+	--function-name itec-stack-causaldiagramFunction-AD3EZ1RKX5HW \
+	--s3-bucket itec-lambda-function-artifacts \
+	--s3-key causaldiagram-latest.zip
+
 deploy-pattern-lambda:
 	./gradlew clean build
 
@@ -26,4 +36,11 @@ test-pattern-api:
 	-d '{"siteswap":"6789A", "type":"FOUR_HANDED_SITESWAP", "sort":"FOUR_HANDED_PASSING"}' \
 	| jq
 
-.PHONY: deploy-pattern-lambda deploy-api test-pattern-api
+test-causal-diagram-api:
+	curl -vvv "https://jluasn7qrb.execute-api.us-west-2.amazonaws.com/v1/causaldiagram/" \
+	-H "Content-Type: application/json" \
+	-H "x-api-key: $(AWS_API_SECRET)" \
+	-X POST \
+	-d '{"siteswap":"777786786", "type":"FOUR_HANDED_SITESWAP"}'
+
+.PHONY: deploy-pattern-lambda deploy-api test-pattern-api test-causal-diagram-api

@@ -1,9 +1,9 @@
 {
-    "ChangeSetName": "set-mapping-to-json",
-    "ChangeSetId": "arn:aws:cloudformation:us-west-2:682111966329:changeSet/set-mapping-to-json/f31d3ded-4578-4371-8199-d3d576f5a16f",
+    "ChangeSetName": "increase-cd-lambda-timeout",
+    "ChangeSetId": "arn:aws:cloudformation:us-west-2:682111966329:changeSet/increase-cd-lambda-timeout/741e1f71-9e39-443f-a8d4-a11357d056f3",
     "StackId": "arn:aws:cloudformation:us-west-2:682111966329:stack/itec-stack/5aa59b60-eb6f-11e8-85ba-50a686fc37d2",
     "StackName": "itec-stack",
-    "CreationTime": "2018-11-23T22:41:46.760Z",
+    "CreationTime": "2018-11-25T22:28:24.422Z",
     "ExecutionStatus": "AVAILABLE",
     "Status": "CREATE_COMPLETE",
     "NotificationARNs": [],
@@ -12,6 +12,79 @@
         "CAPABILITY_NAMED_IAM"
     ],
     "Changes": [
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "causaldiagramFunction",
+                "PhysicalResourceId": "itec-stack-causaldiagramFunction-AD3EZ1RKX5HW",
+                "ResourceType": "AWS::Lambda::Function",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Timeout",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    }
+                ]
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "causaldiagramLambdaMethod",
+                "PhysicalResourceId": "itec-causa-39GXGEQUDTOP",
+                "ResourceType": "AWS::ApiGateway::Method",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Integration",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Dynamic",
+                        "ChangeSource": "ResourceAttribute",
+                        "CausingEntity": "causaldiagramFunction.Arn"
+                    }
+                ]
+            }
+        },
+        {
+            "Type": "Resource",
+            "ResourceChange": {
+                "Action": "Modify",
+                "LogicalResourceId": "patternFunction",
+                "PhysicalResourceId": "itec-stack-patternFunction-I9HSG97D33OO",
+                "ResourceType": "AWS::Lambda::Function",
+                "Replacement": "False",
+                "Scope": [
+                    "Properties"
+                ],
+                "Details": [
+                    {
+                        "Target": {
+                            "Attribute": "Properties",
+                            "Name": "Timeout",
+                            "RequiresRecreation": "Never"
+                        },
+                        "Evaluation": "Static",
+                        "ChangeSource": "DirectModification"
+                    }
+                ]
+            }
+        },
         {
             "Type": "Resource",
             "ResourceChange": {
@@ -30,8 +103,9 @@
                             "Name": "Integration",
                             "RequiresRecreation": "Never"
                         },
-                        "Evaluation": "Static",
-                        "ChangeSource": "DirectModification"
+                        "Evaluation": "Dynamic",
+                        "ChangeSource": "ResourceAttribute",
+                        "CausingEntity": "patternFunction.Arn"
                     }
                 ]
             }

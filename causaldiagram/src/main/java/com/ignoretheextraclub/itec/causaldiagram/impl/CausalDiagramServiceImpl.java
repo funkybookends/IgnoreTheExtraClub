@@ -21,6 +21,9 @@ import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.FourHandedSiteswa
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.PassingSiteswap;
 import com.ignoretheextraclub.siteswapfactory.siteswap.vanilla.constructors.StringToPassingSiteswapConstructor;
 
+import lombok.extern.java.Log;
+
+@Log
 public class CausalDiagramServiceImpl implements CausalDiagramService
 {
 	private static final SiteswapFactoryImpl PASSING_SITESWAP_FACTORY = new SiteswapFactoryImpl(Collections.singletonList(StringToPassingSiteswapConstructor.get()));
@@ -56,8 +59,11 @@ public class CausalDiagramServiceImpl implements CausalDiagramService
 	{
 		final CausalDiagramProperties properties = causalDiagramPropertiesFactory.createProperties(causalDiagramRequest);
 		final CausalDiagram causalDiagram = getCausalDiagram(causalDiagramRequest, properties);
+		log.info("diagram created, creating drawer");
 		final CausalDiagramDrawer causalDiagramDrawer = causalDiagramDrawerFactory.getCausalDiagramDrawer(causalDiagramRequest, properties);
+		log.info("drawer created, drawing");
 		final SVGGraphics2D causalDiagramSvg = causalDiagramDrawer.apply(causalDiagram, graphicsSupplier);
+		log.info("diagram drawn, rendering");
 		return causalDiagramSvg.getSVGDocument();
 	}
 
@@ -76,6 +82,7 @@ public class CausalDiagramServiceImpl implements CausalDiagramService
 
 	private CausalDiagram handlePassing(final CausalDiagramRequest causalDiagramRequest, final CausalDiagramProperties properties)
 	{
+		log.info("handling passing siteswap");
 		final PassingSiteswap passingSiteswap = (PassingSiteswap) PASSING_SITESWAP_FACTORY.get(causalDiagramRequest.getSiteswap());
 
 		final Hand[][] handOrder = Optional.ofNullable(causalDiagramRequest.getPassingSiteswapHandOrder())
@@ -83,11 +90,13 @@ public class CausalDiagramServiceImpl implements CausalDiagramService
 
 		final PassingSiteswapToCausalDiagram diagrammer = new PassingSiteswapToCausalDiagram(properties, handOrder);
 
+		log.info("creating diagram");
 		return diagrammer.apply(passingSiteswap);
 	}
 
 	private CausalDiagram handleFHS(final CausalDiagramRequest causalDiagramRequest, final CausalDiagramProperties properties)
 	{
+		log.info("hadnling fhs");
 		final FourHandedSiteswap siteswap = FourHandedSiteswapFactory.getFourHandedSiteswap(causalDiagramRequest.getSiteswap());
 
 		final Hand[] fourHandedSiteswapHandOrder = Optional.ofNullable(causalDiagramRequest.getFourHandedSiteswapHandOrder())
@@ -95,6 +104,7 @@ public class CausalDiagramServiceImpl implements CausalDiagramService
 
 		final FhsToCausalDiagram diagrammer = new FhsToCausalDiagram(properties, fourHandedSiteswapHandOrder);
 
+		log.info("creating diagram");
 		return diagrammer.apply(siteswap);
 	}
 }

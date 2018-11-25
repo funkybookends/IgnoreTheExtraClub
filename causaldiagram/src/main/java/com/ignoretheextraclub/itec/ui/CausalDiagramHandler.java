@@ -7,6 +7,11 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.ignoretheextraclub.itec.causaldiagram.CausalDiagramService;
 import com.ignoretheextraclub.itec.configuration.DaggerCausalDiagramComponent;
 
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+
+@Log
 public class CausalDiagramHandler implements RequestHandler<LambdaRequest, Object>
 {
 	private final CausalDiagramService causalDiagramService;
@@ -14,6 +19,7 @@ public class CausalDiagramHandler implements RequestHandler<LambdaRequest, Objec
 	public CausalDiagramHandler()
 	{
 		causalDiagramService = DaggerCausalDiagramComponent.create().causalDiagramService();
+		log.info("Created Dagger component");
 	}
 
 	public CausalDiagramHandler(final CausalDiagramService causalDiagramService)
@@ -25,6 +31,7 @@ public class CausalDiagramHandler implements RequestHandler<LambdaRequest, Objec
 	public Object handleRequest(final LambdaRequest lambdaRequest,
 	                            final Context context)
 	{
+		log.info("Evaluation message");
 		final CausalDiagramRequest causalDiagramRequest = lambdaRequest.getBody();
 
 		final ErrorResponse.ErrorResponseBuilder errorResponse = ErrorResponse.builder().statusCode(400);
@@ -47,6 +54,7 @@ public class CausalDiagramHandler implements RequestHandler<LambdaRequest, Objec
 		{
 			try
 			{
+				log.info("message is good, creating diagram");
 				return causalDiagramService.getCausalDiagram(causalDiagramRequest);
 			}
 			catch (final Exception exception)
@@ -55,6 +63,7 @@ public class CausalDiagramHandler implements RequestHandler<LambdaRequest, Objec
 			}
 		}
 
+		log.info("returning");
 		return errorResponse.build();
 	}
 }

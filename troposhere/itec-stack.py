@@ -49,7 +49,7 @@ itec_stack.add_resource(Role(
     ))
 
 
-def create_frm(stack, prefix, handler):
+def create_frm(stack, prefix, handler, response_parameters, timeout):
     function_name = "%sFunction" % prefix
     resource_name = "%sResource" % prefix
 
@@ -62,6 +62,7 @@ def create_frm(stack, prefix, handler):
         Handler = handler,
         Role = GetAtt(lambda_execution_role, "Arn"),
         Runtime = "java8",
+        Timeout = timeout
         ))
 
     # Create a resource to map the lambda function to
@@ -71,6 +72,11 @@ def create_frm(stack, prefix, handler):
         PathPart = prefix,
         ParentId = GetAtt(apiName, "RootResourceId"),
         ))
+
+    ok_integration_response = IntegrationResponse(StatusCode = '200')
+
+    if (len(response_parameters) > 0):
+        ok_integration_response = IntegrationResponse(StatusCode = '200', ResponseParameters = response_parameters)
 
     # Create a Lambda API method for the Lambda resource
     method = stack.add_resource(Method(
@@ -85,17 +91,14 @@ def create_frm(stack, prefix, handler):
             Credentials = GetAtt(lambda_execution_role, "Arn"),
             Type = "AWS",
             IntegrationHttpMethod = 'POST',
-            IntegrationResponses = [
-                    IntegrationResponse(
-                        StatusCode = '200'
-                        ),
-                    IntegrationResponse(
-                        StatusCode = '400',
-                        SelectionPattern = '"statusCode":"400"'
-                        )
-                    ],
+            IntegrationResponses = [ok_integration_response,
+                                    IntegrationResponse(
+                                        StatusCode = '400',
+                                        SelectionPattern = '"statusCode":"400"'
+                                        )
+                                    ],
             RequestTemplates = {
-                    "application/json" : """
+                    "application/json": """
                         {
                           "body" : $input.json('$'),
                           "headers": {
@@ -116,7 +119,7 @@ def create_frm(stack, prefix, handler):
         MethodResponses = [
                 MethodResponse(
                     "CatResponse",
-                    StatusCode = '200'
+                    StatusCode = '200',
                     )
                 ]
         ))
@@ -125,15 +128,26 @@ def create_frm(stack, prefix, handler):
 
 pattern_function_params = {
         "prefix": "pattern",
-        "handler": "com.ignoretheextraclub.itec.ui.PatternHandler::handleRequest"
+        "handler": "com.ignoretheextraclub.itec.ui.PatternHandler::handleRequest",
+        "response_parameters": {},
+        "timeout" : 3
         }
 
 pattern_function, pattern_resource, pattern_method = create_frm(itec_stack, **pattern_function_params)
 
+causal_diagram_function_params = {
+        "prefix": "causaldiagram",
+        "handler": "com.ignoretheextraclub.itec.ui.CausalDiagramHandler::handleRequest",
+        "response_parameters": {},
+        "timeout": 10
+        }
+
+causal_diagram_function, causal_diagram_resource, causal_diagram_method = create_frm(itec_stack, **causal_diagram_function_params)
+
 # Create a deployment
 deployment = itec_stack.add_resource(Deployment(
     "%sDeployment" % stage_name,
-    DependsOn = pattern_method,
+    DependsOn = [pattern_method, causal_diagram_method],
     RestApiId = Ref(itec_rest_api),
     ))
 

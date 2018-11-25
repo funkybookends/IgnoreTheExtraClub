@@ -69,6 +69,54 @@ Resources:
       KeyType: API_KEY
       UsagePlanId: !Ref 'XLUsagePlan'
     Type: AWS::ApiGateway::UsagePlanKey
+  causaldiagramFunction:
+    Properties:
+      Code:
+        S3Bucket: itec-lambda-function-artifacts
+        S3Key: causaldiagram-latest.zip
+      Handler: com.ignoretheextraclub.itec.ui.CausalDiagramHandler::handleRequest
+      Role: !GetAtt 'LambdaExecutionRole.Arn'
+      Runtime: java8
+      Timeout: 10
+    Type: AWS::Lambda::Function
+  causaldiagramLambdaMethod:
+    DependsOn: causaldiagramFunction
+    Properties:
+      ApiKeyRequired: true
+      AuthorizationType: NONE
+      HttpMethod: POST
+      Integration:
+        Credentials: !GetAtt 'LambdaExecutionRole.Arn'
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - StatusCode: '200'
+          - SelectionPattern: '"statusCode":"400"'
+            StatusCode: '400'
+        RequestTemplates:
+          application/json: "\n                        {\n                       \
+            \   \"body\" : $input.json('$'),\n                          \"headers\"\
+            : {\n                            #foreach($param in $input.params().header.keySet())\n\
+            \                            \"$param\": \"$util.escapeJavaScript($input.params().header.get($param))\"\
+            \ #if($foreach.hasNext),#end\n                            \n         \
+            \                   #end  \n                          }\n            \
+            \            }\n                    "
+        Type: AWS
+        Uri: !Join
+          - ''
+          - - arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/
+            - !GetAtt 'causaldiagramFunction.Arn'
+            - /invocations
+      MethodResponses:
+        - StatusCode: '200'
+      ResourceId: !Ref 'causaldiagramResource'
+      RestApiId: !Ref 'ITECApi'
+    Type: AWS::ApiGateway::Method
+  causaldiagramResource:
+    Properties:
+      ParentId: !GetAtt 'ITECApi.RootResourceId'
+      PathPart: causaldiagram
+      RestApiId: !Ref 'ITECApi'
+    Type: AWS::ApiGateway::Resource
   patternFunction:
     Properties:
       Code:
@@ -77,6 +125,7 @@ Resources:
       Handler: com.ignoretheextraclub.itec.ui.PatternHandler::handleRequest
       Role: !GetAtt 'LambdaExecutionRole.Arn'
       Runtime: java8
+      Timeout: 3
     Type: AWS::Lambda::Function
   patternLambdaMethod:
     DependsOn: patternFunction
@@ -117,7 +166,9 @@ Resources:
       RestApiId: !Ref 'ITECApi'
     Type: AWS::ApiGateway::Resource
   v1Deployment:
-    DependsOn: patternLambdaMethod
+    DependsOn:
+      - patternLambdaMethod
+      - causaldiagramLambdaMethod
     Properties:
       RestApiId: !Ref 'ITECApi'
     Type: AWS::ApiGateway::Deployment
