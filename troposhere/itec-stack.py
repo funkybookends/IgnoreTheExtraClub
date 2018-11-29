@@ -8,6 +8,9 @@ from troposphere.apigateway import RestApi, Method
 from troposphere.apigateway import UsagePlan, QuotaSettings, ThrottleSettings
 from troposphere.awslambda import Function, Code
 from troposphere.iam import Role, Policy
+from troposphere.s3 import Bucket
+from troposphere.s3 import BucketPolicy, WebsiteConfiguration
+from troposphere.s3 import CorsConfiguration, CorsRules
 
 itec_stack = Template()
 
@@ -130,7 +133,7 @@ pattern_function_params = {
         "prefix": "pattern",
         "handler": "com.ignoretheextraclub.itec.ui.PatternHandler::handleRequest",
         "response_parameters": {},
-        "timeout" : 3
+        "timeout": 3
         }
 
 pattern_function, pattern_resource, pattern_method = create_frm(itec_stack, **pattern_function_params)
@@ -186,6 +189,43 @@ usage_plan_key = itec_stack.add_resource(UsagePlanKey(
     UsagePlanId = Ref(usage_plan)
     ))
 
+itec_public_static_content = "itec-public-static-content"
+itec_bucket_resource_name = "ItecPublicStaticBucket"
+
+itec_static_bucket_resource = itec_stack.add_resource(Bucket(
+    itec_bucket_resource_name,
+    AccessControl = "PublicRead",
+    BucketName = itec_public_static_content,
+    CorsConfiguration = CorsConfiguration(
+        CorsRules = [CorsRules(
+            AllowedHeaders = ["*"],
+            AllowedMethods = ["GET"],
+            AllowedOrigins = ["*"],
+            ExposedHeaders = ["Date"],
+            MaxAge = 3600
+            )],
+        ),
+    WebsiteConfiguration = WebsiteConfiguration(
+        IndexDocument = "index.html",
+        ErrorDocument = "error.html"
+        )
+    ))
+
+StaticSiteBucketPolicy = itec_stack.add_resource(BucketPolicy(
+    "StaticSiteBucketPolicy",
+    Bucket = Ref(itec_static_bucket_resource),
+    PolicyDocument = {
+            "Statement": [{
+                    "Action": ["s3:GetObject"],
+                    "Effect": "Allow",
+                    "Resource": {
+                            "Fn::Join": ["", ["arn:aws:s3:::", {"Ref": itec_bucket_resource_name}, "/*"]]
+                            },
+                    "Principal": "*"
+                    }]
+            }
+    ))
+
 # Add the deployment endpoint as an output
 itec_stack.add_output([
         Output(
@@ -196,6 +236,10 @@ itec_stack.add_output([
             "ApiKey",
             Value = Ref(api_key),
             Description = "API key"),
+        Output(
+            "StaticEndpoint",
+            Value = Join("", ["http://", itec_public_static_content, ".s3-website-us-west-2.amazonaws.com"]),
+            Description = "Endpoint for the static itec website"),
         ])
 
 print(itec_stack.to_yaml())

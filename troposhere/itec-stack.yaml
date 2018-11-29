@@ -10,6 +10,13 @@ Outputs:
   ApiKey:
     Description: API key
     Value: !Ref 'CasparsApiKey'
+  StaticEndpoint:
+    Description: Endpoint for the static itec website
+    Value: !Join
+      - ''
+      - - http://
+        - itec-public-static-content
+        - .s3-website-us-west-2.amazonaws.com
 Resources:
   CasparsApiKey:
     Properties:
@@ -22,6 +29,25 @@ Resources:
     Properties:
       Name: ITECApi
     Type: AWS::ApiGateway::RestApi
+  ItecPublicStaticBucket:
+    Properties:
+      AccessControl: PublicRead
+      BucketName: itec-public-static-content
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - '*'
+            ExposedHeaders:
+              - Date
+            MaxAge: 3600
+      WebsiteConfiguration:
+        ErrorDocument: error.html
+        IndexDocument: index.html
+    Type: AWS::S3::Bucket
   LambdaExecutionRole:
     Properties:
       AssumeRolePolicyDocument:
@@ -49,6 +75,21 @@ Resources:
             Version: '2012-10-17'
           PolicyName: root
     Type: AWS::IAM::Role
+  StaticSiteBucketPolicy:
+    Properties:
+      Bucket: !Ref 'ItecPublicStaticBucket'
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject
+            Effect: Allow
+            Principal: '*'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref 'ItecPublicStaticBucket'
+                - /*
+    Type: AWS::S3::BucketPolicy
   XLUsagePlan:
     Properties:
       ApiStages:
