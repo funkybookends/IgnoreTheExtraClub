@@ -2,6 +2,6 @@
 	<form>
 		<label for="query">Search:</label>
 		<input type="text" class="form-control" id="query" [formControl]="searchFormControl">
-		<button type="submit" class="btn btn-success">Juggle!</button>
+		<button type="submit" class="btn btn-success" (click)="searchButtonClick()">Juggle!</button>
 	</form>
 </div>

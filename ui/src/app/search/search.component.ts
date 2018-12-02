@@ -14,4 +14,9 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
   }
 
+  searchButtonClick() {
+    const query = this.searchFormControl.value;
+    console.log("Search button was clicked with [" + query + "]!");
+  }
+
 }
