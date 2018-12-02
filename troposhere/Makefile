@@ -23,3 +23,5 @@ execute-change-set: change-set.json
 	aws cloudformation execute-change-set \
 	--stack-name itec-stack \
 	--change-set-name $(csn)
+
+	touch execute-change-set
