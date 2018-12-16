@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mock:
+    image: rodolpheche/wiremock
+    volumes:
+      - .:/home/wiremock
+    ports:
+      - "8080:8080"
+      - "80:80"
+    command: "--verbose"

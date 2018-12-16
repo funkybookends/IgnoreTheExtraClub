@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Pattern } from '../pattern/pattern';
 import { PatternLambdaService } from '../services/pattern-lambda.service';
+import { PatternComponent } from '../pattern/pattern.component';
 
 @Component({
   selector: 'app-search',
@@ -11,15 +12,16 @@ import { PatternLambdaService } from '../services/pattern-lambda.service';
 export class SearchComponent implements OnInit {
   searchFormControl = new FormControl('');
 
-  constructor(private patternLambdaService: PatternLambdaService) { }
+  constructor(private patternLambdaService: PatternLambdaService,
+    private patternComponent: PatternComponent) { }
 
   ngOnInit() {
   }
 
   searchButtonClick() {
     const query = this.searchFormControl.value;
-    console.log("Search button was clicked with [" + query + "]!");
-    this.patternLambdaService.searchPattern(query);
+    const response = this.patternLambdaService.searchPattern(query);
+    response.subscribe((pattern: Pattern)  => this.patternComponent.setPattern(pattern));
   }
 
 }

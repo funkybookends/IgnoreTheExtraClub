@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/v1/pattern/"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "siteswap-response-fhs-975.json",
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS, POST",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Content-Type": "application/json"
+    }
+  }
+}

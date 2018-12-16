@@ -1,0 +1,29 @@
+{
+  "pattern": {
+    "title": "597",
+    "type": "Four Handed Siteswap",
+    "numJugglers": 2,
+    "numHands": 4,
+    "numObjects": 7,
+    "prime": true,
+    "grounded": true,
+    "siteswap": "597",
+    "names": [
+      "597"
+    ],
+    "shortDescriptions": {
+      "en": "597 is a period 3 pattern with 7 clubs for 2 jugglers. Aidan begins with Zap, Pass, Double, and Becky responds with Double, Zap, Pass."
+    },
+    "longDescriptions": {
+      "en": "597 is a period 3 pattern with 7 clubs for 2 jugglers. Aidan has 2 clubs in their right hand and 2 clubs in the left hand. Aidan begins with the right hand and his sequence is Zap, Pass, Double. Becky has one club in her right hand, 2 clubs in the left hand and begins half a beat later. Becky begins with the right hand and her sequence is Double, Zap, Pass."
+    },
+    "causalDiagramSvg": "/p/Four Handed Siteswap/597/causal-diagram"
+  },
+  "request": {
+    "siteswap": "975",
+    "type": "FOUR_HANDED_SITESWAP",
+    "sort": "FOUR_HANDED_PASSING"
+  },
+  "statusCode": 200,
+  "errorMessages": []
+}
