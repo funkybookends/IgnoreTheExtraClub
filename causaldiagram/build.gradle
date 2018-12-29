@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-	compile('com.github.funkybookends:SiteswapFactory:0.2.1') 
+	compile('com.github.funkybookends:SiteswapFactory:0.2.2') 
 	compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.0'
 	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.2-groovy-2.5'
 	annotationProcessor 'com.google.dagger:dagger-compiler:2.19'
